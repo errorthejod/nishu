@@ -1,6 +1,6 @@
 import { ReactNode } from "react";
 import { Link, useLocation } from "wouter";
-import { Shield, Menu, X } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -9,7 +9,8 @@ export function Layout({ children }: { children: ReactNode }) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const navLinks = [
-    { href: "/leaderboard", label: "Global" },
+    { href: "/", label: "Home" },
+    { href: "/leaderboard", label: "Rankings" },
     { href: "/smp", label: "SMP" },
     { href: "/uhc", label: "UHC" },
     { href: "/nethpot", label: "NethPot" },
@@ -20,17 +21,18 @@ export function Layout({ children }: { children: ReactNode }) {
   return (
     <div className="min-h-screen flex flex-col bg-background">
       {/* Top Header */}
-      <header className="sticky top-0 z-50 w-full border-b border-border/50 bg-background/80 backdrop-blur-xl">
-        <div className="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2 group cursor-pointer">
-            <Shield className="w-8 h-8 text-primary group-hover:text-primary/80 transition-colors" />
-            <span className="font-display text-2xl font-bold tracking-widest text-foreground mt-1">
-              NEO<span className="text-primary">TIERS</span>
-            </span>
+      <header className="sticky top-0 z-50 w-full border-b border-[#1e2130] bg-[#0d0f14]/95 backdrop-blur-xl">
+        <div className="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between gap-6">
+          <Link href="/" className="flex items-center gap-2 group cursor-pointer shrink-0">
+            <img
+              src={`${import.meta.env.BASE_URL}images/neotiers-logo.png`}
+              alt="NEOTIERS"
+              className="h-10 w-auto object-contain"
+            />
           </Link>
 
           {/* Desktop Nav */}
-          <nav className="hidden md:flex items-center gap-1">
+          <nav className="hidden md:flex items-center gap-0">
             {navLinks.map((link) => {
               const isActive = location === link.href;
               return (
@@ -38,10 +40,10 @@ export function Layout({ children }: { children: ReactNode }) {
                   key={link.href}
                   href={link.href}
                   className={`
-                    px-4 py-2 font-display text-lg tracking-wider transition-all duration-200 uppercase mt-1
-                    ${isActive 
-                      ? "text-primary text-glow" 
-                      : "text-muted-foreground hover:text-foreground hover:bg-secondary rounded-md"
+                    px-3 py-2 text-sm font-medium tracking-wide transition-all duration-200
+                    ${isActive
+                      ? "text-white border-b-2 border-primary"
+                      : "text-[#6b7280] hover:text-white"
                     }
                   `}
                 >
@@ -49,18 +51,37 @@ export function Layout({ children }: { children: ReactNode }) {
                 </Link>
               );
             })}
-            <div className="w-px h-6 bg-border mx-2"></div>
-            <Link 
-              href="/admin" 
-              className="px-4 py-2 font-display text-lg tracking-wider text-muted-foreground hover:text-primary transition-colors uppercase mt-1"
+          </nav>
+
+          {/* Right side */}
+          <div className="hidden md:flex items-center gap-3 ml-auto shrink-0">
+            <a
+              href="https://discord.gg/7UxNZS3tph"
+              target="_blank"
+              rel="noreferrer"
+              className="flex items-center gap-2 px-3 py-1.5 rounded text-sm text-[#6b7280] hover:text-white transition-colors bg-[#1e2130] border border-[#2a2f42]"
+            >
+              <svg className="w-4 h-4 text-[#5865F2]" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057c.002.022.015.043.033.054a19.85 19.85 0 0 0 5.993 3.03.077.077 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/>
+              </svg>
+              Discord
+            </a>
+
+            <div className="text-xs text-[#6b7280] bg-[#1e2130] border border-[#2a2f42] px-3 py-1.5 rounded">
+              SERVER IP: <span className="text-white font-medium">neomc.fun</span>
+            </div>
+
+            <Link
+              href="/admin"
+              className="px-3 py-1.5 text-sm text-[#6b7280] hover:text-white transition-colors"
             >
               Admin
             </Link>
-          </nav>
+          </div>
 
           {/* Mobile Menu Toggle */}
-          <button 
-            className="md:hidden p-2 text-foreground"
+          <button
+            className="md:hidden p-2 text-[#6b7280]"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
           >
             {isMobileMenuOpen ? <X /> : <Menu />}
@@ -75,27 +96,27 @@ export function Layout({ children }: { children: ReactNode }) {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
-            className="md:hidden bg-card border-b border-border overflow-hidden"
+            className="md:hidden bg-[#0d0f14] border-b border-[#1e2130] overflow-hidden"
           >
-            <div className="flex flex-col p-4 gap-2">
+            <div className="flex flex-col p-4 gap-1">
               {navLinks.map((link) => (
                 <Link
                   key={link.href}
                   href={link.href}
                   onClick={() => setIsMobileMenuOpen(false)}
                   className={`
-                    px-4 py-3 font-display text-xl tracking-wider uppercase
-                    ${location === link.href ? "text-primary bg-primary/10 border-l-2 border-primary" : "text-muted-foreground hover:text-foreground hover:bg-secondary"}
+                    px-4 py-3 text-sm tracking-wider rounded
+                    ${location === link.href ? "text-white bg-primary/10 border-l-2 border-primary" : "text-[#6b7280] hover:text-white hover:bg-[#1e2130]"}
                   `}
                 >
                   {link.label}
                 </Link>
               ))}
-              <div className="h-px bg-border my-2"></div>
-              <Link 
-                href="/admin" 
+              <div className="h-px bg-[#1e2130] my-2"></div>
+              <Link
+                href="/admin"
                 onClick={() => setIsMobileMenuOpen(false)}
-                className="px-4 py-3 font-display text-xl tracking-wider text-muted-foreground uppercase"
+                className="px-4 py-3 text-sm text-[#6b7280] hover:text-white"
               >
                 Admin Panel
               </Link>
@@ -105,29 +126,26 @@ export function Layout({ children }: { children: ReactNode }) {
       </AnimatePresence>
 
       {/* Main Content */}
-      <main className="flex-1 w-full">
-        {children}
-      </main>
+      <main className="flex-1 w-full">{children}</main>
 
       {/* Footer */}
-      <footer className="border-t border-border bg-card mt-20">
-        <div className="max-w-7xl mx-auto px-4 py-12 flex flex-col md:flex-row items-center justify-between gap-6">
-          <div className="flex items-center gap-2">
-            <Shield className="w-6 h-6 text-primary" />
-            <span className="font-display text-xl font-bold tracking-widest text-muted-foreground mt-1">
-              NEO<span className="text-primary">TIERS</span>
-            </span>
-          </div>
-          
-          <div className="flex gap-6">
-            <a href="https://discord.gg/7UxNZS3tph" target="_blank" rel="noreferrer" className="text-muted-foreground hover:text-primary transition-colors font-medium">
-              Discord Server
+      <footer className="border-t border-[#1e2130] bg-[#0a0c10] mt-10">
+        <div className="max-w-7xl mx-auto px-4 py-10 flex flex-col md:flex-row items-center justify-between gap-4">
+          <img
+            src={`${import.meta.env.BASE_URL}images/neotiers-logo.png`}
+            alt="NEOTIERS"
+            className="h-8 w-auto object-contain opacity-60"
+          />
+
+          <div className="flex gap-6 text-sm text-[#6b7280]">
+            <a href="https://discord.gg/7UxNZS3tph" target="_blank" rel="noreferrer" className="hover:text-white transition-colors">
+              Discord
             </a>
-            <span className="text-border">|</span>
-            <span className="text-muted-foreground font-medium">Server IP: <span className="text-foreground">neomc.fun</span></span>
+            <span className="text-[#2a2f42]">|</span>
+            <span>Server IP: <span className="text-white">neomc.fun</span></span>
           </div>
-          
-          <p className="text-muted-foreground text-sm">
+
+          <p className="text-[#4b5563] text-xs">
             © {new Date().getFullYear()} NEOTIERS. Not affiliated with Mojang AB.
           </p>
         </div>

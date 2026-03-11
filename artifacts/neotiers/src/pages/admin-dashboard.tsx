@@ -252,7 +252,7 @@ function PlayerFormDialog({ isOpen, onClose, initialData }: any) {
   const { data: gamemodes } = useListGamemodes();
 
   const [formData, setFormData] = useState({
-    username: "", gamemode: "", tier: "C", points: 0, weapon: ""
+    username: "", gamemode: "", tier: "LT1", points: 0, weapon: ""
   });
 
   useEffect(() => {
@@ -312,7 +312,7 @@ function PlayerFormDialog({ isOpen, onClose, initialData }: any) {
             <div>
               <label className={labelClass}>Tier</label>
               <select required name="tier" value={formData.tier} onChange={handleChange} className={inputClass}>
-                {['S','A','B','C','D'].map(t => <option key={t} value={t}>{t} Tier</option>)}
+                {['HT1','HT2','HT3','HT4','HT5','LT1','LT2','LT3','LT4','LT5'].map(t => <option key={t} value={t}>{t}</option>)}
               </select>
             </div>
           </div>

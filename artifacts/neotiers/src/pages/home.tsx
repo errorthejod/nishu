@@ -86,7 +86,7 @@ export default function Home() {
       <section className="py-20 bg-card border-y border-border relative z-10">
         <div className="max-w-7xl mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-8">
           {[
-            { icon: Trophy, title: "Global Tiers", desc: "Climb from D Tier to S Tier across multiple standardized gamemodes." },
+            { icon: Trophy, title: "Global Tiers", desc: "Climb from LT5 to HT1 across multiple standardized gamemodes. HT1 is the pinnacle." },
             { icon: Swords, title: "Fair Competition", desc: "Strictly monitored and balanced PvP leaderboards updated in real-time." },
             { icon: Users, title: "Active Community", desc: "Join thousands of players in our Discord and on the server." }
           ].map((feature, i) => (

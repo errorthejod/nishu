@@ -1,144 +1,141 @@
 import { Layout } from "@/components/layout";
-import { TierBadge, LoadingSpinner } from "@/components/ui-elements";
+import { TierBadge, getRankTitle, LoadingSpinner } from "@/components/ui-elements";
 import { useGetPlayer } from "@workspace/api-client-react";
 import { useParams, Link } from "wouter";
 import { format } from "date-fns";
 import { motion } from "framer-motion";
-import { ArrowLeft, Target, Trophy, Calendar, Swords } from "lucide-react";
+import { ArrowLeft, Target, Trophy, Calendar, Swords, Shield } from "lucide-react";
 
 export default function Profile() {
   const params = useParams<{ id: string }>();
   const playerId = parseInt(params.id || "0", 10);
 
   const { data: player, isLoading, error } = useGetPlayer(playerId, {
-    query: { enabled: playerId > 0 }
+    query: { enabled: playerId > 0 },
   });
 
   if (isLoading) return <Layout><LoadingSpinner /></Layout>;
-  
+
   if (error || !player) {
     return (
       <Layout>
         <div className="max-w-4xl mx-auto px-4 py-20 text-center">
-          <h1 className="text-4xl font-display text-destructive uppercase">Player Not Found</h1>
-          <Link href="/leaderboard" className="text-primary hover:underline mt-4 inline-block">Return to Leaderboard</Link>
+          <h1 className="text-3xl font-bold text-red-500">Player Not Found</h1>
+          <Link href="/leaderboard" className="text-primary hover:underline mt-4 inline-block text-sm">
+            ← Return to Leaderboard
+          </Link>
         </div>
       </Layout>
     );
   }
 
   const joinDate = new Date(player.createdAt);
+  const title = getRankTitle(player.points);
 
   return (
     <Layout>
-      <div className="max-w-6xl mx-auto px-4 py-12">
-        <Link href="/leaderboard" className="inline-flex items-center text-muted-foreground hover:text-primary transition-colors mb-8 font-display text-xl uppercase tracking-wider">
-          <ArrowLeft className="w-5 h-5 mr-2" /> Back to Rankings
+      <div className="max-w-5xl mx-auto px-4 py-10">
+        <Link
+          href="/leaderboard"
+          className="inline-flex items-center text-[#6b7280] hover:text-white transition-colors mb-8 text-sm"
+        >
+          <ArrowLeft className="w-4 h-4 mr-1" /> Back to Rankings
         </Link>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-          
-          {/* Left Column: 3D Render & Identity */}
-          <div className="lg:col-span-4 flex flex-col items-center">
-            <motion.div 
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              className="w-full bg-card border border-border p-8 esports-clip-sm flex flex-col items-center relative overflow-hidden group"
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {/* Left: Player Card */}
+          <div className="lg:col-span-1">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="bg-[#0d0f14] border border-[#1e2130] rounded-lg overflow-hidden"
             >
-              <div className="absolute inset-0 bg-gradient-to-t from-primary/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-              
-              <img 
-                src={`https://mc-heads.net/body/${player.username}/256`} 
-                alt={`${player.username} 3D render`}
-                className="h-80 object-contain drop-shadow-[0_10px_15px_rgba(0,0,0,0.5)] z-10"
-              />
-              
-              <div className="mt-8 text-center z-10 w-full border-t border-border/50 pt-6">
-                <h1 className="text-4xl font-display text-foreground font-bold tracking-widest break-all">
-                  {player.username}
-                </h1>
-                <div className="mt-2">
-                  <TierBadge tier={player.tier} />
+              {/* 3D Model */}
+              <div className="relative flex justify-center items-end pt-8 pb-0 bg-gradient-to-b from-[#1a1d27] to-[#0d0f14] min-h-[220px]">
+                <img
+                  src={`https://visage.surgeplay.com/full/256/${player.username}`}
+                  alt={player.username}
+                  className="h-56 object-contain drop-shadow-2xl"
+                  style={{ imageRendering: "pixelated" }}
+                  onError={(e) => {
+                    (e.target as HTMLImageElement).src = `https://mc-heads.net/player/${player.username}/256`;
+                  }}
+                />
+              </div>
+
+              {/* Player Info */}
+              <div className="p-6 text-center border-t border-[#1e2130]">
+                <h1 className="text-2xl font-bold text-white">{player.username}</h1>
+                <div className="flex items-center justify-center gap-1.5 mt-1">
+                  <span className="text-yellow-400/80 text-xs">◆</span>
+                  <span className="text-[#6b7280] text-sm">{title}</span>
+                </div>
+                <div className="mt-3 flex justify-center">
+                  <TierBadge tier={player.tier} size="lg" />
+                </div>
+
+                {/* Minecraft Avatar */}
+                <div className="mt-4 flex justify-center">
+                  <img
+                    src={`https://mc-heads.net/avatar/${player.username}/64`}
+                    alt={`${player.username} head`}
+                    className="w-16 h-16 rounded-lg border-2 border-[#1e2130]"
+                    style={{ imageRendering: "pixelated" }}
+                  />
                 </div>
               </div>
             </motion.div>
           </div>
 
-          {/* Right Column: Stats */}
-          <div className="lg:col-span-8 flex flex-col gap-6">
-            <motion.div 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="bg-card border border-border p-8 esports-clip flex justify-between items-center bg-[url('/images/hero-bg.png')] bg-cover bg-center bg-blend-overlay"
-              style={{ backgroundColor: 'rgba(10,10,10,0.85)' }}
+          {/* Right: Stats */}
+          <div className="lg:col-span-2 flex flex-col gap-4">
+            {/* Rank Banner */}
+            <motion.div
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              className="bg-[#0d0f14] border border-[#1e2130] rounded-lg p-6 flex items-center justify-between"
             >
               <div>
-                <div className="text-primary font-display text-2xl tracking-widest uppercase mb-1">Global Rank</div>
-                <div className="text-7xl font-display font-bold text-foreground text-glow">#{player.rank}</div>
+                <p className="text-[#6b7280] text-xs uppercase tracking-widest">Global Rank</p>
+                <p className="text-5xl font-bold text-white mt-1">#{player.rank}</p>
               </div>
-              <Trophy className="w-24 h-24 text-primary/20" />
+              <Trophy className="w-16 h-16 text-primary opacity-20" />
             </motion.div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-              <StatCard 
-                icon={Target} 
-                label="Points" 
-                value={player.points.toLocaleString()} 
-                delay={0.1} 
-              />
-              <StatCard 
-                icon={Swords} 
-                label="Main Gamemode" 
-                value={player.gamemode} 
-                delay={0.2}
-                capitalize 
-              />
-              <StatCard 
-                icon={Swords} 
-                label="Preferred Weapon" 
-                value={player.weapon} 
-                delay={0.3} 
-                capitalize
-              />
-              <StatCard 
-                icon={Calendar} 
-                label="Ranked Since" 
-                value={format(joinDate, 'MMM d, yyyy')} 
-                delay={0.4} 
-              />
-            </div>
-            
-            {/* Visual flair - empty decorative element matching esports theme */}
-            <div className="mt-auto pt-6 flex gap-2 w-full opacity-30">
-              <div className="h-2 flex-1 bg-primary/40 esports-clip-sm"></div>
-              <div className="h-2 w-12 bg-primary/60 esports-clip-sm"></div>
-              <div className="h-2 w-4 bg-primary esports-clip-sm"></div>
+            {/* Stats Grid */}
+            <div className="grid grid-cols-2 gap-4">
+              {[
+                { icon: Target, label: "Total Points", value: player.points.toLocaleString() },
+                { icon: Shield, label: "Tier", value: <TierBadge tier={player.tier} size="md" /> },
+                { icon: Swords, label: "Main Gamemode", value: player.gamemode, cap: true },
+                { icon: Swords, label: "Weapon", value: player.weapon, cap: true },
+                { icon: Calendar, label: "Ranked Since", value: format(joinDate, "MMM d, yyyy") },
+                { icon: Trophy, label: "Rank Title", value: title },
+              ].map(({ icon: Icon, label, value, cap }, i) => (
+                <motion.div
+                  key={label}
+                  initial={{ opacity: 0, y: 12 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: i * 0.05 }}
+                  className="bg-[#0d0f14] border border-[#1e2130] rounded-lg p-4 flex items-start gap-3"
+                >
+                  <div className="p-2 bg-[#1e2130] rounded">
+                    <Icon className="w-4 h-4 text-primary" />
+                  </div>
+                  <div>
+                    <p className="text-[#6b7280] text-xs uppercase tracking-widest">{label}</p>
+                    {typeof value === "string" ? (
+                      <p className={`text-white font-semibold mt-0.5 ${cap ? "capitalize" : ""}`}>{value}</p>
+                    ) : (
+                      <div className="mt-1">{value}</div>
+                    )}
+                  </div>
+                </motion.div>
+              ))}
             </div>
           </div>
-
         </div>
       </div>
     </Layout>
-  );
-}
-
-function StatCard({ icon: Icon, label, value, delay, capitalize = false }: any) {
-  return (
-    <motion.div 
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay }}
-      className="bg-background border border-border p-6 esports-clip-sm hover:border-primary/50 transition-colors flex items-start gap-4"
-    >
-      <div className="p-3 bg-secondary rounded-sm">
-        <Icon className="w-6 h-6 text-primary" />
-      </div>
-      <div>
-        <div className="text-sm text-muted-foreground uppercase tracking-widest">{label}</div>
-        <div className={`text-2xl font-display tracking-wider text-foreground mt-1 ${capitalize ? 'capitalize' : ''}`}>
-          {value}
-        </div>
-      </div>
-    </motion.div>
   );
 }
