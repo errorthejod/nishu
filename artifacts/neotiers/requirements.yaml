@@ -1,0 +1,13 @@
+packages:
+  "framer-motion": "For advanced esports-style entering animations, hover effects, and page transitions"
+  "date-fns": "For formatting player join dates in the profile view"
+
+images:
+  - path: "artifacts/neotiers/public/images/hero-bg.png"
+    description: "Dark, gritty, abstract esports background with subtle red neon accents, low poly geometric textures, and a dark vignette. High contrast, premium gaming aesthetic."
+    aspect_ratio: "16:9"
+
+notes:
+  - Using generated orval hooks from @workspace/api-client-react
+  - Assuming admin session relies on httpOnly cookies automatically handled by the browser
+  - Using mc-heads.net for all Minecraft skin rendering

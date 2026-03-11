@@ -1,0 +1,21 @@
+import { pgTable, text, serial, integer, timestamp } from "drizzle-orm/pg-core";
+import { createInsertSchema } from "drizzle-zod";
+import { z } from "zod/v4";
+
+export const playersTable = pgTable("players", {
+  id: serial("id").primaryKey(),
+  username: text("username").notNull(),
+  gamemode: text("gamemode").notNull(),
+  tier: text("tier").notNull().default("D"),
+  points: integer("points").notNull().default(0),
+  weapon: text("weapon").notNull().default("Sword"),
+  rank: integer("rank").notNull().default(0),
+  skinUrl: text("skin_url"),
+  customSkinUrl: text("custom_skin_url"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export const insertPlayerSchema = createInsertSchema(playersTable).omit({ id: true, createdAt: true, updatedAt: true });
+export type InsertPlayer = z.infer<typeof insertPlayerSchema>;
+export type Player = typeof playersTable.$inferSelect;

@@ -1,22 +1,26 @@
 openapi: 3.1.0
 info:
-  # Do not change the title, if the title changes, the import paths will be broken
   title: Api
   version: 0.1.0
-  description: API specification
+  description: NEOTIERS Minecraft PvP Rankings API
 servers:
   - url: /api
     description: Base API path
 tags:
   - name: health
     description: Health operations
+  - name: players
+    description: Player management
+  - name: gamemodes
+    description: Gamemode management
+  - name: admin
+    description: Admin operations
 paths:
   /healthz:
     get:
       operationId: healthCheck
       tags: [health]
       summary: Health check
-      description: Returns server health status
       responses:
         "200":
           description: Healthy
@@ -24,6 +28,262 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/HealthStatus"
+
+  /players:
+    get:
+      operationId: listPlayers
+      tags: [players]
+      summary: List all players
+      parameters:
+        - name: gamemode
+          in: query
+          schema:
+            type: string
+        - name: search
+          in: query
+          schema:
+            type: string
+        - name: sortBy
+          in: query
+          schema:
+            type: string
+            enum: [rank, points, tier, username]
+        - name: limit
+          in: query
+          schema:
+            type: number
+      responses:
+        "200":
+          description: List of players
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Player"
+    post:
+      operationId: createPlayer
+      tags: [players]
+      summary: Create a player
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreatePlayerInput"
+      responses:
+        "201":
+          description: Created player
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Player"
+        "401":
+          description: Unauthorized
+
+  /players/{id}:
+    get:
+      operationId: getPlayer
+      tags: [players]
+      summary: Get a player by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: number
+      responses:
+        "200":
+          description: Player details
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Player"
+        "404":
+          description: Not found
+    put:
+      operationId: updatePlayer
+      tags: [players]
+      summary: Update a player
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: number
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdatePlayerInput"
+      responses:
+        "200":
+          description: Updated player
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Player"
+        "401":
+          description: Unauthorized
+        "404":
+          description: Not found
+    delete:
+      operationId: deletePlayer
+      tags: [players]
+      summary: Delete a player
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: number
+      responses:
+        "200":
+          description: Deleted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MessageResponse"
+        "401":
+          description: Unauthorized
+        "404":
+          description: Not found
+
+  /gamemodes:
+    get:
+      operationId: listGamemodes
+      tags: [gamemodes]
+      summary: List all gamemodes
+      responses:
+        "200":
+          description: List of gamemodes
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Gamemode"
+    post:
+      operationId: createGamemode
+      tags: [gamemodes]
+      summary: Create a gamemode
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateGamemodeInput"
+      responses:
+        "201":
+          description: Created gamemode
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Gamemode"
+        "401":
+          description: Unauthorized
+
+  /gamemodes/{id}:
+    delete:
+      operationId: deleteGamemode
+      tags: [gamemodes]
+      summary: Delete a gamemode
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: number
+      responses:
+        "200":
+          description: Deleted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MessageResponse"
+        "401":
+          description: Unauthorized
+
+  /admin/login:
+    post:
+      operationId: adminLogin
+      tags: [admin]
+      summary: Admin login
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AdminLoginInput"
+      responses:
+        "200":
+          description: Login successful
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AdminLoginResponse"
+        "401":
+          description: Invalid credentials
+
+  /admin/logout:
+    post:
+      operationId: adminLogout
+      tags: [admin]
+      summary: Admin logout
+      responses:
+        "200":
+          description: Logged out
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MessageResponse"
+
+  /admin/me:
+    get:
+      operationId: adminMe
+      tags: [admin]
+      summary: Check if admin is logged in
+      responses:
+        "200":
+          description: Admin status
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AdminMeResponse"
+
+  /settings:
+    get:
+      operationId: getSettings
+      tags: [admin]
+      summary: Get site settings
+      responses:
+        "200":
+          description: Settings
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SiteSettings"
+    put:
+      operationId: updateSettings
+      tags: [admin]
+      summary: Update site settings
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateSettingsInput"
+      responses:
+        "200":
+          description: Updated settings
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SiteSettings"
+        "401":
+          description: Unauthorized
+
 components:
   schemas:
     HealthStatus:
@@ -34,3 +294,193 @@ components:
       required:
         - status
 
+    MessageResponse:
+      type: object
+      properties:
+        message:
+          type: string
+      required:
+        - message
+
+    Player:
+      type: object
+      properties:
+        id:
+          type: number
+        username:
+          type: string
+        gamemode:
+          type: string
+        tier:
+          type: string
+        points:
+          type: number
+        weapon:
+          type: string
+        rank:
+          type: number
+        skinUrl:
+          type: string
+          nullable: true
+        customSkinUrl:
+          type: string
+          nullable: true
+        createdAt:
+          type: string
+        updatedAt:
+          type: string
+      required:
+        - id
+        - username
+        - gamemode
+        - tier
+        - points
+        - weapon
+        - rank
+        - createdAt
+        - updatedAt
+
+    CreatePlayerInput:
+      type: object
+      properties:
+        username:
+          type: string
+        gamemode:
+          type: string
+        tier:
+          type: string
+        points:
+          type: number
+        weapon:
+          type: string
+        customSkinUrl:
+          type: string
+          nullable: true
+      required:
+        - username
+        - gamemode
+        - tier
+        - points
+        - weapon
+
+    UpdatePlayerInput:
+      type: object
+      properties:
+        username:
+          type: string
+        gamemode:
+          type: string
+        tier:
+          type: string
+        points:
+          type: number
+        weapon:
+          type: string
+        customSkinUrl:
+          type: string
+          nullable: true
+
+    Gamemode:
+      type: object
+      properties:
+        id:
+          type: number
+        name:
+          type: string
+        slug:
+          type: string
+        description:
+          type: string
+          nullable: true
+        defaultWeapon:
+          type: string
+        createdAt:
+          type: string
+      required:
+        - id
+        - name
+        - slug
+        - defaultWeapon
+        - createdAt
+
+    CreateGamemodeInput:
+      type: object
+      properties:
+        name:
+          type: string
+        slug:
+          type: string
+        description:
+          type: string
+          nullable: true
+        defaultWeapon:
+          type: string
+      required:
+        - name
+        - slug
+        - defaultWeapon
+
+    AdminLoginInput:
+      type: object
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+      required:
+        - username
+        - password
+
+    AdminLoginResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        message:
+          type: string
+      required:
+        - success
+        - message
+
+    AdminMeResponse:
+      type: object
+      properties:
+        isAdmin:
+          type: boolean
+      required:
+        - isAdmin
+
+    SiteSettings:
+      type: object
+      properties:
+        id:
+          type: number
+        backgroundType:
+          type: string
+          enum: [color, image, video]
+        backgroundValue:
+          type: string
+          nullable: true
+        serverIp:
+          type: string
+        discordUrl:
+          type: string
+      required:
+        - id
+        - backgroundType
+        - serverIp
+        - discordUrl
+
+    UpdateSettingsInput:
+      type: object
+      properties:
+        backgroundType:
+          type: string
+          enum: [color, image, video]
+        backgroundValue:
+          type: string
+          nullable: true
+        serverIp:
+          type: string
+        discordUrl:
+          type: string

@@ -1,0 +1,31 @@
+kind = "web"
+previewPath = "/"
+title = "NEOTIERS - Minecraft PvP Rankings"
+version = "1.0.0"
+id = "artifacts/neotiers"
+router = "path"
+
+[[integratedSkills]]
+name = "react-vite"
+version = "1.0.0"
+
+[[services]]
+localPort = 18140
+name = "web"
+paths = ["/"]
+
+[services.development]
+run = "pnpm --filter @workspace/neotiers run dev"
+
+[services.env]
+PORT = "18140"
+BASE_PATH = "/"
+
+[services.production]
+build = ["pnpm", "--filter", "@workspace/neotiers", "run", "build"]
+publicDir = "artifacts/neotiers/dist/public"
+serve = "static"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"

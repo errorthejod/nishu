@@ -1,0 +1,67 @@
+Build a complete Minecraft PvP ranking website called **NEOTIERS**, inspired by MCTiers, with the following features:
+
+1. **Homepage & Navigation**
+- Dark esports theme: black, dark gray, red accents.
+- Navigation bar: NEOTIERS logo, links to **Leaderboard, SMP, UHC, NethPot, PvP, About, Contact, Admin**.
+- Animated background video on homepage (optional: Minecraft battle/sky animation).
+- Footer with server IP: **neomc.fun**, Discord invite: **https://discord.gg/7UxNZS3tph**, copyright.
+
+2. **Leaderboard**
+- Global leaderboard showing **top 100 players**.
+- Columns: Rank, Player (full 3D Minecraft model), Gamemode, Weapon, Tier, Points.
+- Player models:
+  - Full body (head, chest, arms, hands).
+  - Holding weapon corresponding to gamemode (Sword, Axe, Mace, Spear, etc.).
+  - Dynamic rotation on hover.
+  - Skins fetched from **NameMC API** based on username.
+- Sortable by: Rank, Points, Gamemode, Tier.
+- Search bar to filter players by username.
+- Top 25 players highlighted with glowing or animated badge.
+
+3. **Multiple Gamemode Pages**
+- Separate leaderboard pages/tabs for **SMP, UHC, NethPot, PvP, BedWars**.
+- Smooth transitions between pages.
+- Each page shows only players for that gamemode.
+
+4. **Admin Panel**
+- Login system (username + password).
+- Admin can:
+  - Add, edit, or remove players.
+  - Update points, tiers, gamemode, and weapons.
+  - Override or upload custom player skins.
+  - Change leaderboard background (image or video).
+  - Add new gamemodes dynamically.
+- Changes reflect instantly on leaderboard.
+
+5. **Player Profiles**
+- Clicking a player opens profile page:
+  - Full 3D model with animated view.
+  - Stats for each gamemode.
+  - Tier badges.
+  - Weapon display.
+  - Total points.
+
+6. **Backend**
+- Use **Replit DB or JSON** to store player data.
+- Admin updates leaderboard via panel.
+- Player skin URLs dynamically loaded from NameMC API using username.
+
+7. **UI/UX**
+- Dark esports theme with red highlights.
+- Smooth hover and animation effects.
+- Responsive design for desktop and mobile.
+
+8. **Extra Features**
+- Optional leaderboard filters (points range, tier).
+- Animated effects for top players.
+- Custom banners for gamemodes or tiers.
+
+9. **Server & Community Integration**
+- Display server IP prominently: **neomc.fun**.
+- Join Discord button: **https://discord.gg/7UxNZS3tph**.
+- Footer with copyright and credits.
+
+10. **Custom Domain**
+- Make website compatible with custom domains (example: **tier.neomc.fun**) using CNAME or Replit domain forwarding.
+
+**Final Goal:** A fully functional NEOTIERS Minecraft PvP leaderboard website that mimics MCTiers with **player models instead of heads, sortable leaderboard, multiple gamemodes, animated backgrounds, admin panel, dynamic skins, and full server/Discord info.**
