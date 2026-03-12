@@ -7,13 +7,14 @@ import { motion, AnimatePresence } from "framer-motion";
 const GAMEMODE_NAV = [
   { href: "/leaderboard", label: "Overall",    icon: "🏆" },
   { href: "/uhc",         label: "UHC",        icon: "💀" },
-  { href: "/nethpot",     label: "NethPot",    icon: "🧪" },
-  { href: "/smp",         label: "SMP",        icon: "⚔️" },
+  { href: "/nethpot",     label: "NethPot",    icon: "⚗️" },
+  { href: "/smp",         label: "SMP",        icon: "🛡️" },
   { href: "/axe",         label: "Axe",        icon: "🪓" },
   { href: "/mace",        label: "Mace",       icon: "🔨" },
   { href: "/spear",       label: "Spear",      icon: "🏹" },
   { href: "/lifesteal",   label: "Lifesteal",  icon: "❤️" },
   { href: "/crystal",     label: "Crystal",    icon: "💎" },
+  { href: "/sword",       label: "Sword",      icon: "🗡️" },
 ];
 
 export function Layout({ children }: { children: ReactNode }) {

@@ -5,16 +5,17 @@ import { useQuery } from "@tanstack/react-query";
 import { motion } from "framer-motion";
 import { ArrowLeft, Trophy, Target, Calendar } from "lucide-react";
 
-const RANKED_GAMEMODES = ["uhc", "nethpot", "smp", "axe", "mace", "spear", "lifesteal", "crystal"] as const;
+const RANKED_GAMEMODES = ["uhc", "nethpot", "smp", "axe", "mace", "spear", "lifesteal", "crystal", "sword"] as const;
 const GAMEMODE_LABELS: Record<string, { label: string; icon: string }> = {
   uhc:       { label: "UHC",       icon: "💀" },
-  nethpot:   { label: "NethPot",   icon: "🧪" },
-  smp:       { label: "SMP",       icon: "⚔️" },
+  nethpot:   { label: "NethPot",   icon: "⚗️" },
+  smp:       { label: "SMP",       icon: "🛡️" },
   axe:       { label: "Axe",       icon: "🪓" },
   mace:      { label: "Mace",      icon: "🔨" },
   spear:     { label: "Spear",     icon: "🏹" },
   lifesteal: { label: "Lifesteal", icon: "❤️" },
   crystal:   { label: "Crystal",   icon: "💎" },
+  sword:     { label: "Sword",     icon: "🗡️" },
 };
 
 interface PlayerData {

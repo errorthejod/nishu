@@ -12,17 +12,18 @@ type SortKey = "rank" | "username" | "tier" | "points";
 export const GAMEMODE_META: Record<string, { label: string; icon: string; color: string }> = {
   overall:   { label: "Overall",    icon: "🏆", color: "#FFD700" },
   uhc:       { label: "UHC",        icon: "💀", color: "#ef4444" },
-  nethpot:   { label: "NethPot",    icon: "🧪", color: "#a855f7" },
-  smp:       { label: "SMP",        icon: "⚔️", color: "#3b82f6" },
+  nethpot:   { label: "NethPot",    icon: "⚗️", color: "#a855f7" },
+  smp:       { label: "SMP",        icon: "🛡️", color: "#3b82f6" },
   axe:       { label: "Axe",        icon: "🪓", color: "#f97316" },
   mace:      { label: "Mace",       icon: "🔨", color: "#eab308" },
   spear:     { label: "Spear",      icon: "🏹", color: "#22c55e" },
   lifesteal: { label: "Lifesteal",  icon: "❤️", color: "#ec4899" },
   crystal:   { label: "Crystal",    icon: "💎", color: "#06b6d4" },
+  sword:     { label: "Sword",      icon: "🗡️", color: "#f43f5e" },
 };
 
 export const COL_WIDTHS = "48px 56px 1fr 90px 110px 72px 80px";
-const RANKED_GAMEMODES = ["uhc", "nethpot", "smp", "axe", "mace", "spear", "lifesteal", "crystal"] as const;
+const RANKED_GAMEMODES = ["uhc", "nethpot", "smp", "axe", "mace", "spear", "lifesteal", "crystal", "sword"] as const;
 
 interface LeaderboardProps { gamemode?: string; }
 

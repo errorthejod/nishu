@@ -29,6 +29,7 @@ export const macePlayersTable = makeGamemodeTable("mace_players");
 export const spearPlayersTable = makeGamemodeTable("spear_players");
 export const lifestealPlayersTable = makeGamemodeTable("lifesteal_players");
 export const crystalPlayersTable = makeGamemodeTable("crystal_players");
+export const swordPlayersTable = makeGamemodeTable("sword_players");
 
 export const GAMEMODE_TABLES = {
   overall: overallPlayersTable,
@@ -40,12 +41,13 @@ export const GAMEMODE_TABLES = {
   spear: spearPlayersTable,
   lifesteal: lifestealPlayersTable,
   crystal: crystalPlayersTable,
+  sword: swordPlayersTable,
 } as const;
 
 export type GamemodeSlug = keyof typeof GAMEMODE_TABLES;
 
 export const VALID_GAMEMODES: GamemodeSlug[] = [
-  "overall", "uhc", "nethpot", "smp", "axe", "mace", "spear", "lifesteal", "crystal",
+  "overall", "uhc", "nethpot", "smp", "axe", "mace", "spear", "lifesteal", "crystal", "sword",
 ];
 
 export const insertPlayerSchema = createInsertSchema(playersTable).omit({ id: true, createdAt: true, updatedAt: true });
