@@ -10,8 +10,8 @@ import Profile from "@/pages/profile";
 import AdminLogin from "@/pages/admin-login";
 import AdminDashboard from "@/pages/admin-dashboard";
 
-export const VALID_GAMEMODES = ["uhc", "nethpot", "smp", "axe", "mace", "spear", "lifesteal", "crystal"] as const;
-export type GamemodeSlug = typeof VALID_GAMEMODES[number];
+export const ALL_GAMEMODES = ["overall", "uhc", "nethpot", "smp", "axe", "mace", "spear", "lifesteal", "crystal"] as const;
+export type GamemodeSlug = typeof ALL_GAMEMODES[number];
 
 const queryClient = new QueryClient();
 
@@ -22,10 +22,11 @@ function Router() {
       <Route path="/admin" component={AdminLogin} />
       <Route path="/admin/dashboard" component={AdminDashboard} />
       <Route path="/player/:id" component={Profile} />
-      {VALID_GAMEMODES.map((gm) => (
-        <Route key={gm} path={`/${gm}`}>
-          {() => <Leaderboard gamemode={gm} />}
-        </Route>
+      {/* Overall leaderboard at /leaderboard */}
+      <Route path="/leaderboard">{() => <Leaderboard gamemode="overall" />}</Route>
+      {/* Per-gamemode routes */}
+      {ALL_GAMEMODES.map((gm) => (
+        <Route key={gm} path={`/${gm}`}>{() => <Leaderboard gamemode={gm} />}</Route>
       ))}
       <Route component={NotFound} />
     </Switch>

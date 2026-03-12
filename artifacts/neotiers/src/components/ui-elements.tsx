@@ -1,5 +1,4 @@
 import { ReactNode } from "react";
-import { motion } from "framer-motion";
 
 export const TIERS = ["HT1","HT2","HT3","HT4","HT5","LT1","LT2","LT3","LT4","LT5"] as const;
 export type Tier = typeof TIERS[number];
@@ -25,7 +24,6 @@ const TIER_STYLES: Record<string, { bg: string; text: string; border: string; gl
 export function TierBadge({ tier, size = "md" }: { tier: string; size?: "sm" | "md" | "lg" }) {
   const upper = tier.toUpperCase();
   const style = TIER_STYLES[upper] || { bg: "#263238", text: "#90A4AE", border: "#455A64", glow: "none" };
-  const isHT = upper.startsWith("HT");
 
   const sizeClasses = {
     sm: "text-[10px] px-1.5 py-0.5 min-w-[32px]",
@@ -55,13 +53,26 @@ export function TierBadge({ tier, size = "md" }: { tier: string; size?: "sm" | "
   );
 }
 
-export function getRankTitle(points: number): string {
-  if (points >= 9000) return "Combat Grandmaster";
-  if (points >= 7500) return "Combat Master";
-  if (points >= 6000) return "Combat Expert";
-  if (points >= 4500) return "Combat Veteran";
-  if (points >= 3000) return "Combat Recruit";
-  return "Combat Initiate";
+/** Returns the rank title based on leaderboard position (1-indexed) */
+export function getRankTitle(rank: number): string {
+  if (rank === 1) return "Combat Grandmaster";
+  if (rank === 2) return "Combat Master";
+  if (rank === 3) return "Master";
+  if (rank <= 10) return "Combat Ace";
+  if (rank <= 25) return "Combat Specialist";
+  if (rank <= 50) return "Combat Initiate";
+  return "Unranked";
+}
+
+/** Color for each rank title */
+export function getRankTitleColor(rank: number): string {
+  if (rank === 1) return "#FFD700";
+  if (rank === 2) return "#C0C0C0";
+  if (rank === 3) return "#CD7F32";
+  if (rank <= 10) return "#ef4444";
+  if (rank <= 25) return "#a855f7";
+  if (rank <= 50) return "#6b7280";
+  return "#4b5563";
 }
 
 export function EsportsButton({

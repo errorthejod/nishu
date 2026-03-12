@@ -6,25 +6,29 @@ import { Search, ChevronUp, ChevronDown, Minus } from "lucide-react";
 
 type SortKey = "rank" | "username" | "tier" | "points";
 
-const GAMEMODE_META: Record<string, { label: string; icon: string; color: string }> = {
-  uhc:       { label: "UHC",       icon: "💀", color: "#ef4444" },
-  nethpot:   { label: "NethPot",   icon: "🧪", color: "#a855f7" },
-  smp:       { label: "SMP",       icon: "⚔️", color: "#3b82f6" },
-  axe:       { label: "Axe",       icon: "🪓", color: "#f97316" },
-  mace:      { label: "Mace",      icon: "🔨", color: "#eab308" },
-  spear:     { label: "Spear",     icon: "🏹", color: "#22c55e" },
-  lifesteal: { label: "Lifesteal", icon: "❤️", color: "#ec4899" },
-  crystal:   { label: "Crystal",   icon: "💎", color: "#06b6d4" },
+export const GAMEMODE_META: Record<string, { label: string; icon: string; color: string }> = {
+  overall:   { label: "Overall",    icon: "🏆", color: "#FFD700" },
+  uhc:       { label: "UHC",        icon: "💀", color: "#ef4444" },
+  nethpot:   { label: "NethPot",    icon: "🧪", color: "#a855f7" },
+  smp:       { label: "SMP",        icon: "⚔️", color: "#3b82f6" },
+  axe:       { label: "Axe",        icon: "🪓", color: "#f97316" },
+  mace:      { label: "Mace",       icon: "🔨", color: "#eab308" },
+  spear:     { label: "Spear",      icon: "🏹", color: "#22c55e" },
+  lifesteal: { label: "Lifesteal",  icon: "❤️", color: "#ec4899" },
+  crystal:   { label: "Crystal",    icon: "💎", color: "#06b6d4" },
 };
 
-// Fixed column widths shared between header and rows
-export const COL_WIDTHS = "48px 64px 1fr 100px 110px 72px 80px";
+/**
+ * Grid columns shared between header and each PlayerRow.
+ * Rank | Skin | Player (username+title) | Mode | Weapon | Tier | Points
+ */
+export const COL_WIDTHS = "48px 64px 1fr 90px 110px 72px 80px";
 
 interface LeaderboardProps {
   gamemode?: string;
 }
 
-export default function Leaderboard({ gamemode = "uhc" }: LeaderboardProps) {
+export default function Leaderboard({ gamemode = "overall" }: LeaderboardProps) {
   const [search, setSearch] = useState("");
   const [sortKey, setSortKey] = useState<SortKey>("rank");
   const [sortDir, setSortDir] = useState<"asc" | "desc">("asc");
@@ -36,12 +40,12 @@ export default function Leaderboard({ gamemode = "uhc" }: LeaderboardProps) {
 
   const meta = GAMEMODE_META[gamemode] ?? { label: gamemode, icon: "🎮", color: "#6b7280" };
 
-  const filtered = players.filter(p =>
+  const filtered = players.filter((p) =>
     p.username.toLowerCase().includes(search.toLowerCase())
   );
 
   function handleSort(key: SortKey) {
-    if (sortKey === key) setSortDir(d => d === "asc" ? "desc" : "asc");
+    if (sortKey === key) setSortDir((d) => (d === "asc" ? "desc" : "asc"));
     else { setSortKey(key); setSortDir("asc"); }
   }
 
@@ -80,12 +84,14 @@ export default function Leaderboard({ gamemode = "uhc" }: LeaderboardProps) {
             </div>
             <div>
               <h1 className="text-xl font-bold text-white flex items-center gap-2">
-                {meta.label}
-                <span className="text-xs text-[#6b7280] font-normal bg-[#1e2130] px-2 py-0.5 rounded">
+                {meta.label}{" "}
+                <span className="text-xs font-normal text-[#6b7280] bg-[#1e2130] px-2 py-0.5 rounded">
                   Top {players.length}
                 </span>
               </h1>
-              <p className="text-xs text-[#6b7280]">Ranked by points · Top 50 players</p>
+              <p className="text-xs text-[#6b7280]">
+                {gamemode === "overall" ? "Global rankings across all gamemodes" : "Ranked by points · Top 50 players"}
+              </p>
             </div>
           </div>
           <div className="sm:ml-auto relative">
@@ -94,7 +100,7 @@ export default function Leaderboard({ gamemode = "uhc" }: LeaderboardProps) {
               type="text"
               placeholder="Search player..."
               value={search}
-              onChange={e => setSearch(e.target.value)}
+              onChange={(e) => setSearch(e.target.value)}
               className="pl-8 pr-3 py-1.5 text-sm bg-[#1e2130] border border-[#2a2f42] rounded text-white placeholder-[#6b7280] focus:outline-none focus:border-primary w-52"
             />
           </div>
@@ -102,7 +108,7 @@ export default function Leaderboard({ gamemode = "uhc" }: LeaderboardProps) {
 
         {/* Table */}
         <div className="rounded-lg border border-[#1e2130] overflow-hidden bg-[#0d0f14]">
-          {/* Table Header — must match COL_WIDTHS exactly */}
+          {/* Header */}
           <div
             className="grid text-[11px] font-semibold uppercase tracking-wider text-[#6b7280] border-b border-[#1e2130] px-3 h-9 items-center"
             style={{ gridTemplateColumns: COL_WIDTHS }}
@@ -110,7 +116,6 @@ export default function Leaderboard({ gamemode = "uhc" }: LeaderboardProps) {
             <button onClick={() => handleSort("rank")} className="flex items-center hover:text-white">
               #<SortIcon col="rank" />
             </button>
-            {/* skin column */}
             <span />
             <button onClick={() => handleSort("username")} className="flex items-center hover:text-white">
               Player<SortIcon col="username" />
@@ -134,17 +139,18 @@ export default function Leaderboard({ gamemode = "uhc" }: LeaderboardProps) {
           )}
           {!isLoading && !error && sorted.length === 0 && (
             <div className="text-center py-16 text-[#6b7280] text-sm">
-              {search ? "No players matching your search" : "No players ranked yet in this mode"}
+              {search ? "No players matching your search" : "No players ranked yet"}
             </div>
           )}
-          {!isLoading && sorted.map((player) => (
-            <PlayerRow
-              key={player.id}
-              player={player}
-              position={player.rank ?? 0}
-              gamemode={gamemode}
-            />
-          ))}
+          {!isLoading &&
+            sorted.map((player) => (
+              <PlayerRow
+                key={player.id}
+                player={player}
+                position={player.rank ?? 0}
+                gamemode={gamemode}
+              />
+            ))}
         </div>
       </div>
     </Layout>

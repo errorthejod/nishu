@@ -20,6 +20,7 @@ function makeGamemodeTable(tableName: string) {
 
 export const playersTable = makeGamemodeTable("players");
 
+export const overallPlayersTable = makeGamemodeTable("overall_players");
 export const uhcPlayersTable = makeGamemodeTable("uhc_players");
 export const nethpotPlayersTable = makeGamemodeTable("nethpot_players");
 export const smpPlayersTable = makeGamemodeTable("smp_players");
@@ -30,6 +31,7 @@ export const lifestealPlayersTable = makeGamemodeTable("lifesteal_players");
 export const crystalPlayersTable = makeGamemodeTable("crystal_players");
 
 export const GAMEMODE_TABLES = {
+  overall: overallPlayersTable,
   uhc: uhcPlayersTable,
   nethpot: nethpotPlayersTable,
   smp: smpPlayersTable,
@@ -42,7 +44,9 @@ export const GAMEMODE_TABLES = {
 
 export type GamemodeSlug = keyof typeof GAMEMODE_TABLES;
 
-export const VALID_GAMEMODES: GamemodeSlug[] = ["uhc", "nethpot", "smp", "axe", "mace", "spear", "lifesteal", "crystal"];
+export const VALID_GAMEMODES: GamemodeSlug[] = [
+  "overall", "uhc", "nethpot", "smp", "axe", "mace", "spear", "lifesteal", "crystal",
+];
 
 export const insertPlayerSchema = createInsertSchema(playersTable).omit({ id: true, createdAt: true, updatedAt: true });
 export type InsertPlayer = z.infer<typeof insertPlayerSchema>;

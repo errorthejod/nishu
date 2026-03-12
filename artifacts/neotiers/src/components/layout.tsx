@@ -5,14 +5,15 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
 const GAMEMODE_NAV = [
-  { href: "/uhc",       label: "UHC",       icon: "💀" },
-  { href: "/nethpot",   label: "NethPot",   icon: "🧪" },
-  { href: "/smp",       label: "SMP",       icon: "⚔️" },
-  { href: "/axe",       label: "Axe",       icon: "🪓" },
-  { href: "/mace",      label: "Mace",      icon: "🔨" },
-  { href: "/spear",     label: "Spear",     icon: "🏹" },
-  { href: "/lifesteal", label: "Lifesteal", icon: "❤️" },
-  { href: "/crystal",   label: "Crystal",   icon: "💎" },
+  { href: "/leaderboard", label: "Overall",    icon: "🏆" },
+  { href: "/uhc",         label: "UHC",        icon: "💀" },
+  { href: "/nethpot",     label: "NethPot",    icon: "🧪" },
+  { href: "/smp",         label: "SMP",        icon: "⚔️" },
+  { href: "/axe",         label: "Axe",        icon: "🪓" },
+  { href: "/mace",        label: "Mace",       icon: "🔨" },
+  { href: "/spear",       label: "Spear",      icon: "🏹" },
+  { href: "/lifesteal",   label: "Lifesteal",  icon: "❤️" },
+  { href: "/crystal",     label: "Crystal",    icon: "💎" },
 ];
 
 export function Layout({ children }: { children: ReactNode }) {
@@ -43,13 +44,14 @@ export function Layout({ children }: { children: ReactNode }) {
             </Link>
             <div className="w-px h-4 bg-[#2a2f42] mx-1" />
             {GAMEMODE_NAV.map((link) => {
-              const isActive = location === link.href;
+              const isActive = location === link.href || (link.href === "/leaderboard" && location === "/overall");
               return (
                 <Link
                   key={link.href}
                   href={link.href}
-                  className={`px-3 py-2 text-sm font-medium tracking-wide transition-all whitespace-nowrap flex items-center gap-1
-                    ${isActive ? "text-white border-b-2 border-primary bg-primary/5" : "text-[#6b7280] hover:text-white"}`}
+                  className={`px-2.5 py-2 text-sm font-medium tracking-wide transition-all whitespace-nowrap flex items-center gap-1
+                    ${isActive ? "text-white border-b-2 border-primary bg-primary/5" : "text-[#6b7280] hover:text-white"}
+                    ${link.href === "/leaderboard" ? "text-yellow-400 hover:text-yellow-300" : ""}`}
                 >
                   <span className="text-xs">{link.icon}</span>
                   {link.label}

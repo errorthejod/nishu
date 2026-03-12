@@ -18,9 +18,9 @@ import { LogOut, Plus, Edit, Trash2, Settings, Users, Gamepad2 } from "lucide-re
 import { useToast } from "@/hooks/use-toast";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 
-const VALID_GAMEMODES = ["uhc", "nethpot", "smp", "axe", "mace", "spear", "lifesteal", "crystal"] as const;
+const VALID_GAMEMODES = ["overall", "uhc", "nethpot", "smp", "axe", "mace", "spear", "lifesteal", "crystal"] as const;
 const GAMEMODE_LABELS: Record<string, string> = {
-  uhc: "UHC", nethpot: "NethPot", smp: "SMP",
+  overall: "Overall 🏆", uhc: "UHC", nethpot: "NethPot", smp: "SMP",
   axe: "Axe", mace: "Mace", spear: "Spear",
   lifesteal: "Lifesteal", crystal: "Crystal",
 };
