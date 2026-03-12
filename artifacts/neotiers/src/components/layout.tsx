@@ -76,6 +76,9 @@ export function Layout({ children }: { children: ReactNode }) {
             <div className="text-xs text-[#6b7280] bg-[#1e2130] border border-[#2a2f42] px-3 py-1.5 rounded">
               <span className="text-white font-medium">neomc.fun</span>
             </div>
+            <Link href="/stats" className="px-3 py-1.5 text-xs text-[#6b7280] hover:text-white transition-colors">
+              Stats
+            </Link>
             <Link href="/admin" className="px-3 py-1.5 text-xs text-[#6b7280] hover:text-white transition-colors">
               Admin
             </Link>

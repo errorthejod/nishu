@@ -8,22 +8,30 @@ export const TIER_ORDER: Record<string, number> = {
   LT1: 5, LT2: 6, LT3: 7, LT4: 8, LT5: 9,
 };
 
+// Updated tier colors per spec
 const TIER_STYLES: Record<string, { bg: string; text: string; border: string; glow: string }> = {
-  HT1: { bg: "#FFD700", text: "#000", border: "#FFD700", glow: "rgba(255,215,0,0.6)" },
-  HT2: { bg: "#FF8C00", text: "#fff", border: "#FF8C00", glow: "rgba(255,140,0,0.5)" },
-  HT3: { bg: "#00C853", text: "#000", border: "#00C853", glow: "rgba(0,200,83,0.5)" },
-  HT4: { bg: "#00BCD4", text: "#000", border: "#00BCD4", glow: "rgba(0,188,212,0.5)" },
-  HT5: { bg: "#9C27B0", text: "#fff", border: "#9C27B0", glow: "rgba(156,39,176,0.5)" },
-  LT1: { bg: "#E91E63", text: "#fff", border: "#E91E63", glow: "rgba(233,30,99,0.4)" },
-  LT2: { bg: "#2196F3", text: "#fff", border: "#2196F3", glow: "rgba(33,150,243,0.4)" },
-  LT3: { bg: "#607D8B", text: "#fff", border: "#607D8B", glow: "rgba(96,125,139,0.4)" },
-  LT4: { bg: "#455A64", text: "#fff", border: "#455A64", glow: "none" },
-  LT5: { bg: "#263238", text: "#90A4AE", border: "#455A64", glow: "none" },
+  HT1: { bg: "#dc2626", text: "#fff", border: "#ef4444", glow: "rgba(220,38,38,0.6)" },
+  HT2: { bg: "#ea580c", text: "#fff", border: "#f97316", glow: "rgba(234,88,12,0.5)" },
+  HT3: { bg: "#ca8a04", text: "#fff", border: "#eab308", glow: "rgba(202,138,4,0.5)" },
+  HT4: { bg: "#16a34a", text: "#fff", border: "#4ade80", glow: "rgba(22,163,74,0.5)" },
+  HT5: { bg: "#15803d", text: "#fff", border: "#22c55e", glow: "rgba(21,128,61,0.4)" },
+  LT1: { bg: "#7e22ce", text: "#fff", border: "#a855f7", glow: "rgba(126,34,206,0.5)" },
+  LT2: { bg: "#1d4ed8", text: "#fff", border: "#3b82f6", glow: "rgba(29,78,216,0.5)" },
+  LT3: { bg: "#0e7490", text: "#fff", border: "#06b6d4", glow: "rgba(14,116,144,0.4)" },
+  LT4: { bg: "#4b5563", text: "#fff", border: "#6b7280", glow: "none" },
+  LT5: { bg: "#1f2937", text: "#9ca3af", border: "#374151", glow: "none" },
+};
+
+export const TIER_COLORS: Record<string, string> = {
+  HT1: "#dc2626", HT2: "#ea580c", HT3: "#ca8a04",
+  HT4: "#16a34a", HT5: "#15803d",
+  LT1: "#7e22ce", LT2: "#1d4ed8", LT3: "#0e7490",
+  LT4: "#4b5563", LT5: "#1f2937",
 };
 
 export function TierBadge({ tier, size = "md" }: { tier: string; size?: "sm" | "md" | "lg" }) {
   const upper = tier.toUpperCase();
-  const style = TIER_STYLES[upper] || { bg: "#263238", text: "#90A4AE", border: "#455A64", glow: "none" };
+  const style = TIER_STYLES[upper] || { bg: "#1f2937", text: "#9ca3af", border: "#374151", glow: "none" };
 
   const sizeClasses = {
     sm: "text-[10px] px-1.5 py-0.5 min-w-[32px]",
@@ -53,6 +61,29 @@ export function TierBadge({ tier, size = "md" }: { tier: string; size?: "sm" | "
   );
 }
 
+export const WEAPON_ICONS: Record<string, string> = {
+  sword:     "⚔️",
+  axe:       "🪓",
+  mace:      "🔨",
+  crystal:   "💎",
+  bow:       "🏹",
+  spear:     "🗡️",
+  lifesteal: "🩸",
+  trident:   "🔱",
+  pickaxe:   "⛏️",
+};
+
+export function WeaponIcon({ weapon }: { weapon: string }) {
+  const key = weapon.toLowerCase();
+  const icon = WEAPON_ICONS[key] ?? "⚔️";
+  return (
+    <span className="flex items-center gap-1.5 text-xs text-[#9ca3af]">
+      <span className="text-sm leading-none">{icon}</span>
+      <span>{weapon}</span>
+    </span>
+  );
+}
+
 /** Returns the rank title based on leaderboard position (1-indexed) */
 export function getRankTitle(rank: number): string {
   if (rank === 1) return "Combat Grandmaster";
@@ -76,36 +107,19 @@ export function getRankTitleColor(rank: number): string {
 }
 
 export function EsportsButton({
-  children,
-  onClick,
-  variant = "primary",
-  className = "",
-  disabled = false,
-  type = "button",
+  children, onClick, variant = "primary", className = "", disabled = false, type = "button",
 }: {
-  children: ReactNode;
-  onClick?: () => void;
-  variant?: "primary" | "secondary" | "outline";
-  className?: string;
-  disabled?: boolean;
-  type?: "button" | "submit";
+  children: ReactNode; onClick?: () => void; variant?: "primary" | "secondary" | "outline";
+  className?: string; disabled?: boolean; type?: "button" | "submit";
 }) {
-  const baseClasses =
-    "esports-clip px-8 py-3 font-display text-xl tracking-wider uppercase font-bold transition-all duration-300 flex items-center justify-center gap-2 group disabled:opacity-50 disabled:cursor-not-allowed";
-
+  const base = "esports-clip px-8 py-3 font-display text-xl tracking-wider uppercase font-bold transition-all duration-300 flex items-center justify-center gap-2 group disabled:opacity-50 disabled:cursor-not-allowed";
   const variants = {
-    primary: "bg-primary text-primary-foreground hover:bg-primary/90 hover:box-glow",
+    primary: "bg-primary text-primary-foreground hover:bg-primary/90",
     secondary: "bg-secondary text-foreground hover:bg-muted",
     outline: "bg-transparent border-2 border-primary text-primary hover:bg-primary/10",
   };
-
   return (
-    <button
-      type={type}
-      onClick={onClick}
-      disabled={disabled}
-      className={`${baseClasses} ${variants[variant]} ${className}`}
-    >
+    <button type={type} onClick={onClick} disabled={disabled} className={`${base} ${variants[variant]} ${className}`}>
       {children}
     </button>
   );
@@ -114,10 +128,8 @@ export function EsportsButton({
 export function LoadingSpinner() {
   return (
     <div className="flex flex-col items-center justify-center py-20 gap-4">
-      <div className="w-12 h-12 border-4 border-secondary border-t-primary rounded-full animate-spin"></div>
-      <p className="font-display text-xl text-muted-foreground uppercase tracking-widest animate-pulse">
-        Loading Data...
-      </p>
+      <div className="w-12 h-12 border-4 border-secondary border-t-primary rounded-full animate-spin" />
+      <p className="font-display text-xl text-muted-foreground uppercase tracking-widest animate-pulse">Loading Data...</p>
     </div>
   );
 }

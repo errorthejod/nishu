@@ -1,5 +1,5 @@
 import { Player } from "@workspace/api-client-react";
-import { TierBadge, getRankTitle, getRankTitleColor } from "./ui-elements";
+import { TierBadge, WeaponIcon, getRankTitle, getRankTitleColor } from "./ui-elements";
 import { Link } from "wouter";
 import { COL_WIDTHS } from "@/pages/leaderboard";
 
@@ -15,46 +15,22 @@ const GAMEMODE_LABELS: Record<string, string> = {
 };
 
 function RankBadge({ position }: { position: number }) {
-  if (position === 1) {
-    return (
-      <div className="flex flex-col items-center">
-        <span className="text-base leading-none">🥇</span>
-      </div>
-    );
-  }
-  if (position === 2) {
-    return (
-      <div className="flex flex-col items-center">
-        <span className="text-base leading-none">🥈</span>
-      </div>
-    );
-  }
-  if (position === 3) {
-    return (
-      <div className="flex flex-col items-center">
-        <span className="text-base leading-none">🥉</span>
-      </div>
-    );
-  }
-  return (
-    <span className="text-[#6b7280] text-sm font-mono">#{position}</span>
-  );
+  if (position === 1) return <span className="text-lg leading-none">🥇</span>;
+  if (position === 2) return <span className="text-lg leading-none">🥈</span>;
+  if (position === 3) return <span className="text-lg leading-none">🥉</span>;
+  return <span className="text-[#6b7280] text-sm font-mono">#{position}</span>;
 }
 
 export function PlayerRow({ player, position, gamemode }: PlayerRowProps) {
-  const skinSrc =
-    player.customSkinUrl ||
-    `https://visage.surgeplay.com/bust/96/${player.username}`;
-
+  const skinSrc = player.customSkinUrl || `https://mc-heads.net/avatar/${player.username}/40`;
   const isTop3 = position <= 3;
   const isTop10 = position <= 10;
   const title = getRankTitle(position);
   const titleColor = getRankTitleColor(position);
-
   const displayGamemode = player.gamemode ?? gamemode;
 
   return (
-    <Link href={`/player/${player.id}?gamemode=${gamemode}`}>
+    <Link href={`/player/${player.username}`}>
       <div
         className={`grid px-3 py-1 items-center border-b border-[#1e2130] cursor-pointer transition-all duration-150
           ${isTop3 ? "bg-[#ffffff04] hover:bg-[#ffffff09]" : "hover:bg-[#1a1d27]"}`}
@@ -65,16 +41,17 @@ export function PlayerRow({ player, position, gamemode }: PlayerRowProps) {
           <RankBadge position={position} />
         </div>
 
-        {/* Player Skin */}
+        {/* Skin */}
         <div className="flex items-center justify-center py-1">
           <img
             src={skinSrc}
             alt={player.username}
-            className="w-10 h-10 object-contain"
+            className="w-9 h-9 rounded object-contain"
+            style={{ imageRendering: "pixelated" }}
             onError={(e) => {
               const t = e.currentTarget;
-              if (!t.src.includes("mc-heads")) {
-                t.src = `https://mc-heads.net/avatar/${player.username}/40`;
+              if (!t.src.includes("visage")) {
+                t.src = `https://visage.surgeplay.com/bust/48/${player.username}`;
               }
             }}
           />
@@ -83,20 +60,13 @@ export function PlayerRow({ player, position, gamemode }: PlayerRowProps) {
         {/* Username + Title */}
         <div className="flex flex-col justify-center min-w-0 pr-2 py-1">
           <div className="flex items-center gap-1.5 min-w-0">
-            {isTop10 && (
-              <span className="shrink-0 w-1.5 h-1.5 rounded-full bg-primary inline-block" />
-            )}
-            <span
-              className={`font-bold truncate text-sm leading-tight ${isTop3 ? "text-white" : "text-[#d1d5db]"}`}
-            >
+            {isTop10 && <span className="shrink-0 w-1.5 h-1.5 rounded-full bg-primary inline-block" />}
+            <span className={`font-bold truncate text-sm leading-tight ${isTop3 ? "text-white" : "text-[#d1d5db]"}`}>
               {player.username}
             </span>
           </div>
           {position > 0 && position <= 50 && (
-            <span
-              className="text-[10px] font-medium leading-tight truncate mt-0.5"
-              style={{ color: titleColor }}
-            >
+            <span className="text-[10px] font-medium leading-tight truncate mt-0.5" style={{ color: titleColor }}>
               {title}
             </span>
           )}
@@ -109,9 +79,9 @@ export function PlayerRow({ player, position, gamemode }: PlayerRowProps) {
           </span>
         </div>
 
-        {/* Weapon */}
+        {/* Weapon with icon */}
         <div className="hidden md:flex items-center">
-          <span className="text-xs text-[#9ca3af] truncate">{player.weapon}</span>
+          <WeaponIcon weapon={player.weapon} />
         </div>
 
         {/* Tier */}
@@ -121,9 +91,7 @@ export function PlayerRow({ player, position, gamemode }: PlayerRowProps) {
 
         {/* Points */}
         <div className="flex items-center justify-end">
-          <span
-            className={`text-sm font-bold tabular-nums ${isTop3 ? "text-white" : "text-[#9ca3af]"}`}
-          >
+          <span className={`text-sm font-bold tabular-nums ${isTop3 ? "text-white" : "text-[#9ca3af]"}`}>
             {player.points.toLocaleString()}
           </span>
         </div>
