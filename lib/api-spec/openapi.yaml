@@ -138,6 +138,11 @@ paths:
           required: true
           schema:
             type: number
+        - name: gamemode
+          in: query
+          required: true
+          schema:
+            type: string
       responses:
         "200":
           description: Deleted

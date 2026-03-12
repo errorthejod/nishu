@@ -22,6 +22,7 @@ import type {
   AdminMeResponse,
   CreateGamemodeInput,
   CreatePlayerInput,
+  DeletePlayerParams,
   Gamemode,
   HealthStatus,
   ListPlayersParams,
@@ -471,15 +472,28 @@ export const useUpdatePlayer = <
 /**
  * @summary Delete a player
  */
-export const getDeletePlayerUrl = (id: number) => {
-  return `/api/players/${id}`;
+export const getDeletePlayerUrl = (id: number, params: DeletePlayerParams) => {
+  const normalizedParams = new URLSearchParams();
+
+  Object.entries(params || {}).forEach(([key, value]) => {
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? "null" : value.toString());
+    }
+  });
+
+  const stringifiedParams = normalizedParams.toString();
+
+  return stringifiedParams.length > 0
+    ? `/api/players/${id}?${stringifiedParams}`
+    : `/api/players/${id}`;
 };
 
 export const deletePlayer = async (
   id: number,
+  params: DeletePlayerParams,
   options?: RequestInit,
 ): Promise<MessageResponse> => {
-  return customFetch<MessageResponse>(getDeletePlayerUrl(id), {
+  return customFetch<MessageResponse>(getDeletePlayerUrl(id, params), {
     ...options,
     method: "DELETE",
   });
@@ -492,14 +506,14 @@ export const getDeletePlayerMutationOptions = <
   mutation?: UseMutationOptions<
     Awaited<ReturnType<typeof deletePlayer>>,
     TError,
-    { id: number },
+    { id: number; params: DeletePlayerParams },
     TContext
   >;
   request?: SecondParameter<typeof customFetch>;
 }): UseMutationOptions<
   Awaited<ReturnType<typeof deletePlayer>>,
   TError,
-  { id: number },
+  { id: number; params: DeletePlayerParams },
   TContext
 > => {
   const mutationKey = ["deletePlayer"];
@@ -513,11 +527,11 @@ export const getDeletePlayerMutationOptions = <
 
   const mutationFn: MutationFunction<
     Awaited<ReturnType<typeof deletePlayer>>,
-    { id: number }
+    { id: number; params: DeletePlayerParams }
   > = (props) => {
-    const { id } = props ?? {};
+    const { id, params } = props ?? {};
 
-    return deletePlayer(id, requestOptions);
+    return deletePlayer(id, params, requestOptions);
   };
 
   return { mutationFn, ...mutationOptions };
@@ -539,14 +553,14 @@ export const useDeletePlayer = <
   mutation?: UseMutationOptions<
     Awaited<ReturnType<typeof deletePlayer>>,
     TError,
-    { id: number },
+    { id: number; params: DeletePlayerParams },
     TContext
   >;
   request?: SecondParameter<typeof customFetch>;
 }): UseMutationResult<
   Awaited<ReturnType<typeof deletePlayer>>,
   TError,
-  { id: number },
+  { id: number; params: DeletePlayerParams },
   TContext
 > => {
   return useMutation(getDeletePlayerMutationOptions(options));

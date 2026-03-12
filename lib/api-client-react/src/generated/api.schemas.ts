@@ -124,3 +124,7 @@ export const ListPlayersSortBy = {
   tier: "tier",
   username: "username",
 } as const;
+
+export type DeletePlayerParams = {
+  gamemode: string;
+};

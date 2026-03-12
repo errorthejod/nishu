@@ -1,184 +1,150 @@
+import { useState } from "react";
 import { Layout } from "@/components/layout";
 import { PlayerRow } from "@/components/player-row";
-import { LoadingSpinner, TIERS } from "@/components/ui-elements";
-import { useListPlayers, useListGamemodes } from "@workspace/api-client-react";
-import { Search, Trophy, Swords } from "lucide-react";
-import { useState } from "react";
+import { useListPlayers } from "@workspace/api-client-react";
+import { Search, ChevronUp, ChevronDown, Minus } from "lucide-react";
 
-const GAMEMODE_ICONS: Record<string, string> = {
-  overall: "🏆",
-  smp: "⚔️",
-  uhc: "💀",
-  nethpot: "🧪",
-  pvp: "🗡️",
-  bedwars: "🛏️",
+type SortKey = "rank" | "username" | "tier" | "points";
+
+const GAMEMODE_META: Record<string, { label: string; icon: string; color: string }> = {
+  uhc:       { label: "UHC",       icon: "💀", color: "#ef4444" },
+  nethpot:   { label: "NethPot",   icon: "🧪", color: "#a855f7" },
+  smp:       { label: "SMP",       icon: "⚔️", color: "#3b82f6" },
+  axe:       { label: "Axe",       icon: "🪓", color: "#f97316" },
+  mace:      { label: "Mace",      icon: "🔨", color: "#eab308" },
+  spear:     { label: "Spear",     icon: "🏹", color: "#22c55e" },
+  lifesteal: { label: "Lifesteal", icon: "❤️", color: "#ec4899" },
+  crystal:   { label: "Crystal",   icon: "💎", color: "#06b6d4" },
 };
 
-type SortOption = "rank" | "points" | "tier" | "username";
+// Fixed column widths shared between header and rows
+export const COL_WIDTHS = "48px 64px 1fr 100px 110px 72px 80px";
 
-export default function Leaderboard({ gamemodeFilter }: { gamemodeFilter?: string }) {
+interface LeaderboardProps {
+  gamemode?: string;
+}
+
+export default function Leaderboard({ gamemode = "uhc" }: LeaderboardProps) {
   const [search, setSearch] = useState("");
-  const [sortBy, setSortBy] = useState<SortOption>("rank");
+  const [sortKey, setSortKey] = useState<SortKey>("rank");
+  const [sortDir, setSortDir] = useState<"asc" | "desc">("asc");
 
-  const { data: gamemodes } = useListGamemodes();
-  const { data: allPlayers, isLoading, error } = useListPlayers({
-    gamemode: gamemodeFilter,
-    search: search || undefined,
-    sortBy: sortBy,
-    limit: 50,
+  const { data: players = [], isLoading, error } = useListPlayers(
+    { gamemode, limit: "50" },
+    { query: { queryKey: ["players", gamemode], refetchOnWindowFocus: false } }
+  );
+
+  const meta = GAMEMODE_META[gamemode] ?? { label: gamemode, icon: "🎮", color: "#6b7280" };
+
+  const filtered = players.filter(p =>
+    p.username.toLowerCase().includes(search.toLowerCase())
+  );
+
+  function handleSort(key: SortKey) {
+    if (sortKey === key) setSortDir(d => d === "asc" ? "desc" : "asc");
+    else { setSortKey(key); setSortDir("asc"); }
+  }
+
+  const TIER_ORDER: Record<string, number> = {
+    HT1: 0, HT2: 1, HT3: 2, HT4: 3, HT5: 4,
+    LT1: 5, LT2: 6, LT3: 7, LT4: 8, LT5: 9,
+  };
+
+  const sorted = [...filtered].sort((a, b) => {
+    let cmp = 0;
+    if (sortKey === "rank") cmp = (a.rank ?? 99) - (b.rank ?? 99);
+    else if (sortKey === "username") cmp = a.username.localeCompare(b.username);
+    else if (sortKey === "tier") cmp = (TIER_ORDER[a.tier] ?? 99) - (TIER_ORDER[b.tier] ?? 99);
+    else if (sortKey === "points") cmp = b.points - a.points;
+    return sortDir === "asc" ? cmp : -cmp;
   });
 
-  const players = allPlayers || [];
-  const activeTab = gamemodeFilter?.toLowerCase() || "overall";
-
-  const gamemodeTabList = [
-    { slug: "", label: "Overall", icon: "🏆" },
-    ...(gamemodes || []).map((g) => ({
-      slug: g.slug,
-      label: g.name,
-      icon: GAMEMODE_ICONS[g.slug.toLowerCase()] || "🎮",
-    })),
-  ];
+  function SortIcon({ col }: { col: SortKey }) {
+    if (sortKey !== col) return <Minus className="w-3 h-3 opacity-30 ml-0.5" />;
+    return sortDir === "asc"
+      ? <ChevronUp className="w-3 h-3 ml-0.5" style={{ color: meta.color }} />
+      : <ChevronDown className="w-3 h-3 ml-0.5" style={{ color: meta.color }} />;
+  }
 
   return (
     <Layout>
-      <div className="max-w-6xl mx-auto px-4 py-8">
-
-        {/* Page Title */}
-        <div className="mb-6">
-          <h1 className="text-3xl font-bold text-white">
-            {gamemodeFilter ? `${gamemodeFilter.toUpperCase()} Rankings` : "Global Rankings"}
-          </h1>
-          <p className="text-[#6b7280] text-sm mt-1">
-            Top 50 players · Sorted by {sortBy}
-          </p>
-        </div>
-
-        {/* Gamemode Tabs - MCTiers style */}
-        <div className="flex flex-wrap gap-2 mb-4 bg-[#0d0f14] border border-[#1e2130] rounded-lg p-2">
-          {gamemodeTabList.map((tab) => {
-            const isActive = activeTab === (tab.slug || "overall");
-            return (
-              <a
-                key={tab.slug}
-                href={tab.slug ? `/${tab.slug}` : "/leaderboard"}
-                className={`
-                  flex flex-col items-center gap-1 px-4 py-2 rounded-md transition-all duration-200 cursor-pointer min-w-[60px] text-center
-                  ${isActive
-                    ? "bg-[#1e2130] text-white border-b-2 border-primary"
-                    : "text-[#6b7280] hover:text-white hover:bg-[#1a1d27]"
-                  }
-                `}
-              >
-                <span className="text-xl">{tab.icon}</span>
-                <span className="text-xs font-medium whitespace-nowrap">{tab.label}</span>
-              </a>
-            );
-          })}
-        </div>
-
-        {/* Controls bar */}
-        <div className="flex flex-col sm:flex-row gap-3 justify-between items-start sm:items-center mb-4">
-          <div className="relative w-full sm:w-72">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#6b7280]" />
+      <div className="max-w-5xl mx-auto px-3 py-6">
+        {/* Page Header */}
+        <div className="flex flex-col sm:flex-row sm:items-center gap-3 mb-5">
+          <div className="flex items-center gap-3">
+            <div
+              className="w-10 h-10 rounded-lg flex items-center justify-center text-xl border"
+              style={{ borderColor: meta.color + "44", background: meta.color + "18" }}
+            >
+              {meta.icon}
+            </div>
+            <div>
+              <h1 className="text-xl font-bold text-white flex items-center gap-2">
+                {meta.label}
+                <span className="text-xs text-[#6b7280] font-normal bg-[#1e2130] px-2 py-0.5 rounded">
+                  Top {players.length}
+                </span>
+              </h1>
+              <p className="text-xs text-[#6b7280]">Ranked by points · Top 50 players</p>
+            </div>
+          </div>
+          <div className="sm:ml-auto relative">
+            <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-[#6b7280]" />
             <input
               type="text"
               placeholder="Search player..."
               value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              className="w-full bg-[#0d0f14] border border-[#1e2130] pl-9 pr-4 py-2 text-sm text-white placeholder-[#4b5563] focus:outline-none focus:border-primary rounded"
+              onChange={e => setSearch(e.target.value)}
+              className="pl-8 pr-3 py-1.5 text-sm bg-[#1e2130] border border-[#2a2f42] rounded text-white placeholder-[#6b7280] focus:outline-none focus:border-primary w-52"
             />
-          </div>
-
-          <div className="flex items-center gap-2 text-sm">
-            <span className="text-[#6b7280]">Sort:</span>
-            {(["rank", "points", "tier", "username"] as SortOption[]).map((opt) => (
-              <button
-                key={opt}
-                onClick={() => setSortBy(opt)}
-                className={`px-3 py-1.5 rounded capitalize transition-colors ${
-                  sortBy === opt
-                    ? "bg-primary text-white"
-                    : "bg-[#1e2130] text-[#6b7280] hover:text-white border border-[#2a2f42]"
-                }`}
-              >
-                {opt}
-              </button>
-            ))}
           </div>
         </div>
 
         {/* Table */}
-        <div className="bg-[#0d0f14] border border-[#1e2130] rounded-lg overflow-hidden">
-          {/* Table Header */}
-          <div className="flex items-center gap-0 border-b border-[#1e2130] bg-[#0a0c10] px-0 py-2 text-xs text-[#6b7280] uppercase tracking-widest">
-            <div style={{ width: 56, minWidth: 56 }} className="text-center">#</div>
-            <div className="w-[60px] shrink-0"></div>
-            <div className="flex-1 pl-2">Player</div>
-            <div className="hidden md:block w-20 text-center">Mode</div>
-            <div className="hidden lg:block w-20 text-center">Weapon</div>
-            <div className="w-24 text-center pr-4">Tier</div>
+        <div className="rounded-lg border border-[#1e2130] overflow-hidden bg-[#0d0f14]">
+          {/* Table Header — must match COL_WIDTHS exactly */}
+          <div
+            className="grid text-[11px] font-semibold uppercase tracking-wider text-[#6b7280] border-b border-[#1e2130] px-3 h-9 items-center"
+            style={{ gridTemplateColumns: COL_WIDTHS }}
+          >
+            <button onClick={() => handleSort("rank")} className="flex items-center hover:text-white">
+              #<SortIcon col="rank" />
+            </button>
+            {/* skin column */}
+            <span />
+            <button onClick={() => handleSort("username")} className="flex items-center hover:text-white">
+              Player<SortIcon col="username" />
+            </button>
+            <span className="hidden md:block">Mode</span>
+            <span className="hidden md:block">Weapon</span>
+            <button onClick={() => handleSort("tier")} className="flex items-center justify-center hover:text-white">
+              Tier<SortIcon col="tier" />
+            </button>
+            <button onClick={() => handleSort("points")} className="flex items-center justify-end hover:text-white">
+              Points<SortIcon col="points" />
+            </button>
           </div>
 
           {/* Rows */}
-          {isLoading ? (
-            <LoadingSpinner />
-          ) : error ? (
-            <div className="text-center py-20 text-red-500 text-sm">
-              Failed to load rankings. Please try again.
-            </div>
-          ) : players.length > 0 ? (
-            <div>
-              {players.map((player, index) => (
-                <PlayerRow key={player.id} player={player} index={index} />
-              ))}
-            </div>
-          ) : (
-            <div className="text-center py-20 flex flex-col items-center gap-4 text-[#6b7280]">
-              <Swords className="w-12 h-12 opacity-30" />
-              <div>
-                <p className="font-medium text-white">No players found</p>
-                <p className="text-sm">Try adjusting your search or filters.</p>
-              </div>
+          {isLoading && (
+            <div className="text-center py-16 text-[#6b7280] text-sm">Loading players...</div>
+          )}
+          {error && (
+            <div className="text-center py-16 text-red-500 text-sm">Failed to load leaderboard</div>
+          )}
+          {!isLoading && !error && sorted.length === 0 && (
+            <div className="text-center py-16 text-[#6b7280] text-sm">
+              {search ? "No players matching your search" : "No players ranked yet in this mode"}
             </div>
           )}
-        </div>
-
-        {/* Footer info */}
-        <div className="mt-4 flex items-center justify-between text-xs text-[#4b5563]">
-          <span>Showing top {players.length} of 50 maximum players</span>
-          <span>Tier system: HT1 (best) → LT5 (lowest)</span>
-        </div>
-
-        {/* Tier Legend */}
-        <div className="mt-6 bg-[#0d0f14] border border-[#1e2130] rounded-lg p-4">
-          <p className="text-xs text-[#6b7280] uppercase tracking-widest mb-3">Tier Legend</p>
-          <div className="flex flex-wrap gap-2">
-            {TIERS.map((tier) => {
-              const tierColors: Record<string, string> = {
-                HT1: "#FFD700", HT2: "#FF8C00", HT3: "#00C853",
-                HT4: "#00BCD4", HT5: "#9C27B0",
-                LT1: "#E91E63", LT2: "#2196F3", LT3: "#607D8B",
-                LT4: "#455A64", LT5: "#263238",
-              };
-              const col = tierColors[tier] || "#444";
-              const isHT = tier.startsWith("HT");
-              return (
-                <span
-                  key={tier}
-                  className="text-xs px-2 py-0.5 rounded font-bold border"
-                  style={{
-                    backgroundColor: col + "20",
-                    color: isHT ? col : "#9ca3af",
-                    borderColor: col + "55",
-                  }}
-                >
-                  {tier}
-                </span>
-              );
-            })}
-          </div>
-          <p className="text-[#4b5563] text-xs mt-2">HT = High Tier · LT = Low Tier · Lower number = Higher skill</p>
+          {!isLoading && sorted.map((player) => (
+            <PlayerRow
+              key={player.id}
+              player={player}
+              position={player.rank ?? 0}
+              gamemode={gamemode}
+            />
+          ))}
         </div>
       </div>
     </Layout>

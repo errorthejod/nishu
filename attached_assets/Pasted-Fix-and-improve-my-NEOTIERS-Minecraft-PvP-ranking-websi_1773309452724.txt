@@ -1,0 +1,104 @@
+Fix and improve my **NEOTIERS Minecraft PvP ranking website**.
+
+Current problems and required changes:
+
+1. **Replace Tier System**
+   Remove the current tier system:
+   S, A, B, C, D
+
+Replace it with this new tier system exactly:
+
+HT1
+HT2
+HT3
+HT4
+HT5
+LT1
+LT2
+LT3
+LT4
+LT5
+
+These tiers must appear:
+
+* in the leaderboard
+* in the admin panel
+* in the player database
+* in the dropdown when adding players
+
+2. **Fix Table Alignment**
+   In the leaderboard table the columns:
+   MODE
+   WEAPON
+   TIER
+
+are shifted too far to the right.
+
+Fix the CSS so all columns align perfectly under the headers.
+Make the layout symmetrical and centered.
+
+3. **Update Game Mode Navigation**
+   Remove these gamemodes from the navbar and system:
+
+* PvP
+* BedWars
+
+Add these instead:
+
+* Axe
+* Mace
+* Spear
+* Lifesteal
+* Crystal
+
+4. **Separate Leaderboards**
+   Instead of one global leaderboard, create **separate leaderboards** for each mode:
+
+* UHC leaderboard
+* NethPot leaderboard
+* SMP leaderboard
+* Axe leaderboard
+* Mace leaderboard
+* Spear leaderboard
+* Lifesteal leaderboard
+* Crystal leaderboard
+
+Each page should display **Top 50 players** sorted by points.
+
+5. **Separate Databases in Admin Panel**
+   In the admin panel, do NOT store everything in one table.
+
+Create separate player databases for each gamemode:
+
+* uhc_players
+* nethpot_players
+* smp_players
+* axe_players
+* mace_players
+* spear_players
+* lifesteal_players
+* crystal_players
+
+When adding a player in the admin panel:
+
+* selecting the gamemode should save the player to the correct database.
+
+6. **Leaderboard Logic**
+   Leaderboard ranking should be based on:
+   Points (highest first).
+
+Columns must show:
+Rank
+Player Skin
+Username
+Mode
+Weapon
+Tier (HT/LT system)
+Points
+
+7. **UI Improvements**
+   Keep the current **dark esports style** theme but improve spacing and alignment so the leaderboard looks similar to professional PvP ranking sites like MCTiers.
+
+Do not break the existing admin panel functionality.
+
+Return the updated code files after implementing these fixes.

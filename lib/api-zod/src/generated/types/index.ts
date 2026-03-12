@@ -11,6 +11,7 @@ export * from "./adminLoginResponse";
 export * from "./adminMeResponse";
 export * from "./createGamemodeInput";
 export * from "./createPlayerInput";
+export * from "./deletePlayerParams";
 export * from "./gamemode";
 export * from "./healthStatus";
 export * from "./listPlayersParams";

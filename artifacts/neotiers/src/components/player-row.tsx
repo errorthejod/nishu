@@ -1,111 +1,103 @@
 import { Player } from "@workspace/api-client-react";
-import { TierBadge, getRankTitle } from "./ui-elements";
-import { motion } from "framer-motion";
+import { TierBadge } from "./ui-elements";
 import { Link } from "wouter";
+import { COL_WIDTHS } from "@/pages/leaderboard";
 
-const RANK_COLORS: Record<number, { bg: string; text: string }> = {
-  1: { bg: "#C9A227", text: "#fff" },
-  2: { bg: "#8A8FA0", text: "#fff" },
-  3: { bg: "#A0522D", text: "#fff" },
-};
+interface PlayerRowProps {
+  player: Player;
+  position: number;
+  gamemode: string;
+}
 
-function PlayerModel({ username, customSkinUrl }: { username: string; customSkinUrl?: string | null }) {
+function RankDisplay({ position }: { position: number }) {
+  if (position === 1) return (
+    <span className="text-[#FFD700] font-bold text-sm">🥇</span>
+  );
+  if (position === 2) return (
+    <span className="text-[#C0C0C0] font-bold text-sm">🥈</span>
+  );
+  if (position === 3) return (
+    <span className="text-[#CD7F32] font-bold text-sm">🥉</span>
+  );
   return (
-    <div className="relative w-[60px] h-[72px] shrink-0 overflow-hidden">
-      <img
-        src={`https://visage.surgeplay.com/bust/96/${username}`}
-        alt={username}
-        className="w-full h-full object-contain drop-shadow-md"
-        style={{ imageRendering: "pixelated" }}
-        loading="lazy"
-        onError={(e) => {
-          (e.target as HTMLImageElement).src = `https://mc-heads.net/avatar/${username}/64`;
-        }}
-      />
-    </div>
+    <span className="text-[#6b7280] text-sm font-mono">#{position}</span>
   );
 }
 
-export function PlayerRow({ player, index }: { player: Player; index: number }) {
-  const rankNum = index + 1;
-  const rankColor = RANK_COLORS[rankNum] || { bg: "#1e2130", text: "#9ca3af" };
-  const isTop3 = rankNum <= 3;
-  const isTop25 = rankNum <= 25;
-  const title = getRankTitle(player.points);
+const GAMEMODE_LABELS: Record<string, string> = {
+  uhc: "UHC", nethpot: "NethPot", smp: "SMP",
+  axe: "Axe", mace: "Mace", spear: "Spear",
+  lifesteal: "Lifesteal", crystal: "Crystal",
+};
+
+export function PlayerRow({ player, position, gamemode }: PlayerRowProps) {
+  const skinSrc = player.customSkinUrl
+    || `https://visage.surgeplay.com/bust/96/${player.username}`;
+
+  const isTop3 = position <= 3;
+  const isTop10 = position <= 10;
 
   return (
-    <Link href={`/player/${player.id}`}>
-      <motion.div
-        initial={{ opacity: 0, y: 6 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: Math.min(index * 0.03, 0.5) }}
-        className={`
-          group flex items-center gap-0 cursor-pointer transition-all duration-200 border-b border-[#1e2130]
-          ${isTop3 ? "bg-[#16191f] hover:bg-[#1c2030]" : "bg-[#12141a] hover:bg-[#16191f]"}
-        `}
-        style={{
-          borderLeft: isTop25 ? `3px solid ${rankColor.bg}` : "3px solid transparent",
-        }}
+    <Link href={`/player/${player.id}?gamemode=${gamemode}`}>
+      <div
+        className={`grid px-3 py-1.5 items-center border-b border-[#1e2130] cursor-pointer transition-all duration-150
+          ${isTop3 ? "bg-[#ffffff04] hover:bg-[#ffffff09]" : "hover:bg-[#1a1d27]"}`}
+        style={{ gridTemplateColumns: COL_WIDTHS }}
       >
-        {/* Rank Number */}
-        <div
-          className="flex items-center justify-center shrink-0 font-bold text-lg"
-          style={{
-            width: 56,
-            minWidth: 56,
-            height: 72,
-            backgroundColor: rankColor.bg,
-            color: rankColor.text,
-            fontFamily: "inherit",
-          }}
-        >
-          {rankNum}.
+        {/* Rank */}
+        <div className="flex items-center">
+          <RankDisplay position={position} />
         </div>
 
-        {/* Player 3D Model */}
-        <div className="flex items-center justify-center shrink-0 px-2 h-[72px]">
-          <PlayerModel username={player.username} customSkinUrl={player.customSkinUrl} />
+        {/* Player Skin */}
+        <div className="flex items-center justify-center">
+          <img
+            src={skinSrc}
+            alt={player.username}
+            className="w-10 h-10 object-contain"
+            onError={(e) => {
+              const target = e.currentTarget;
+              if (!target.src.includes("mc-heads")) {
+                target.src = `https://mc-heads.net/avatar/${player.username}/40`;
+              }
+            }}
+          />
         </div>
 
-        {/* Player Info */}
-        <div className="flex-1 min-w-0 py-3 pr-4">
-          <div className="flex items-center gap-2">
-            <span className="font-bold text-white text-base leading-tight truncate group-hover:text-primary transition-colors">
-              {player.username}
-            </span>
-            {isTop25 && (
-              <span
-                className="text-[10px] font-bold px-1.5 py-0.5 rounded"
-                style={{ backgroundColor: rankColor.bg + "33", color: rankColor.bg, border: `1px solid ${rankColor.bg}55` }}
-              >
-                TOP {rankNum <= 3 ? rankNum : "25"}
-              </span>
-            )}
-          </div>
-          <div className="flex items-center gap-1.5 mt-0.5">
-            <span className="text-yellow-400/80 text-xs">◆</span>
-            <span className="text-[#6b7280] text-xs">{title}</span>
-            <span className="text-[#3a3f52] text-xs">({player.points.toLocaleString()} points)</span>
-          </div>
+        {/* Username */}
+        <div className="flex items-center gap-2 min-w-0 pr-2">
+          {isTop10 && (
+            <span className="shrink-0 w-1.5 h-1.5 rounded-full bg-primary inline-block" />
+          )}
+          <span className={`font-semibold truncate text-sm ${isTop3 ? "text-white" : "text-[#d1d5db]"}`}>
+            {player.username}
+          </span>
         </div>
 
-        {/* Gamemode */}
-        <div className="hidden md:flex items-center justify-center shrink-0 w-20 px-2">
-          <span className="text-xs px-2 py-1 rounded font-medium tracking-wide bg-[#1e2130] text-[#6b7280] border border-[#2a2f42]">
-            {player.gamemode}
+        {/* Mode */}
+        <div className="hidden md:flex items-center">
+          <span className="text-xs text-[#6b7280] bg-[#1e2130] px-1.5 py-0.5 rounded">
+            {GAMEMODE_LABELS[player.gamemode ?? gamemode] ?? gamemode}
           </span>
         </div>
 
         {/* Weapon */}
-        <div className="hidden lg:flex items-center justify-center shrink-0 w-20 px-2">
-          <span className="text-xs text-[#6b7280]">{player.weapon}</span>
+        <div className="hidden md:flex items-center">
+          <span className="text-xs text-[#9ca3af] truncate">{player.weapon}</span>
         </div>
 
-        {/* Tier Badge */}
-        <div className="flex items-center justify-center shrink-0 px-4 gap-2">
-          <TierBadge tier={player.tier} size="sm" />
+        {/* Tier */}
+        <div className="flex items-center justify-center">
+          <TierBadge tier={player.tier} />
         </div>
-      </motion.div>
+
+        {/* Points */}
+        <div className="flex items-center justify-end">
+          <span className={`text-sm font-bold tabular-nums ${isTop3 ? "text-white" : "text-[#9ca3af]"}`}>
+            {player.points.toLocaleString()}
+          </span>
+        </div>
+      </div>
     </Link>
   );
 }

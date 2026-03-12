@@ -109,6 +109,10 @@ export const DeletePlayerParams = zod.object({
   id: zod.coerce.number(),
 });
 
+export const DeletePlayerQueryParams = zod.object({
+  gamemode: zod.coerce.string(),
+});
+
 export const DeletePlayerResponse = zod.object({
   message: zod.string(),
 });

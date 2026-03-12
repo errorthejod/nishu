@@ -1,6 +1,6 @@
 import { Router, type IRouter } from "express";
-import { db, playersTable } from "@workspace/db";
-import { eq, ilike, or, asc, desc, sql } from "drizzle-orm";
+import { db, GAMEMODE_TABLES, VALID_GAMEMODES, type GamemodeSlug } from "@workspace/db";
+import { eq, ilike, and } from "drizzle-orm";
 
 const router: IRouter = Router();
 
@@ -8,49 +8,62 @@ function isAdmin(req: any): boolean {
   return !!(req.session && req.session.isAdmin);
 }
 
+function getTable(gamemode: string) {
+  const slug = gamemode.toLowerCase() as GamemodeSlug;
+  return GAMEMODE_TABLES[slug] ?? null;
+}
+
+function formatPlayer(p: any, gamemode: string) {
+  return {
+    ...p,
+    gamemode,
+    createdAt: p.createdAt instanceof Date ? p.createdAt.toISOString() : p.createdAt,
+    updatedAt: p.updatedAt instanceof Date ? p.updatedAt.toISOString() : p.updatedAt,
+  };
+}
+
+// GET /api/players?gamemode=uhc&search=&sortBy=&limit=
 router.get("/players", async (req, res) => {
   try {
     const { gamemode, search, sortBy, limit } = req.query as Record<string, string>;
-    let query = db.select().from(playersTable);
 
-    const conditions: any[] = [];
-    if (gamemode) conditions.push(eq(playersTable.gamemode, gamemode));
-    if (search) conditions.push(ilike(playersTable.username, `%${search}%`));
-
-    let results;
-    if (conditions.length > 0) {
-      const { and } = await import("drizzle-orm");
-      results = await db.select().from(playersTable).where(and(...conditions));
-    } else {
-      results = await db.select().from(playersTable);
+    if (!gamemode || !VALID_GAMEMODES.includes(gamemode.toLowerCase() as GamemodeSlug)) {
+      return res.status(400).json({ message: "Valid gamemode required. Options: " + VALID_GAMEMODES.join(", ") });
     }
+
+    const table = getTable(gamemode)!;
+    const conditions: any[] = [];
+    if (search) conditions.push(ilike(table.username, `%${search}%`));
+
+    let results = conditions.length > 0
+      ? await db.select().from(table).where(and(...conditions))
+      : await db.select().from(table);
+
+    const TIER_ORDER: Record<string, number> = {
+      HT1: 0, HT2: 1, HT3: 2, HT4: 3, HT5: 4,
+      LT1: 5, LT2: 6, LT3: 7, LT4: 8, LT5: 9,
+    };
 
     if (sortBy === "points") {
       results.sort((a, b) => b.points - a.points);
     } else if (sortBy === "tier") {
-      const tierOrder: Record<string, number> = { S: 0, A: 1, B: 2, C: 3, D: 4 };
-      results.sort((a, b) => (tierOrder[a.tier] ?? 5) - (tierOrder[b.tier] ?? 5));
+      results.sort((a, b) => (TIER_ORDER[a.tier] ?? 99) - (TIER_ORDER[b.tier] ?? 99));
     } else if (sortBy === "username") {
       results.sort((a, b) => a.username.localeCompare(b.username));
     } else {
-      results.sort((a, b) => a.rank - b.rank || b.points - a.points);
+      results.sort((a, b) => (a.rank || 0) - (b.rank || 0) || b.points - a.points);
     }
 
-    if (limit) {
-      results = results.slice(0, parseInt(limit, 10));
-    }
+    if (limit) results = results.slice(0, parseInt(limit, 10));
 
-    res.json(results.map(p => ({
-      ...p,
-      createdAt: p.createdAt.toISOString(),
-      updatedAt: p.updatedAt.toISOString(),
-    })));
+    res.json(results.map(p => formatPlayer(p, gamemode)));
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: "Internal server error" });
   }
 });
 
+// POST /api/players
 router.post("/players", async (req, res) => {
   if (!isAdmin(req)) return res.status(401).json({ message: "Unauthorized" });
   try {
@@ -58,88 +71,102 @@ router.post("/players", async (req, res) => {
     if (!username || !gamemode || !tier || points === undefined || !weapon) {
       return res.status(400).json({ message: "Missing required fields" });
     }
+
+    const table = getTable(gamemode);
+    if (!table) return res.status(400).json({ message: "Invalid gamemode: " + gamemode });
+
     const skinUrl = `https://mc-heads.net/avatar/${username}/64`;
-    const allPlayers = await db.select().from(playersTable);
-    const rank = allPlayers.length + 1;
-    const [created] = await db.insert(playersTable).values({
+    const [created] = await db.insert(table).values({
       username,
       gamemode,
       tier,
       points: parseInt(points, 10),
       weapon,
-      rank,
+      rank: 0,
       skinUrl,
       customSkinUrl: customSkinUrl || null,
     }).returning();
 
-    await recalcRanks();
+    await recalcRanks(gamemode);
 
-    res.status(201).json({
-      ...created,
-      createdAt: created.createdAt.toISOString(),
-      updatedAt: created.updatedAt.toISOString(),
-    });
+    res.status(201).json(formatPlayer(created, gamemode));
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: "Internal server error" });
   }
 });
 
+// GET /api/players/:id  — searches all tables
 router.get("/players/:id", async (req, res) => {
   try {
     const id = parseInt(req.params.id, 10);
-    const [player] = await db.select().from(playersTable).where(eq(playersTable.id, id));
-    if (!player) return res.status(404).json({ message: "Not found" });
-    res.json({
-      ...player,
-      createdAt: player.createdAt.toISOString(),
-      updatedAt: player.updatedAt.toISOString(),
-    });
+    const { gamemode } = req.query as Record<string, string>;
+
+    if (gamemode) {
+      const table = getTable(gamemode);
+      if (table) {
+        const [player] = await db.select().from(table).where(eq(table.id, id));
+        if (player) return res.json(formatPlayer(player, gamemode));
+      }
+    }
+
+    for (const [slug, table] of Object.entries(GAMEMODE_TABLES)) {
+      const [player] = await db.select().from(table).where(eq(table.id, id));
+      if (player) return res.json(formatPlayer(player, slug));
+    }
+
+    res.status(404).json({ message: "Player not found" });
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: "Internal server error" });
   }
 });
 
+// PUT /api/players/:id
 router.put("/players/:id", async (req, res) => {
   if (!isAdmin(req)) return res.status(401).json({ message: "Unauthorized" });
   try {
     const id = parseInt(req.params.id, 10);
     const { username, gamemode, tier, points, weapon, customSkinUrl } = req.body;
-    const updateData: any = { updatedAt: new Date() };
+
+    const table = getTable(gamemode || "");
+    if (!table) return res.status(400).json({ message: "Valid gamemode required in body" });
+
+    const updateData: any = { updatedAt: new Date(), gamemode };
     if (username !== undefined) {
       updateData.username = username;
       updateData.skinUrl = `https://mc-heads.net/avatar/${username}/64`;
     }
-    if (gamemode !== undefined) updateData.gamemode = gamemode;
     if (tier !== undefined) updateData.tier = tier;
     if (points !== undefined) updateData.points = parseInt(points, 10);
     if (weapon !== undefined) updateData.weapon = weapon;
     if (customSkinUrl !== undefined) updateData.customSkinUrl = customSkinUrl || null;
 
-    const [updated] = await db.update(playersTable).set(updateData).where(eq(playersTable.id, id)).returning();
-    if (!updated) return res.status(404).json({ message: "Not found" });
+    const [updated] = await db.update(table).set(updateData).where(eq(table.id, id)).returning();
+    if (!updated) return res.status(404).json({ message: "Player not found" });
 
-    await recalcRanks();
-
-    res.json({
-      ...updated,
-      createdAt: updated.createdAt.toISOString(),
-      updatedAt: updated.updatedAt.toISOString(),
-    });
+    await recalcRanks(gamemode);
+    res.json(formatPlayer(updated, gamemode));
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: "Internal server error" });
   }
 });
 
+// DELETE /api/players/:id
 router.delete("/players/:id", async (req, res) => {
   if (!isAdmin(req)) return res.status(401).json({ message: "Unauthorized" });
   try {
     const id = parseInt(req.params.id, 10);
-    const [deleted] = await db.delete(playersTable).where(eq(playersTable.id, id)).returning();
-    if (!deleted) return res.status(404).json({ message: "Not found" });
-    await recalcRanks();
+    const { gamemode } = req.query as Record<string, string>;
+
+    const table = getTable(gamemode || "");
+    if (!table) return res.status(400).json({ message: "Valid gamemode query param required" });
+
+    const [deleted] = await db.delete(table).where(eq(table.id, id)).returning();
+    if (!deleted) return res.status(404).json({ message: "Player not found" });
+
+    await recalcRanks(gamemode);
     res.json({ message: "Deleted successfully" });
   } catch (err) {
     console.error(err);
@@ -147,11 +174,13 @@ router.delete("/players/:id", async (req, res) => {
   }
 });
 
-async function recalcRanks() {
-  const all = await db.select().from(playersTable);
+async function recalcRanks(gamemode: string) {
+  const table = getTable(gamemode);
+  if (!table) return;
+  const all = await db.select().from(table);
   all.sort((a, b) => b.points - a.points);
   for (let i = 0; i < all.length; i++) {
-    await db.update(playersTable).set({ rank: i + 1 }).where(eq(playersTable.id, all[i].id));
+    await db.update(table).set({ rank: i + 1 }).where(eq(table.id, all[i].id));
   }
 }
 
