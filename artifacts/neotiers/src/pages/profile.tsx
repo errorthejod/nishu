@@ -1,5 +1,5 @@
 import { Layout } from "@/components/layout";
-import { TierBadge, GamemodeIcon, getRankTitleFromPoints, getRankTitleColorFromPoints, LoadingSpinner } from "@/components/ui-elements";
+import { TierBadge, GamemodeIcon, getRankTitleFromPoints, getRankTitleColorFromPoints, getRankTitleStyle, LoadingSpinner } from "@/components/ui-elements";
 import { useParams, Link } from "wouter";
 import { useQuery } from "@tanstack/react-query";
 import { motion } from "framer-motion";
@@ -138,7 +138,7 @@ export default function Profile() {
             {/* Info */}
             <div className="p-5 text-center border-t border-[#1e2130]">
               <h1 className="text-xl font-bold text-white">{player.username}</h1>
-              <p className="text-sm font-semibold mt-0.5" style={{ color: titleColor }}>{title}</p>
+              <p className="text-sm mt-0.5" style={{ color: titleColor, ...getRankTitleStyle(title) }}>{title}</p>
               <div className="flex justify-center mt-2">
                 <TierBadge tier={bestTier} size="lg" />
               </div>

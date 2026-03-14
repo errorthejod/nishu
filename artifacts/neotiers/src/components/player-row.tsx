@@ -1,5 +1,5 @@
 import { Player } from "@workspace/api-client-react";
-import { TierBadge, getRankTitle, getRankTitleColor } from "./ui-elements";
+import { TierBadge, getRankTitle, getRankTitleColor, getRankTitleStyle } from "./ui-elements";
 import { Link } from "wouter";
 import { COL_WIDTHS } from "@/pages/leaderboard";
 
@@ -87,7 +87,7 @@ export function PlayerRow({ player, position, gamemode }: PlayerRowProps) {
             </span>
           </div>
           {position > 0 && position <= 50 && (
-            <span className="text-[10px] font-medium leading-tight truncate mt-0.5" style={{ color: titleColor }}>
+            <span className="text-[10px] leading-tight truncate mt-0.5" style={{ color: titleColor, ...getRankTitleStyle(title) }}>
               {title}
             </span>
           )}

@@ -1,7 +1,7 @@
 import { useState, useMemo } from "react";
 import { Layout } from "@/components/layout";
 import { PlayerRow } from "@/components/player-row";
-import { TierBadge, GamemodeTierBadge, GamemodeIcon, getRankTitle, getRankTitleColor, getRankTitleFromPoints, getRankTitleColorFromPoints, TIERS, TIER_ORDER } from "@/components/ui-elements";
+import { TierBadge, GamemodeTierBadge, GamemodeIcon, getRankTitle, getRankTitleColor, getRankTitleFromPoints, getRankTitleColorFromPoints, getRankTitleStyle, TIERS, TIER_ORDER } from "@/components/ui-elements";
 import { useListPlayers } from "@workspace/api-client-react";
 import { useQueries } from "@tanstack/react-query";
 import { Search, ChevronUp, ChevronDown, Minus } from "lucide-react";
@@ -119,7 +119,7 @@ function OverallLeaderboard() {
                       #{player.rank}
                     </span>
                     <p className="font-bold text-sm text-white mt-0.5 truncate max-w-full">{player.username}</p>
-                    <p className="text-[10px] font-medium mt-0.5" style={{ color: titleColor }}>{title}</p>
+                    <p className="text-[10px] mt-0.5" style={{ color: titleColor, ...getRankTitleStyle(title) }}>{title}</p>
                     <div className={`${podiumHeight} w-full rounded-b-md mt-2 flex flex-col items-center justify-end pb-2 gap-1`}
                       style={{ background: isFirst ? "linear-gradient(to top, rgba(255,215,0,0.15), transparent)" : "linear-gradient(to top, rgba(255,255,255,0.04), transparent)" }}>
                       <p className="text-white font-bold text-sm">{player.totalPoints.toLocaleString()}</p>
@@ -202,7 +202,7 @@ function OverallLeaderboard() {
                     </td>
                     <td className="px-3 py-2">
                       <p className="font-semibold text-white">{player.username}</p>
-                      <p className="text-[10px] font-medium" style={{ color: titleColor }}>{title}</p>
+                      <p className="text-[10px]" style={{ color: titleColor, ...getRankTitleStyle(title) }}>{title}</p>
                     </td>
                     <td className="px-2 py-2 text-center">
                       <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-[#1e2130] border border-[#2a2f42] text-white">

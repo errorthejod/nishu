@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import React, { ReactNode } from "react";
 
 export const TIERS = ["HT1","HT2","HT3","HT4","HT5","LT1","LT2","LT3","LT4","LT5"] as const;
 export type Tier = typeof TIERS[number];
@@ -232,13 +232,38 @@ export function getRankTitleColor(rank: number): string {
 }
 
 export function getRankTitleColorFromPoints(points: number): string {
-  if (points >= 500) return "#FFD700";
-  if (points >= 350) return "#C0C0C0";
-  if (points >= 250) return "#CD7F32";
-  if (points >= 150) return "#ef4444";
-  if (points >= 75)  return "#a855f7";
-  if (points >= 25)  return "#3b82f6";
+  if (points >= 420) return "#FFD700";
+  if (points >= 300) return "#C0C0C0";
+  if (points >= 200) return "#CD7F32";
+  if (points >= 120) return "#ef4444";
+  if (points >= 60)  return "#a855f7";
+  if (points >= 20)  return "#3b82f6";
   return "#6b7280";
+}
+
+export function getRankTitleStyle(title: string): React.CSSProperties {
+  if (title === "Combat Grandmaster") return {
+    background: "linear-gradient(90deg, #BF8B30, #FFD700, #FFF0A0, #FFD700, #BF8B30)",
+    WebkitBackgroundClip: "text",
+    WebkitTextFillColor: "transparent",
+    backgroundClip: "text",
+    fontWeight: 700,
+  };
+  if (title === "Combat Master") return {
+    background: "linear-gradient(90deg, #7a7a7a, #C0C0C0, #F0F0F0, #C0C0C0, #7a7a7a)",
+    WebkitBackgroundClip: "text",
+    WebkitTextFillColor: "transparent",
+    backgroundClip: "text",
+    fontWeight: 700,
+  };
+  if (title === "Master") return {
+    background: "linear-gradient(90deg, #7B3F00, #CD7F32, #F0A050, #CD7F32, #7B3F00)",
+    WebkitBackgroundClip: "text",
+    WebkitTextFillColor: "transparent",
+    backgroundClip: "text",
+    fontWeight: 700,
+  };
+  return {};
 }
 
 export function EsportsButton({
