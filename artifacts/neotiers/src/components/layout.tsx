@@ -67,13 +67,13 @@ export function Layout({ children }: { children: ReactNode }) {
               href="https://discord.gg/nPKGArUy"
               target="_blank"
               rel="noreferrer"
-              className="flex items-center gap-0 rounded overflow-hidden hover:opacity-90 transition-opacity border border-[#2a2f42]"
-              style={{ background: "#d4d7dc" }}
+              className="flex items-center gap-0 rounded overflow-hidden hover:opacity-90 transition-opacity"
+              style={{ background: "#5865F2" }}
             >
               <img
                 src="/icon-discord.png"
                 alt="Discord"
-                className="h-8 w-auto object-contain px-2 py-1"
+                className="h-8 w-auto object-contain px-3 py-1.5"
               />
             </a>
             <div className="text-xs text-[#6b7280] bg-[#1e2130] border border-[#2a2f42] px-3 py-1.5 rounded">

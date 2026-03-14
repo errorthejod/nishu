@@ -22,7 +22,7 @@ export const GAMEMODE_META: Record<string, { label: string; color: string }> = {
   sword:     { label: "Sword",      color: "#ef4444" },
 };
 
-export const COL_WIDTHS = "48px 56px 1fr 90px 110px 72px 80px";
+export const COL_WIDTHS = "52px 100px 1fr 90px 110px 72px 80px";
 const RANKED_GAMEMODES = ["uhc", "nethpot", "smp", "axe", "mace", "spear", "lifesteal", "crystal", "sword"] as const;
 
 interface LeaderboardProps { gamemode?: string; }
@@ -138,7 +138,7 @@ function OverallLeaderboard() {
             <thead>
               <tr className="border-b border-[#1e2130] text-[11px] font-semibold uppercase tracking-wider text-[#6b7280] h-10">
                 <th className="px-3 text-left w-10">#</th>
-                <th className="px-2 w-12" />
+                <th className="px-2 w-24" />
                 <th className="px-3 text-left min-w-[140px]">Player</th>
                 <th className="px-2 text-center w-16">Region</th>
                 {RANKED_GAMEMODES.map((gm) => (
@@ -191,9 +191,9 @@ function OverallLeaderboard() {
                     </td>
                     <td className="px-2 py-1">
                       <img
-                        src={`https://visage.surgeplay.com/bust/${player.rank <= 3 ? 96 : 80}/${player.username}`}
+                        src={`https://visage.surgeplay.com/bust/${player.rank <= 3 ? 128 : 112}/${player.username}`}
                         alt={player.username}
-                        className={`${player.rank <= 3 ? "w-16 h-16" : "w-14 h-14"} rounded object-contain`}
+                        className={`${player.rank <= 3 ? "w-24 h-24" : "w-20 h-20"} object-contain`}
                         style={{ imageRendering: "pixelated" }}
                         onError={(e) => {
                           (e.target as HTMLImageElement).src = `https://mc-heads.net/avatar/${player.username}/32`;
