@@ -116,13 +116,13 @@ export default function Profile() {
             className="lg:col-span-1 bg-[#0d0f14] border border-[#1e2130] rounded-xl overflow-hidden"
           >
             {/* 3D Half-Body Skin */}
-            <div className="relative flex justify-center items-end pt-4 min-h-[220px] overflow-hidden"
+            <div className="relative flex justify-center items-end pt-6 min-h-[310px] overflow-hidden"
               style={{ background: "linear-gradient(to bottom, #1a1d27, #0d0f14)" }}>
               <div className="absolute inset-0 pointer-events-none" style={{ background: "radial-gradient(ellipse at 50% 60%, rgba(99,102,241,0.18) 0%, rgba(139,92,246,0.06) 40%, transparent 70%)", filter: "blur(24px)" }} />
               <img
-                src={`https://visage.surgeplay.com/bust/300/${player.username}`}
+                src={`https://visage.surgeplay.com/bust/400/${player.username}`}
                 alt={player.username}
-                className="relative z-10 h-52 object-contain drop-shadow-2xl"
+                className="relative z-10 h-72 object-contain drop-shadow-2xl"
                 style={{ imageRendering: "pixelated" }}
                 onError={(e) => {
                   const img = e.target as HTMLImageElement;

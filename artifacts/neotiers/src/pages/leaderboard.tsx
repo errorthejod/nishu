@@ -107,9 +107,9 @@ function OverallLeaderboard() {
                 <Link key={player.username} href={`/player/${player.username}`} className="flex-1 max-w-[200px]">
                   <div className={`flex flex-col items-center bg-[#0d0f14] border rounded-lg ${isFirst ? "border-yellow-500/50 shadow-[0_0_20px_rgba(255,215,0,0.15)]" : "border-[#1e2130]"} p-3 cursor-pointer hover:bg-[#1a1d27] transition-all`}>
                     <img
-                      src={`https://visage.surgeplay.com/bust/128/${player.username}`}
+                      src={`https://visage.surgeplay.com/bust/200/${player.username}`}
                       alt={player.username}
-                      className={`${isFirst ? "w-20 h-20" : "w-16 h-16"} object-contain drop-shadow-xl`}
+                      className={`${isFirst ? "w-28 h-28" : "w-20 h-20"} object-contain drop-shadow-xl`}
                       style={{ imageRendering: "pixelated" }}
                       onError={(e) => {
                         (e.target as HTMLImageElement).src = `https://mc-heads.net/avatar/${player.username}/64`;
@@ -160,26 +160,40 @@ function OverallLeaderboard() {
               ) : filtered.map((player) => {
                 const title = getRankTitleFromPoints(player.totalPoints);
                 const titleColor = getRankTitleColorFromPoints(player.totalPoints);
+                const rowBg = player.rank === 1
+                  ? "linear-gradient(to right, rgba(255,215,0,0.13) 0%, rgba(255,215,0,0.04) 50%, transparent 100%)"
+                  : player.rank === 2
+                  ? "linear-gradient(to right, rgba(192,192,192,0.10) 0%, rgba(192,192,192,0.03) 50%, transparent 100%)"
+                  : player.rank === 3
+                  ? "linear-gradient(to right, rgba(205,127,50,0.13) 0%, rgba(205,127,50,0.04) 50%, transparent 100%)"
+                  : undefined;
+                const leftBorder = player.rank === 1 ? "3px solid rgba(255,215,0,0.5)"
+                  : player.rank === 2 ? "3px solid rgba(192,192,192,0.35)"
+                  : player.rank === 3 ? "3px solid rgba(205,127,50,0.45)"
+                  : undefined;
                 return (
                   <tr
                     key={player.username}
-                    className="border-b border-[#1e2130] hover:bg-[#1a1d27] cursor-pointer transition-colors"
+                    className="border-b border-[#1e2130] cursor-pointer transition-colors hover:brightness-110"
+                    style={{ background: rowBg, borderLeft: leftBorder }}
                     onClick={() => window.location.href = `/player/${player.username}`}
                   >
                     <td className="px-3 py-2">
-                      {player.rank <= 3 ? (
-                        <span className={`font-black text-sm ${player.rank === 1 ? "text-yellow-400" : player.rank === 2 ? "text-slate-300" : "text-amber-600"}`}>
-                          {player.rank}.
-                        </span>
+                      {player.rank === 1 ? (
+                        <span className="inline-flex items-center justify-center w-7 h-7 rounded-md font-black text-sm text-black" style={{ background: "linear-gradient(135deg,#FFD700,#FFA500)" }}>1</span>
+                      ) : player.rank === 2 ? (
+                        <span className="inline-flex items-center justify-center w-7 h-7 rounded-md font-black text-sm text-black" style={{ background: "linear-gradient(135deg,#E8E8E8,#A0A0A0)" }}>2</span>
+                      ) : player.rank === 3 ? (
+                        <span className="inline-flex items-center justify-center w-7 h-7 rounded-md font-black text-sm text-black" style={{ background: "linear-gradient(135deg,#CD7F32,#8B4513)" }}>3</span>
                       ) : (
                         <span className="text-[#6b7280] font-mono text-xs">#{player.rank}</span>
                       )}
                     </td>
                     <td className="px-2 py-1">
                       <img
-                        src={`https://visage.surgeplay.com/bust/48/${player.username}`}
+                        src={`https://visage.surgeplay.com/bust/${player.rank <= 3 ? 72 : 48}/${player.username}`}
                         alt={player.username}
-                        className="w-9 h-9 rounded object-contain"
+                        className={`${player.rank <= 3 ? "w-11 h-11" : "w-9 h-9"} rounded object-contain`}
                         style={{ imageRendering: "pixelated" }}
                         onError={(e) => {
                           (e.target as HTMLImageElement).src = `https://mc-heads.net/avatar/${player.username}/32`;
@@ -322,9 +336,9 @@ export default function Leaderboard({ gamemode = "overall" }: LeaderboardProps) 
                 <Link key={player.id} href={`/player/${player.username}`} className="flex-1 max-w-[160px]">
                   <div className={`flex flex-col items-center bg-[#0d0f14] border rounded-lg ${isFirst ? "border-yellow-500/50 shadow-[0_0_20px_rgba(255,215,0,0.15)]" : "border-[#1e2130]"} p-3 cursor-pointer hover:bg-[#1a1d27] transition-all`}>
                     <img
-                      src={`https://visage.surgeplay.com/bust/96/${player.username}`}
+                      src={`https://visage.surgeplay.com/bust/160/${player.username}`}
                       alt={player.username}
-                      className={`${isFirst ? "w-16 h-16" : "w-12 h-12"} object-contain drop-shadow-xl`}
+                      className={`${isFirst ? "w-24 h-24" : "w-16 h-16"} object-contain drop-shadow-xl`}
                       style={{ imageRendering: "pixelated" }}
                       onError={(e) => {
                         (e.target as HTMLImageElement).src = `https://mc-heads.net/avatar/${player.username}/64`;

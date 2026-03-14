@@ -35,7 +35,7 @@ export const GAMEMODE_ICONS: Record<string, { src: string; color: string }> = {
   smp:       { src: "https://minecraft.wiki/w/Special:FilePath/Invicon_Shield.png",                   color: "#3b82f6" },
   axe:       { src: "https://minecraft.wiki/w/Special:FilePath/Invicon_Diamond_Axe.png",              color: "#f97316" },
   mace:      { src: "https://minecraft.wiki/w/Special:FilePath/Invicon_Mace.png",                     color: "#eab308" },
-  spear:     { src: "/icon-spear.jpeg",                                                               color: "#22c55e" },
+  spear:     { src: "/icon-spear.png",                                                                color: "#22c55e" },
   lifesteal: { src: "/icon-heart.png",                                                                color: "#ec4899" },
   crystal:   { src: "https://minecraft.wiki/w/Special:FilePath/Invicon_End_Crystal.png",              color: "#06b6d4" },
   sword:     { src: "https://minecraft.wiki/w/Special:FilePath/Invicon_Diamond_Sword.png",            color: "#ef4444" },
@@ -201,37 +201,43 @@ export function WeaponIcon({ weapon }: { weapon: string }) {
 }
 
 export function getRankTitle(rank: number): string {
-  if (rank === 1) return "Combat Grandmaster";
-  if (rank <= 3)  return "Combat Master";
-  if (rank <= 10) return "Combat Ace";
-  if (rank <= 25) return "Combat Specialist";
-  if (rank <= 50) return "Combat Initiate";
-  return "Unranked";
+  if (rank === 1)  return "Combat Grandmaster";
+  if (rank === 2)  return "Combat Master";
+  if (rank === 3)  return "Master";
+  if (rank <= 10)  return "Combat Ace";
+  if (rank <= 20)  return "Combat Intermediate";
+  if (rank <= 35)  return "Combat Initiate";
+  return "Rookie";
 }
 
 export function getRankTitleFromPoints(points: number): string {
-  if (points >= 400) return "Combat Grandmaster";
-  if (points >= 250) return "Combat Master";
+  if (points >= 500) return "Combat Grandmaster";
+  if (points >= 350) return "Combat Master";
+  if (points >= 250) return "Master";
   if (points >= 150) return "Combat Ace";
-  if (points >= 75)  return "Combat Specialist";
-  if (points > 0)    return "Combat Initiate";
+  if (points >= 75)  return "Combat Intermediate";
+  if (points >= 25)  return "Combat Initiate";
+  if (points > 0)    return "Rookie";
   return "Unranked";
 }
 
 export function getRankTitleColor(rank: number): string {
   if (rank === 1)  return "#FFD700";
-  if (rank <= 3)   return "#C0C0C0";
+  if (rank === 2)  return "#C0C0C0";
+  if (rank === 3)  return "#CD7F32";
   if (rank <= 10)  return "#ef4444";
-  if (rank <= 25)  return "#a855f7";
-  if (rank <= 50)  return "#6b7280";
-  return "#4b5563";
+  if (rank <= 20)  return "#a855f7";
+  if (rank <= 35)  return "#3b82f6";
+  return "#6b7280";
 }
 
 export function getRankTitleColorFromPoints(points: number): string {
-  if (points >= 400) return "#FFD700";
-  if (points >= 250) return "#C0C0C0";
+  if (points >= 500) return "#FFD700";
+  if (points >= 350) return "#C0C0C0";
+  if (points >= 250) return "#CD7F32";
   if (points >= 150) return "#ef4444";
   if (points >= 75)  return "#a855f7";
+  if (points >= 25)  return "#3b82f6";
   return "#6b7280";
 }
 

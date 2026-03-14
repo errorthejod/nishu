@@ -1,5 +1,5 @@
 import { Player } from "@workspace/api-client-react";
-import { TierBadge, WeaponIcon, getRankTitle, getRankTitleColor } from "./ui-elements";
+import { TierBadge, getRankTitle, getRankTitleColor } from "./ui-elements";
 import { Link } from "wouter";
 import { COL_WIDTHS } from "@/pages/leaderboard";
 
@@ -14,13 +14,31 @@ const GAMEMODE_LABELS: Record<string, string> = {
   axe: "Axe", mace: "Mace", spear: "Spear", lifesteal: "Lifesteal", crystal: "Crystal", sword: "Sword",
 };
 
+const RANK_BG: Record<number, string> = {
+  1: "linear-gradient(to right, rgba(255,215,0,0.12) 0%, rgba(255,215,0,0.04) 60%, transparent 100%)",
+  2: "linear-gradient(to right, rgba(192,192,192,0.10) 0%, rgba(192,192,192,0.03) 60%, transparent 100%)",
+  3: "linear-gradient(to right, rgba(205,127,50,0.12) 0%, rgba(205,127,50,0.04) 60%, transparent 100%)",
+};
+
+const RANK_BORDER: Record<number, string> = {
+  1: "rgba(255,215,0,0.35)",
+  2: "rgba(192,192,192,0.25)",
+  3: "rgba(205,127,50,0.30)",
+};
+
 function RankBadge({ position }: { position: number }) {
   if (position === 1)
-    return <span className="text-sm font-black text-yellow-400">1.</span>;
+    return (
+      <span className="inline-flex items-center justify-center w-7 h-7 rounded-md font-black text-sm text-black" style={{ background: "linear-gradient(135deg, #FFD700, #FFA500)" }}>1</span>
+    );
   if (position === 2)
-    return <span className="text-sm font-black text-slate-300">2.</span>;
+    return (
+      <span className="inline-flex items-center justify-center w-7 h-7 rounded-md font-black text-sm text-black" style={{ background: "linear-gradient(135deg, #E8E8E8, #A0A0A0)" }}>2</span>
+    );
   if (position === 3)
-    return <span className="text-sm font-black text-amber-600">3.</span>;
+    return (
+      <span className="inline-flex items-center justify-center w-7 h-7 rounded-md font-black text-sm text-black" style={{ background: "linear-gradient(135deg, #CD7F32, #8B4513)" }}>3</span>
+    );
   return <span className="text-[#6b7280] text-sm font-mono">#{position}</span>;
 }
 
@@ -34,21 +52,23 @@ export function PlayerRow({ player, position, gamemode }: PlayerRowProps) {
   return (
     <Link href={`/player/${player.username}`}>
       <div
-        className={`grid px-3 py-1 items-center border-b border-[#1e2130] cursor-pointer transition-all duration-150
-          ${isTop3 ? "bg-[#ffffff04] hover:bg-[#ffffff09]" : "hover:bg-[#1a1d27]"}`}
-        style={{ gridTemplateColumns: COL_WIDTHS }}
+        className="grid px-3 py-1 items-center border-b cursor-pointer transition-all duration-150 hover:brightness-110"
+        style={{
+          gridTemplateColumns: COL_WIDTHS,
+          background: isTop3 ? RANK_BG[position] : undefined,
+          borderColor: isTop3 ? RANK_BORDER[position] : "#1e2130",
+          borderLeftWidth: isTop3 ? "3px" : "0px",
+        }}
       >
-        {/* Rank */}
         <div className="flex items-center">
           <RankBadge position={position} />
         </div>
 
-        {/* Bust Skin */}
         <div className="flex items-center justify-center py-1">
           <img
-            src={`https://visage.surgeplay.com/bust/48/${player.username}`}
+            src={`https://visage.surgeplay.com/bust/${isTop3 ? 72 : 48}/${player.username}`}
             alt={player.username}
-            className="w-9 h-9 rounded object-contain"
+            className={`${isTop3 ? "w-11 h-11" : "w-9 h-9"} rounded object-contain`}
             style={{ imageRendering: "pixelated" }}
             onError={(e) => {
               const t = e.currentTarget;
@@ -59,7 +79,6 @@ export function PlayerRow({ player, position, gamemode }: PlayerRowProps) {
           />
         </div>
 
-        {/* Username + Title */}
         <div className="flex flex-col justify-center min-w-0 pr-2 py-1">
           <div className="flex items-center gap-1.5 min-w-0">
             {isTop10 && <span className="shrink-0 w-1.5 h-1.5 rounded-full bg-primary inline-block" />}
@@ -74,26 +93,22 @@ export function PlayerRow({ player, position, gamemode }: PlayerRowProps) {
           )}
         </div>
 
-        {/* Mode */}
         <div className="hidden md:flex items-center">
           <span className="text-xs text-[#6b7280] bg-[#1e2130] px-1.5 py-0.5 rounded">
             {GAMEMODE_LABELS[displayGamemode] ?? displayGamemode}
           </span>
         </div>
 
-        {/* Region */}
         <div className="hidden md:flex items-center">
           <span className="text-xs font-bold px-2 py-0.5 rounded bg-[#1e2130] border border-[#2a2f42] text-white">
             {(player as any).region || "—"}
           </span>
         </div>
 
-        {/* Tier */}
         <div className="flex items-center justify-center">
           <TierBadge tier={player.tier} />
         </div>
 
-        {/* Points */}
         <div className="flex items-center justify-end">
           <span className={`text-sm font-bold tabular-nums ${isTop3 ? "text-white" : "text-[#9ca3af]"}`}>
             {player.points.toLocaleString()}
