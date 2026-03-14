@@ -66,9 +66,9 @@ export function PlayerRow({ player, position, gamemode }: PlayerRowProps) {
 
         <div className="flex items-center justify-center py-1">
           <img
-            src={`https://visage.surgeplay.com/bust/${isTop3 ? 72 : 48}/${player.username}`}
+            src={`https://visage.surgeplay.com/bust/${isTop3 ? 96 : 80}/${player.username}`}
             alt={player.username}
-            className={`${isTop3 ? "w-11 h-11" : "w-9 h-9"} rounded object-contain`}
+            className={`${isTop3 ? "w-16 h-16" : "w-14 h-14"} rounded object-contain`}
             style={{ imageRendering: "pixelated" }}
             onError={(e) => {
               const t = e.currentTarget;

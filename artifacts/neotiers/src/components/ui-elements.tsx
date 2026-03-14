@@ -211,12 +211,12 @@ export function getRankTitle(rank: number): string {
 }
 
 export function getRankTitleFromPoints(points: number): string {
-  if (points >= 500) return "Combat Grandmaster";
-  if (points >= 350) return "Combat Master";
-  if (points >= 250) return "Master";
-  if (points >= 150) return "Combat Ace";
-  if (points >= 75)  return "Combat Intermediate";
-  if (points >= 25)  return "Combat Initiate";
+  if (points >= 420) return "Combat Grandmaster";
+  if (points >= 300) return "Combat Master";
+  if (points >= 200) return "Master";
+  if (points >= 120) return "Combat Ace";
+  if (points >= 60)  return "Combat Intermediate";
+  if (points >= 20)  return "Combat Initiate";
   if (points > 0)    return "Rookie";
   return "Unranked";
 }

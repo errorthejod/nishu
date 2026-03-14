@@ -191,9 +191,9 @@ function OverallLeaderboard() {
                     </td>
                     <td className="px-2 py-1">
                       <img
-                        src={`https://visage.surgeplay.com/bust/${player.rank <= 3 ? 72 : 48}/${player.username}`}
+                        src={`https://visage.surgeplay.com/bust/${player.rank <= 3 ? 96 : 80}/${player.username}`}
                         alt={player.username}
-                        className={`${player.rank <= 3 ? "w-11 h-11" : "w-9 h-9"} rounded object-contain`}
+                        className={`${player.rank <= 3 ? "w-16 h-16" : "w-14 h-14"} rounded object-contain`}
                         style={{ imageRendering: "pixelated" }}
                         onError={(e) => {
                           (e.target as HTMLImageElement).src = `https://mc-heads.net/avatar/${player.username}/32`;
