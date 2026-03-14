@@ -3,18 +3,19 @@ import { Link, useLocation } from "wouter";
 import { Menu, X } from "lucide-react";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { GamemodeIcon } from "./ui-elements";
 
 const GAMEMODE_NAV = [
-  { href: "/leaderboard", label: "Overall",    icon: "🏆" },
-  { href: "/uhc",         label: "UHC",        icon: "💀" },
-  { href: "/nethpot",     label: "NethPot",    icon: "⚗️" },
-  { href: "/smp",         label: "SMP",        icon: "🛡️" },
-  { href: "/axe",         label: "Axe",        icon: "🪓" },
-  { href: "/mace",        label: "Mace",       icon: "🔨" },
-  { href: "/spear",       label: "Spear",      icon: "🏹" },
-  { href: "/lifesteal",   label: "Lifesteal",  icon: "❤️" },
-  { href: "/crystal",     label: "Crystal",    icon: "💎" },
-  { href: "/sword",       label: "Sword",      icon: "🗡️" },
+  { href: "/leaderboard", label: "Overall",    gm: "overall" },
+  { href: "/uhc",         label: "UHC",        gm: "uhc" },
+  { href: "/nethpot",     label: "NethPot",    gm: "nethpot" },
+  { href: "/smp",         label: "SMP",        gm: "smp" },
+  { href: "/axe",         label: "Axe",        gm: "axe" },
+  { href: "/mace",        label: "Mace",       gm: "mace" },
+  { href: "/spear",       label: "Spear",      gm: "spear" },
+  { href: "/lifesteal",   label: "Lifesteal",  gm: "lifesteal" },
+  { href: "/crystal",     label: "Crystal",    gm: "crystal" },
+  { href: "/sword",       label: "Sword",      gm: "sword" },
 ];
 
 export function Layout({ children }: { children: ReactNode }) {
@@ -50,11 +51,10 @@ export function Layout({ children }: { children: ReactNode }) {
                 <Link
                   key={link.href}
                   href={link.href}
-                  className={`px-2.5 py-2 text-sm font-medium tracking-wide transition-all whitespace-nowrap flex items-center gap-1
-                    ${isActive ? "text-white border-b-2 border-primary bg-primary/5" : "text-[#6b7280] hover:text-white"}
-                    ${link.href === "/leaderboard" ? "text-yellow-400 hover:text-yellow-300" : ""}`}
+                  className={`px-2.5 py-2 text-sm font-medium tracking-wide transition-all whitespace-nowrap flex items-center gap-1.5
+                    ${isActive ? "text-white border-b-2 border-primary bg-primary/5" : "text-[#6b7280] hover:text-white"}`}
                 >
-                  <span className="text-xs">{link.icon}</span>
+                  <GamemodeIcon gamemode={link.gm} size="sm" active={isActive} />
                   {link.label}
                 </Link>
               );
@@ -64,7 +64,7 @@ export function Layout({ children }: { children: ReactNode }) {
           {/* Right side */}
           <div className="hidden lg:flex items-center gap-2 ml-auto shrink-0">
             <a
-              href="https://discord.gg/7UxNZS3tph"
+              href="https://discord.gg/nPKGArUy"
               target="_blank"
               rel="noreferrer"
               className="flex items-center gap-1.5 px-3 py-1.5 rounded text-xs text-[#6b7280] hover:text-white transition-colors bg-[#1e2130] border border-[#2a2f42]"
@@ -119,7 +119,8 @@ export function Layout({ children }: { children: ReactNode }) {
                   onClick={() => setIsMobileMenuOpen(false)}
                   className={`px-3 py-2 text-sm rounded flex items-center gap-1.5 ${location === link.href ? "text-white bg-[#1e2130] border-l-2 border-primary" : "text-[#6b7280] hover:text-white"}`}
                 >
-                  <span>{link.icon}</span>{link.label}
+                  <GamemodeIcon gamemode={link.gm} size="sm" active={location === link.href} />
+                  {link.label}
                 </Link>
               ))}
               <Link href="/admin" onClick={() => setIsMobileMenuOpen(false)} className="px-3 py-2 text-sm text-[#6b7280] col-span-2 border-t border-[#1e2130] mt-1 pt-2">
@@ -138,7 +139,7 @@ export function Layout({ children }: { children: ReactNode }) {
         <div className="max-w-7xl mx-auto px-4 py-8 flex flex-col md:flex-row items-center justify-between gap-4">
           <img src={`${import.meta.env.BASE_URL}images/neotiers-logo.png`} alt="NEOTIERS" className="h-7 w-auto object-contain opacity-60" />
           <div className="flex gap-6 text-sm text-[#6b7280]">
-            <a href="https://discord.gg/7UxNZS3tph" target="_blank" rel="noreferrer" className="hover:text-white transition-colors">Discord</a>
+            <a href="https://discord.gg/nPKGArUy" target="_blank" rel="noreferrer" className="hover:text-white transition-colors">Discord</a>
             <span className="text-[#2a2f42]">|</span>
             <span>Server IP: <span className="text-white font-medium">neomc.fun</span></span>
           </div>

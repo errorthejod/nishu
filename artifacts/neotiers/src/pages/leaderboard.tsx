@@ -1,25 +1,25 @@
 import { useState, useMemo } from "react";
 import { Layout } from "@/components/layout";
 import { PlayerRow } from "@/components/player-row";
-import { TierBadge, getRankTitle, getRankTitleColor, TIERS, TIER_ORDER } from "@/components/ui-elements";
+import { TierBadge, GamemodeTierBadge, GamemodeIcon, getRankTitle, getRankTitleColor, getRankTitleFromPoints, getRankTitleColorFromPoints, TIERS, TIER_ORDER } from "@/components/ui-elements";
 import { useListPlayers } from "@workspace/api-client-react";
 import { useQueries } from "@tanstack/react-query";
-import { Search, ChevronUp, ChevronDown, Minus, Trophy } from "lucide-react";
+import { Search, ChevronUp, ChevronDown, Minus } from "lucide-react";
 import { Link } from "wouter";
 
 type SortKey = "rank" | "username" | "tier" | "points";
 
-export const GAMEMODE_META: Record<string, { label: string; icon: string; color: string }> = {
-  overall:   { label: "Overall",    icon: "🏆", color: "#FFD700" },
-  uhc:       { label: "UHC",        icon: "💀", color: "#ef4444" },
-  nethpot:   { label: "NethPot",    icon: "⚗️", color: "#a855f7" },
-  smp:       { label: "SMP",        icon: "🛡️", color: "#3b82f6" },
-  axe:       { label: "Axe",        icon: "🪓", color: "#f97316" },
-  mace:      { label: "Mace",       icon: "🔨", color: "#eab308" },
-  spear:     { label: "Spear",      icon: "🏹", color: "#22c55e" },
-  lifesteal: { label: "Lifesteal",  icon: "❤️", color: "#ec4899" },
-  crystal:   { label: "Crystal",    icon: "💎", color: "#06b6d4" },
-  sword:     { label: "Sword",      icon: "🗡️", color: "#f43f5e" },
+export const GAMEMODE_META: Record<string, { label: string; color: string }> = {
+  overall:   { label: "Overall",    color: "#FFD700" },
+  uhc:       { label: "UHC",        color: "#f59e0b" },
+  nethpot:   { label: "NethPot",    color: "#a855f7" },
+  smp:       { label: "SMP",        color: "#3b82f6" },
+  axe:       { label: "Axe",        color: "#f97316" },
+  mace:      { label: "Mace",       color: "#eab308" },
+  spear:     { label: "Spear",      color: "#22c55e" },
+  lifesteal: { label: "Lifesteal",  color: "#ec4899" },
+  crystal:   { label: "Crystal",    color: "#06b6d4" },
+  sword:     { label: "Sword",      color: "#ef4444" },
 };
 
 export const COL_WIDTHS = "48px 56px 1fr 90px 110px 72px 80px";
@@ -58,13 +58,12 @@ function OverallLeaderboard() {
       .map((p) => ({ ...p, totalPoints: Object.values(p.points).reduce((a: number, b: number) => a + b, 0) }))
       .sort((a, b) => b.totalPoints - a.totalPoints)
       .map((p, i) => ({ ...p, rank: i + 1 }))
-      .slice(0, 50);
+      .slice(0, 25);
   }, [results]);
 
   const isLoading = results.some((r) => r.isLoading);
   const filtered = merged.filter((p) => p.username.toLowerCase().includes(search.toLowerCase()));
 
-  // Top 3 podium
   const top3 = merged.slice(0, 3);
   const podiumOrder = top3.length >= 3 ? [top3[1], top3[0], top3[2]] : top3;
 
@@ -74,15 +73,13 @@ function OverallLeaderboard() {
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center gap-3 mb-5">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-lg flex items-center justify-center text-xl border" style={{ borderColor: "#FFD70044", background: "#FFD70018" }}>
-              🏆
-            </div>
+            <GamemodeIcon gamemode="overall" size="lg" active />
             <div>
               <h1 className="text-xl font-bold text-white flex items-center gap-2">
                 Overall Rankings
                 <span className="text-xs font-normal text-[#6b7280] bg-[#1e2130] px-2 py-0.5 rounded">Season 1</span>
               </h1>
-              <p className="text-xs text-[#6b7280]">Global rankings across all gamemodes · Top 50</p>
+              <p className="text-xs text-[#6b7280]">Global rankings across all gamemodes · Top 25</p>
             </div>
           </div>
           <div className="sm:ml-auto relative">
@@ -100,26 +97,29 @@ function OverallLeaderboard() {
         {/* Podium Top 3 */}
         {!isLoading && top3.length === 3 && (
           <div className="flex items-end justify-center gap-3 mb-8">
-            {podiumOrder.map((player, i) => {
+            {podiumOrder.map((player) => {
               const isFirst = player.rank === 1;
-              const medal = player.rank === 1 ? "🥇" : player.rank === 2 ? "🥈" : "🥉";
-              const heights = { 2: "h-28", 1: "h-36", 3: "h-24" };
-              const heightClass = heights[player.rank as 1 | 2 | 3] ?? "h-24";
+              const podiumHeight = player.rank === 1 ? "h-36" : player.rank === 2 ? "h-28" : "h-24";
+              const title = getRankTitleFromPoints(player.totalPoints);
+              const titleColor = getRankTitleColorFromPoints(player.totalPoints);
               return (
-                <Link key={player.username} href={`/player/${player.username}`} className="flex-1 max-w-[180px]">
+                <Link key={player.username} href={`/player/${player.username}`} className="flex-1 max-w-[200px]">
                   <div className={`flex flex-col items-center bg-[#0d0f14] border rounded-lg ${isFirst ? "border-yellow-500/50 shadow-[0_0_20px_rgba(255,215,0,0.15)]" : "border-[#1e2130]"} p-3 cursor-pointer hover:bg-[#1a1d27] transition-all`}>
                     <img
-                      src={`https://mc-heads.net/avatar/${player.username}/64`}
+                      src={`https://visage.surgeplay.com/bust/128/${player.username}`}
                       alt={player.username}
-                      className={`${isFirst ? "w-16 h-16" : "w-12 h-12"} rounded-lg border-2 ${isFirst ? "border-yellow-500/60" : "border-[#2a2f42]"}`}
+                      className={`${isFirst ? "w-20 h-20" : "w-16 h-16"} object-contain drop-shadow-xl`}
                       style={{ imageRendering: "pixelated" }}
+                      onError={(e) => {
+                        (e.target as HTMLImageElement).src = `https://mc-heads.net/avatar/${player.username}/64`;
+                      }}
                     />
-                    <div className="text-lg mt-1">{medal}</div>
-                    <p className={`font-bold text-sm text-white mt-0.5 truncate max-w-full`}>{player.username}</p>
-                    <p className="text-[10px] font-medium mt-0.5" style={{ color: getRankTitleColor(player.rank) }}>
-                      {getRankTitle(player.rank)}
-                    </p>
-                    <div className={`${heightClass} w-full rounded-b-md mt-2 flex flex-col items-center justify-end pb-2 gap-1`}
+                    <span className={`text-lg mt-1 font-black ${isFirst ? "text-yellow-400" : player.rank === 2 ? "text-slate-300" : "text-amber-600"}`}>
+                      #{player.rank}
+                    </span>
+                    <p className="font-bold text-sm text-white mt-0.5 truncate max-w-full">{player.username}</p>
+                    <p className="text-[10px] font-medium mt-0.5" style={{ color: titleColor }}>{title}</p>
+                    <div className={`${podiumHeight} w-full rounded-b-md mt-2 flex flex-col items-center justify-end pb-2 gap-1`}
                       style={{ background: isFirst ? "linear-gradient(to top, rgba(255,215,0,0.15), transparent)" : "linear-gradient(to top, rgba(255,255,255,0.04), transparent)" }}>
                       <p className="text-white font-bold text-sm">{player.totalPoints.toLocaleString()}</p>
                       <p className="text-[#6b7280] text-[10px]">points</p>
@@ -133,60 +133,76 @@ function OverallLeaderboard() {
 
         {/* MCTiers Wide Table */}
         <div className="rounded-lg border border-[#1e2130] overflow-hidden bg-[#0d0f14] overflow-x-auto">
-          <table className="w-full min-w-[900px] text-sm border-collapse">
+          <table className="w-full min-w-[960px] text-sm border-collapse">
             <thead>
-              <tr className="border-b border-[#1e2130] text-[11px] font-semibold uppercase tracking-wider text-[#6b7280] h-9">
-                <th className="px-3 text-left w-12">#</th>
+              <tr className="border-b border-[#1e2130] text-[11px] font-semibold uppercase tracking-wider text-[#6b7280] h-10">
+                <th className="px-3 text-left w-10">#</th>
                 <th className="px-2 w-12" />
-                <th className="px-3 text-left min-w-[130px]">Player</th>
+                <th className="px-3 text-left min-w-[140px]">Player</th>
                 {RANKED_GAMEMODES.map((gm) => (
-                  <th key={gm} className="px-2 text-center w-20">{GAMEMODE_META[gm]?.icon} {GAMEMODE_META[gm]?.label}</th>
+                  <th key={gm} className="px-2 text-center w-20">
+                    <span className="flex flex-col items-center gap-0.5">
+                      <GamemodeIcon gamemode={gm} size="sm" />
+                      <span className="text-[9px] uppercase tracking-wide">{GAMEMODE_META[gm]?.label}</span>
+                    </span>
+                  </th>
                 ))}
                 <th className="px-3 text-right w-24">Points</th>
               </tr>
             </thead>
             <tbody>
               {isLoading ? (
-                <tr><td colSpan={12} className="text-center py-12 text-[#6b7280]">Loading rankings...</td></tr>
+                <tr><td colSpan={13} className="text-center py-12 text-[#6b7280]">Loading rankings...</td></tr>
               ) : filtered.length === 0 ? (
-                <tr><td colSpan={12} className="text-center py-12 text-[#6b7280]">No players found</td></tr>
-              ) : filtered.map((player) => (
-                <tr
-                  key={player.username}
-                  className="border-b border-[#1e2130] hover:bg-[#1a1d27] cursor-pointer transition-colors"
-                  onClick={() => window.location.href = `/player/${player.username}`}
-                >
-                  <td className="px-3 py-2">
-                    {player.rank === 1 ? "🥇" : player.rank === 2 ? "🥈" : player.rank === 3 ? "🥉" : <span className="text-[#6b7280] font-mono">#{player.rank}</span>}
-                  </td>
-                  <td className="px-2 py-1">
-                    <img
-                      src={`https://mc-heads.net/avatar/${player.username}/32`}
-                      alt={player.username}
-                      className="w-8 h-8 rounded"
-                      style={{ imageRendering: "pixelated" }}
-                    />
-                  </td>
-                  <td className="px-3 py-2">
-                    <p className="font-semibold text-white">{player.username}</p>
-                    <p className="text-[10px] font-medium" style={{ color: getRankTitleColor(player.rank) }}>
-                      {getRankTitle(player.rank)}
-                    </p>
-                  </td>
-                  {RANKED_GAMEMODES.map((gm) => (
-                    <td key={gm} className="px-2 py-2 text-center">
-                      {player.tiers[gm] ? (
-                        <TierBadge tier={player.tiers[gm]} size="sm" />
+                <tr><td colSpan={13} className="text-center py-12 text-[#6b7280]">No players found</td></tr>
+              ) : filtered.map((player) => {
+                const title = getRankTitleFromPoints(player.totalPoints);
+                const titleColor = getRankTitleColorFromPoints(player.totalPoints);
+                return (
+                  <tr
+                    key={player.username}
+                    className="border-b border-[#1e2130] hover:bg-[#1a1d27] cursor-pointer transition-colors"
+                    onClick={() => window.location.href = `/player/${player.username}`}
+                  >
+                    <td className="px-3 py-2">
+                      {player.rank <= 3 ? (
+                        <span className={`font-black text-sm ${player.rank === 1 ? "text-yellow-400" : player.rank === 2 ? "text-slate-300" : "text-amber-600"}`}>
+                          {player.rank}.
+                        </span>
                       ) : (
-                        <span className="text-[#374151] text-xs">—</span>
+                        <span className="text-[#6b7280] font-mono text-xs">#{player.rank}</span>
                       )}
                     </td>
-                  ))}
-                  <td className="px-3 py-2 text-right font-bold text-white tabular-nums">
-                    {player.totalPoints.toLocaleString()}
-                  </td>
-                </tr>
-              ))}
+                    <td className="px-2 py-1">
+                      <img
+                        src={`https://visage.surgeplay.com/bust/48/${player.username}`}
+                        alt={player.username}
+                        className="w-9 h-9 rounded object-contain"
+                        style={{ imageRendering: "pixelated" }}
+                        onError={(e) => {
+                          (e.target as HTMLImageElement).src = `https://mc-heads.net/avatar/${player.username}/32`;
+                        }}
+                      />
+                    </td>
+                    <td className="px-3 py-2">
+                      <p className="font-semibold text-white">{player.username}</p>
+                      <p className="text-[10px] font-medium" style={{ color: titleColor }}>{title}</p>
+                    </td>
+                    {RANKED_GAMEMODES.map((gm) => (
+                      <td key={gm} className="px-2 py-2 text-center">
+                        {player.tiers[gm] ? (
+                          <GamemodeTierBadge gamemode={gm} tier={player.tiers[gm]} />
+                        ) : (
+                          <span className="text-[#374151] text-xs">—</span>
+                        )}
+                      </td>
+                    ))}
+                    <td className="px-3 py-2 text-right font-bold text-white tabular-nums">
+                      {player.totalPoints.toLocaleString()}
+                    </td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
         </div>
@@ -209,7 +225,7 @@ export default function Leaderboard({ gamemode = "overall" }: LeaderboardProps) 
     { query: { queryKey: ["players", gamemode], refetchOnWindowFocus: false } }
   );
 
-  const meta = GAMEMODE_META[gamemode] ?? { label: gamemode, icon: "🎮", color: "#6b7280" };
+  const meta = GAMEMODE_META[gamemode] ?? { label: gamemode, color: "#6b7280" };
 
   const filtered = players.filter((p) => {
     const matchesSearch =
@@ -241,7 +257,6 @@ export default function Leaderboard({ gamemode = "overall" }: LeaderboardProps) 
       : <ChevronDown className="w-3 h-3 ml-0.5" style={{ color: meta.color }} />;
   }
 
-  // Top 3 podium
   const top3 = [...players].sort((a, b) => (a.rank ?? 99) - (b.rank ?? 99)).slice(0, 3);
   const podiumOrder = top3.length === 3 ? [top3[1], top3[0], top3[2]] : top3;
 
@@ -251,19 +266,12 @@ export default function Leaderboard({ gamemode = "overall" }: LeaderboardProps) 
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center gap-3 mb-4">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-lg flex items-center justify-center text-xl border"
-              style={{ borderColor: meta.color + "44", background: meta.color + "18" }}>
-              {meta.icon}
-            </div>
+            <GamemodeIcon gamemode={gamemode} size="lg" active />
             <div>
               <h1 className="text-xl font-bold text-white flex items-center gap-2">
                 {meta.label}
-                <span className="text-xs font-normal text-[#6b7280] bg-[#1e2130] px-2 py-0.5 rounded">
-                  Season 1
-                </span>
-                <span className="text-xs font-normal text-[#6b7280] bg-[#1e2130] px-2 py-0.5 rounded">
-                  Top {players.length}
-                </span>
+                <span className="text-xs font-normal text-[#6b7280] bg-[#1e2130] px-2 py-0.5 rounded">Season 1</span>
+                <span className="text-xs font-normal text-[#6b7280] bg-[#1e2130] px-2 py-0.5 rounded">Top {players.length}</span>
               </h1>
               <p className="text-xs text-[#6b7280]">Ranked by points · Top 50 players</p>
             </div>
@@ -303,17 +311,21 @@ export default function Leaderboard({ gamemode = "overall" }: LeaderboardProps) 
           <div className="flex items-end justify-center gap-3 mb-6">
             {podiumOrder.map((player) => {
               const isFirst = player.rank === 1;
-              const medal = player.rank === 1 ? "🥇" : player.rank === 2 ? "🥈" : "🥉";
               return (
                 <Link key={player.id} href={`/player/${player.username}`} className="flex-1 max-w-[160px]">
                   <div className={`flex flex-col items-center bg-[#0d0f14] border rounded-lg ${isFirst ? "border-yellow-500/50 shadow-[0_0_20px_rgba(255,215,0,0.15)]" : "border-[#1e2130]"} p-3 cursor-pointer hover:bg-[#1a1d27] transition-all`}>
                     <img
-                      src={`https://mc-heads.net/avatar/${player.username}/64`}
+                      src={`https://visage.surgeplay.com/bust/96/${player.username}`}
                       alt={player.username}
-                      className={`${isFirst ? "w-14 h-14" : "w-11 h-11"} rounded-lg border-2 ${isFirst ? "border-yellow-500/60" : "border-[#2a2f42]"}`}
+                      className={`${isFirst ? "w-16 h-16" : "w-12 h-12"} object-contain drop-shadow-xl`}
                       style={{ imageRendering: "pixelated" }}
+                      onError={(e) => {
+                        (e.target as HTMLImageElement).src = `https://mc-heads.net/avatar/${player.username}/64`;
+                      }}
                     />
-                    <div className="text-base mt-1">{medal}</div>
+                    <span className={`text-base mt-1 font-black ${isFirst ? "text-yellow-400" : player.rank === 2 ? "text-slate-300" : "text-amber-600"}`}>
+                      #{player.rank}
+                    </span>
                     <p className="font-bold text-xs text-white mt-0.5 truncate max-w-full">{player.username}</p>
                     <p className="text-[10px] mt-0.5" style={{ color: getRankTitleColor(player.rank ?? 0) }}>
                       {getRankTitle(player.rank ?? 0)}

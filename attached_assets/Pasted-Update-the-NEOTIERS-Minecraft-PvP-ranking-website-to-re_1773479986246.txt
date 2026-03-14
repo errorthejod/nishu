@@ -1,0 +1,91 @@
+Update the **NEOTIERS Minecraft PvP ranking website** to redesign it similar to **MCTiers style** with proper Minecraft icons and player profile layout.
+
+Required changes:
+
+1. **Remove emojis everywhere**
+   Do not use emoji icons. Replace them with **real Minecraft-style icons** similar to MCTiers.
+
+2. **Gamemode icons**
+   Use proper Minecraft item icons instead of emojis:
+
+* UHC → Golden Apple / UHC icon
+* NethPot → Potion bottle
+* SMP → Shield
+* Sword → Diamond Sword
+* Axe → Diamond Axe
+* Mace → Mace weapon
+* Crystal → End Crystal
+* Lifesteal → Heart icon (Minecraft style)
+* Spear → Trident
+
+3. **Top tier icons**
+   In the **Overall section**, show tier icons beside the gamemode icons (HT1, HT2, etc.) exactly like MCTiers.
+
+4. **Player profile redesign**
+   Redesign the player profile page to match the layout shown in the image:
+
+* Left side should show a **3D Minecraft player model (half body)**.
+* The model must include **Head + Chest + Both Arms**, not just the head.
+* Use a **Minecraft skin viewer API** or 3D render similar to MCTiers.
+
+Example layout:
+Left side
+
+* 3D player model
+* Player name
+* Rank title (Combat Grandmaster)
+* Best Tier badge
+* Total points
+
+Right side
+
+* Tier rankings by gamemode grid
+* Performance breakdown bars
+* Total points
+* Gamemodes ranked
+
+5. **Fix the Combat Grandmaster problem**
+   Currently the rank system does not calculate correctly. Fix it so ranks are automatically assigned based on **total points thresholds**, similar to MCTiers.
+
+Example:
+
+* Combat Grandmaster → highest tier players
+* Combat Master
+* Combat Expert
+* Combat Apprentice
+
+6. **Database changes**
+   Update the database structure:
+
+* Replace the column **weapon** with **region**.
+* Regions represent gamemodes.
+
+Example regions:
+UHC, NethPot, SMP, Sword, Axe, Mace, Crystal, Lifesteal, Spear.
+
+7. **Tier icons**
+   Add tier badges (HT1–HT5, LT1–LT5) beside each gamemode and also show them in the **overall section**.
+
+8. **Leaderboard improvements**
+   Ensure the leaderboard shows:
+
+* Player 3D model
+* Player name
+* Total points
+* Overall tier
+* Top 25 players.
+
+9. **Discord link**
+   Update the Discord invite button everywhere on the website to:
+
+https://discord.gg/nPKGArUy
+
+10. **Visual style**
+    Keep a **dark esports theme** similar to MCTiers:
+
+* dark blue / black background
+* glowing tier badges
+* modern PvP ranking UI
+* clean gamemode cards with icons.
+
+The final result should look **very similar to MCTiers**, but branded as **NEOTIERS**.

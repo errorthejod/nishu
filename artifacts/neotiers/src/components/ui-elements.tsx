@@ -8,7 +8,6 @@ export const TIER_ORDER: Record<string, number> = {
   LT1: 5, LT2: 6, LT3: 7, LT4: 8, LT5: 9,
 };
 
-// Updated tier colors per spec
 const TIER_STYLES: Record<string, { bg: string; text: string; border: string; glow: string }> = {
   HT1: { bg: "#dc2626", text: "#fff", border: "#ef4444", glow: "rgba(220,38,38,0.6)" },
   HT2: { bg: "#ea580c", text: "#fff", border: "#f97316", glow: "rgba(234,88,12,0.5)" },
@@ -28,6 +27,61 @@ export const TIER_COLORS: Record<string, string> = {
   LT1: "#7e22ce", LT2: "#1d4ed8", LT3: "#0e7490",
   LT4: "#4b5563", LT5: "#1f2937",
 };
+
+export const GAMEMODE_ICONS: Record<string, { src: string; color: string }> = {
+  overall:   { src: "https://minecraft.wiki/w/Special:FilePath/Invicon_Diamond_Sword.png",            color: "#FFD700" },
+  uhc:       { src: "https://minecraft.wiki/w/Special:FilePath/Invicon_Enchanted_Golden_Apple.png",   color: "#f59e0b" },
+  nethpot:   { src: "https://minecraft.wiki/w/Special:FilePath/Invicon_Splash_Potion.png",            color: "#a855f7" },
+  smp:       { src: "https://minecraft.wiki/w/Special:FilePath/Invicon_Shield.png",                   color: "#3b82f6" },
+  axe:       { src: "https://minecraft.wiki/w/Special:FilePath/Invicon_Diamond_Axe.png",              color: "#f97316" },
+  mace:      { src: "https://minecraft.wiki/w/Special:FilePath/Invicon_Mace.png",                     color: "#eab308" },
+  spear:     { src: "https://minecraft.wiki/w/Special:FilePath/Invicon_Trident.png",                  color: "#22c55e" },
+  lifesteal: { src: "https://minecraft.wiki/w/Special:FilePath/Invicon_Totem_of_Undying.png",         color: "#ec4899" },
+  crystal:   { src: "https://minecraft.wiki/w/Special:FilePath/Invicon_End_Crystal.png",              color: "#06b6d4" },
+  sword:     { src: "https://minecraft.wiki/w/Special:FilePath/Invicon_Diamond_Sword.png",            color: "#ef4444" },
+};
+
+export function GamemodeIcon({
+  gamemode,
+  size = "md",
+  active = false,
+}: {
+  gamemode: string;
+  size?: "sm" | "md" | "lg";
+  active?: boolean;
+}) {
+  const meta = GAMEMODE_ICONS[gamemode] ?? GAMEMODE_ICONS.overall;
+  const dim = size === "sm" ? 18 : size === "md" ? 24 : 32;
+  const pad = size === "sm" ? 5 : size === "md" ? 7 : 9;
+  const wrapSize = dim + pad * 2;
+
+  return (
+    <span
+      style={{
+        display: "inline-flex",
+        alignItems: "center",
+        justifyContent: "center",
+        width: wrapSize,
+        height: wrapSize,
+        borderRadius: "50%",
+        background: active ? `${meta.color}22` : "rgba(255,255,255,0.06)",
+        border: `1.5px solid ${active ? meta.color + "88" : "rgba(255,255,255,0.12)"}`,
+        flexShrink: 0,
+      }}
+    >
+      <img
+        src={meta.src}
+        alt={gamemode}
+        width={dim}
+        height={dim}
+        style={{ imageRendering: "pixelated", objectFit: "contain" }}
+        onError={(e) => {
+          (e.currentTarget as HTMLImageElement).style.display = "none";
+        }}
+      />
+    </span>
+  );
+}
 
 export function TierBadge({ tier, size = "md" }: { tier: string; size?: "sm" | "md" | "lg" }) {
   const upper = tier.toUpperCase();
@@ -61,49 +115,124 @@ export function TierBadge({ tier, size = "md" }: { tier: string; size?: "sm" | "
   );
 }
 
+export function GamemodeTierBadge({
+  gamemode,
+  tier,
+}: {
+  gamemode: string;
+  tier: string;
+}) {
+  const upper = tier.toUpperCase();
+  const tierStyle = TIER_STYLES[upper] || { bg: "#1f2937", text: "#9ca3af", border: "#374151", glow: "none" };
+  const meta = GAMEMODE_ICONS[gamemode] ?? GAMEMODE_ICONS.overall;
+
+  return (
+    <span
+      style={{
+        display: "inline-flex",
+        flexDirection: "column",
+        alignItems: "center",
+        gap: 2,
+      }}
+    >
+      <span
+        style={{
+          display: "inline-flex",
+          alignItems: "center",
+          justifyContent: "center",
+          width: 28,
+          height: 28,
+          borderRadius: "50%",
+          background: "#111827",
+          border: `1.5px solid ${tierStyle.border}`,
+          boxShadow: tierStyle.glow !== "none" ? `0 0 6px ${tierStyle.glow}` : "none",
+        }}
+      >
+        <img
+          src={meta.src}
+          alt={gamemode}
+          width={16}
+          height={16}
+          style={{ imageRendering: "pixelated", objectFit: "contain" }}
+          onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = "none"; }}
+        />
+      </span>
+      <span
+        style={{
+          fontSize: 9,
+          fontWeight: 800,
+          color: tierStyle.text,
+          backgroundColor: tierStyle.bg,
+          border: `1px solid ${tierStyle.border}`,
+          borderRadius: 3,
+          padding: "0 3px",
+          letterSpacing: "0.04em",
+          lineHeight: "14px",
+        }}
+      >
+        {upper}
+      </span>
+    </span>
+  );
+}
+
 export const WEAPON_ICONS: Record<string, string> = {
-  sword:     "⚔️",
-  axe:       "🪓",
-  mace:      "🔨",
-  crystal:   "💎",
-  bow:       "🏹",
-  spear:     "🗡️",
-  lifesteal: "🩸",
-  trident:   "🔱",
-  pickaxe:   "⛏️",
+  sword:     "sword",
+  axe:       "axe",
+  mace:      "mace",
+  crystal:   "crystal",
+  bow:       "spear",
+  spear:     "spear",
+  lifesteal: "lifesteal",
+  trident:   "spear",
+  pickaxe:   "axe",
 };
 
 export function WeaponIcon({ weapon }: { weapon: string }) {
   const key = weapon.toLowerCase();
-  const icon = WEAPON_ICONS[key] ?? "⚔️";
+  const gm = WEAPON_ICONS[key] ?? "sword";
+  const meta = GAMEMODE_ICONS[gm] ?? GAMEMODE_ICONS.sword;
   return (
     <span className="flex items-center gap-1.5 text-xs text-[#9ca3af]">
-      <span className="text-sm leading-none">{icon}</span>
+      <img src={meta.src} alt={weapon} width={14} height={14} style={{ imageRendering: "pixelated" }} />
       <span>{weapon}</span>
     </span>
   );
 }
 
-/** Returns the rank title based on leaderboard position (1-indexed) */
 export function getRankTitle(rank: number): string {
   if (rank === 1) return "Combat Grandmaster";
-  if (rank === 2) return "Combat Master";
-  if (rank === 3) return "Master";
+  if (rank <= 3)  return "Combat Master";
   if (rank <= 10) return "Combat Ace";
   if (rank <= 25) return "Combat Specialist";
   if (rank <= 50) return "Combat Initiate";
   return "Unranked";
 }
 
-/** Color for each rank title */
+export function getRankTitleFromPoints(points: number): string {
+  if (points >= 400) return "Combat Grandmaster";
+  if (points >= 250) return "Combat Master";
+  if (points >= 150) return "Combat Ace";
+  if (points >= 75)  return "Combat Specialist";
+  if (points > 0)    return "Combat Initiate";
+  return "Unranked";
+}
+
 export function getRankTitleColor(rank: number): string {
-  if (rank === 1) return "#FFD700";
-  if (rank === 2) return "#C0C0C0";
-  if (rank === 3) return "#CD7F32";
-  if (rank <= 10) return "#ef4444";
-  if (rank <= 25) return "#a855f7";
-  if (rank <= 50) return "#6b7280";
+  if (rank === 1)  return "#FFD700";
+  if (rank <= 3)   return "#C0C0C0";
+  if (rank <= 10)  return "#ef4444";
+  if (rank <= 25)  return "#a855f7";
+  if (rank <= 50)  return "#6b7280";
   return "#4b5563";
+}
+
+export function getRankTitleColorFromPoints(points: number): string {
+  if (points >= 400) return "#FFD700";
+  if (points >= 250) return "#C0C0C0";
+  if (points >= 150) return "#ef4444";
+  if (points >= 75)  return "#a855f7";
+  return "#6b7280";
 }
 
 export function EsportsButton({

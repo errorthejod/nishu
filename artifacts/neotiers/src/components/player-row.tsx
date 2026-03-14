@@ -11,18 +11,20 @@ interface PlayerRowProps {
 
 const GAMEMODE_LABELS: Record<string, string> = {
   overall: "Global", uhc: "UHC", nethpot: "NethPot", smp: "SMP",
-  axe: "Axe", mace: "Mace", spear: "Spear", lifesteal: "Lifesteal", crystal: "Crystal",
+  axe: "Axe", mace: "Mace", spear: "Spear", lifesteal: "Lifesteal", crystal: "Crystal", sword: "Sword",
 };
 
 function RankBadge({ position }: { position: number }) {
-  if (position === 1) return <span className="text-lg leading-none">🥇</span>;
-  if (position === 2) return <span className="text-lg leading-none">🥈</span>;
-  if (position === 3) return <span className="text-lg leading-none">🥉</span>;
+  if (position === 1)
+    return <span className="text-sm font-black text-yellow-400">1.</span>;
+  if (position === 2)
+    return <span className="text-sm font-black text-slate-300">2.</span>;
+  if (position === 3)
+    return <span className="text-sm font-black text-amber-600">3.</span>;
   return <span className="text-[#6b7280] text-sm font-mono">#{position}</span>;
 }
 
 export function PlayerRow({ player, position, gamemode }: PlayerRowProps) {
-  const skinSrc = player.customSkinUrl || `https://mc-heads.net/avatar/${player.username}/40`;
   const isTop3 = position <= 3;
   const isTop10 = position <= 10;
   const title = getRankTitle(position);
@@ -41,17 +43,17 @@ export function PlayerRow({ player, position, gamemode }: PlayerRowProps) {
           <RankBadge position={position} />
         </div>
 
-        {/* Skin */}
+        {/* Bust Skin */}
         <div className="flex items-center justify-center py-1">
           <img
-            src={skinSrc}
+            src={`https://visage.surgeplay.com/bust/48/${player.username}`}
             alt={player.username}
             className="w-9 h-9 rounded object-contain"
             style={{ imageRendering: "pixelated" }}
             onError={(e) => {
               const t = e.currentTarget;
-              if (!t.src.includes("visage")) {
-                t.src = `https://visage.surgeplay.com/bust/48/${player.username}`;
+              if (!t.src.includes("mc-heads")) {
+                t.src = `https://mc-heads.net/avatar/${player.username}/40`;
               }
             }}
           />
