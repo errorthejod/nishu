@@ -81,9 +81,11 @@ export function PlayerRow({ player, position, gamemode }: PlayerRowProps) {
           </span>
         </div>
 
-        {/* Weapon with icon */}
+        {/* Region */}
         <div className="hidden md:flex items-center">
-          <WeaponIcon weapon={player.weapon} />
+          <span className="text-xs font-bold px-2 py-0.5 rounded bg-[#1e2130] border border-[#2a2f42] text-white">
+            {(player as any).region || "—"}
+          </span>
         </div>
 
         {/* Tier */}

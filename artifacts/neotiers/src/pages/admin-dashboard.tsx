@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Layout } from "@/components/layout";
-import { EsportsButton, LoadingSpinner, TierBadge } from "@/components/ui-elements";
+import { EsportsButton, LoadingSpinner, TierBadge, GamemodeIcon } from "@/components/ui-elements";
 import { 
   useAdminMe, 
   useAdminLogout, 
@@ -20,16 +20,19 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 
 const VALID_GAMEMODES = ["overall", "uhc", "nethpot", "smp", "axe", "mace", "spear", "lifesteal", "crystal", "sword"] as const;
 const GAMEMODE_LABELS: Record<string, string> = {
-  overall:   "🏆 Overall",
-  uhc:       "💀 UHC",
-  nethpot:   "⚗️ NethPot",
-  smp:       "🛡️ SMP",
-  axe:       "🪓 Axe",
-  mace:      "🔨 Mace",
-  spear:     "🏹 Spear",
-  lifesteal: "❤️ Lifesteal",
-  crystal:   "💎 Crystal",
-  sword:     "🗡️ Sword",
+  overall: "Overall", uhc: "UHC", nethpot: "NethPot", smp: "SMP",
+  axe: "Axe", mace: "Mace", spear: "Spear", lifesteal: "Lifesteal",
+  crystal: "Crystal", sword: "Sword",
+};
+
+const REGIONS = ["NA", "EU", "AS", "IN", "AU", "US"] as const;
+const REGION_LABELS: Record<string, string> = {
+  NA: "NA — North America",
+  EU: "EU — Europe",
+  AS: "AS — Asia",
+  IN: "IN — India",
+  AU: "AU — Australia",
+  US: "US — United States",
 };
 
 export default function AdminDashboard() {
@@ -134,12 +137,13 @@ function PlayersTab() {
             <button
               key={gm}
               onClick={() => setSelectedGamemode(gm)}
-              className={`px-3 py-1.5 text-sm font-medium rounded transition-colors
+              className={`px-3 py-1.5 text-sm font-medium rounded transition-colors flex items-center gap-1.5
                 ${selectedGamemode === gm
                   ? "bg-primary text-black font-bold"
                   : "bg-[#1e2130] text-[#9ca3af] hover:text-white border border-[#2a2f42]"
                 }`}
             >
+              <GamemodeIcon gamemode={gm} size="sm" active={selectedGamemode === gm} />
               {GAMEMODE_LABELS[gm]}
             </button>
           ))}
@@ -161,7 +165,7 @@ function PlayersTab() {
           <table className="w-full text-left border-collapse">
             <thead>
               <tr className="border-b border-border bg-background">
-                {["ID", "Skin", "Username", "Tier", "Points", "Weapon", "Rank", "Actions"].map(h => (
+                {["ID", "Skin", "Username", "Tier", "Points", "Region", "Rank", "Actions"].map(h => (
                   <th key={h} className="p-3 font-display text-sm uppercase text-muted-foreground whitespace-nowrap">{h}</th>
                 ))}
               </tr>
@@ -187,7 +191,11 @@ function PlayersTab() {
                   <td className="p-3 font-bold">{p.username}</td>
                   <td className="p-3"><TierBadge tier={p.tier} /></td>
                   <td className="p-3 font-display text-lg">{p.points.toLocaleString()}</td>
-                  <td className="p-3 text-sm text-[#9ca3af]">{p.weapon}</td>
+                  <td className="p-3">
+                    <span className="text-xs font-bold px-2 py-0.5 rounded bg-[#1e2130] border border-[#2a2f42] text-white">
+                      {(p as any).region || "NA"}
+                    </span>
+                  </td>
                   <td className="p-3 text-sm text-[#9ca3af]">#{p.rank}</td>
                   <td className="p-3 text-right whitespace-nowrap">
                     <button onClick={() => openEdit(p)} className="p-2 text-blue-400 hover:bg-blue-400/10 rounded mr-1">
@@ -264,9 +272,11 @@ function GamemodesTab() {
         <div className="space-y-3">
           {gamemodes?.map(g => (
             <div key={g.id} className="bg-background border border-border p-4 esports-clip-sm flex justify-between items-center">
-              <div>
-                <h3 className="font-display text-xl">{g.name} <span className="text-muted-foreground text-sm">({g.slug})</span></h3>
-                <p className="text-sm text-muted-foreground">Default weapon: {g.defaultWeapon}</p>
+              <div className="flex items-center gap-3">
+                <GamemodeIcon gamemode={g.slug} size="md" active />
+                <div>
+                  <h3 className="font-display text-xl">{g.name} <span className="text-muted-foreground text-sm">({g.slug})</span></h3>
+                </div>
               </div>
               <button onClick={() => { if (confirm("Delete gamemode?")) deleteMutation.mutate({ id: g.id }); }} className="text-destructive hover:text-red-400 p-2">
                 <Trash2 className="w-5 h-5" />
@@ -299,7 +309,7 @@ function PlayerFormDialog({ isOpen, onClose, initialData, defaultGamemode, onSuc
     gamemode: defaultGamemode || "uhc",
     tier: "LT5",
     points: 0,
-    weapon: "Sword",
+    region: "NA",
   });
 
   useEffect(() => {
@@ -309,18 +319,24 @@ function PlayerFormDialog({ isOpen, onClose, initialData, defaultGamemode, onSuc
         gamemode: initialData.gamemode || defaultGamemode,
         tier: initialData.tier,
         points: initialData.points,
-        weapon: initialData.weapon,
+        region: initialData.region || "NA",
       });
     } else {
-      setFormData({ username: "", gamemode: defaultGamemode || "uhc", tier: "LT5", points: 0, weapon: "Sword" });
+      setFormData({ username: "", gamemode: defaultGamemode || "uhc", tier: "LT5", points: 0, region: "NA" });
     }
   }, [initialData, isOpen, defaultGamemode]);
 
   const createMutation = useCreatePlayer({
-    mutation: { onSuccess: () => { toast({ title: "Player Added" }); onSuccess?.(); } }
+    mutation: {
+      onSuccess: () => { toast({ title: "Player Added" }); onSuccess?.(); },
+      onError: (err: any) => { toast({ title: "Error", description: err?.message || "Failed to add player", variant: "destructive" }); },
+    }
   });
   const updateMutation = useUpdatePlayer({
-    mutation: { onSuccess: () => { toast({ title: "Player Updated" }); onSuccess?.(); } }
+    mutation: {
+      onSuccess: () => { toast({ title: "Player Updated" }); onSuccess?.(); },
+      onError: (err: any) => { toast({ title: "Error", description: err?.message || "Failed to update player", variant: "destructive" }); },
+    }
   });
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -337,6 +353,8 @@ function PlayerFormDialog({ isOpen, onClose, initialData, defaultGamemode, onSuc
 
   const inputClass = "w-full bg-background border border-border px-3 py-2 text-foreground focus:border-primary focus:ring-1 focus:ring-primary outline-none esports-clip-sm";
   const labelClass = "block text-xs font-display uppercase tracking-widest text-muted-foreground mb-1 mt-4";
+
+  const isPending = createMutation.isPending || updateMutation.isPending;
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -373,8 +391,12 @@ function PlayerFormDialog({ isOpen, onClose, initialData, defaultGamemode, onSuc
               <input required type="number" name="points" value={formData.points} onChange={handleChange} className={inputClass} min="0" />
             </div>
             <div>
-              <label className={labelClass}>Weapon</label>
-              <input required name="weapon" value={formData.weapon} onChange={handleChange} className={inputClass} placeholder="e.g. Sword" />
+              <label className={labelClass}>Region</label>
+              <select required name="region" value={formData.region} onChange={handleChange} className={inputClass}>
+                {REGIONS.map(r => (
+                  <option key={r} value={r}>{REGION_LABELS[r]}</option>
+                ))}
+              </select>
             </div>
           </div>
 
@@ -382,8 +404,8 @@ function PlayerFormDialog({ isOpen, onClose, initialData, defaultGamemode, onSuc
             <button type="button" onClick={onClose} className="px-4 py-2 font-display uppercase tracking-wider text-muted-foreground hover:text-foreground">
               Cancel
             </button>
-            <EsportsButton type="submit" className="py-2 px-6 text-lg" disabled={createMutation.isPending || updateMutation.isPending}>
-              {initialData ? "Update" : "Save"}
+            <EsportsButton type="submit" className="py-2 px-6 text-lg" disabled={isPending}>
+              {isPending ? "Saving..." : initialData ? "Update" : "Save"}
             </EsportsButton>
           </div>
         </form>

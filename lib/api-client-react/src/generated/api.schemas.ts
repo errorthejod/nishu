@@ -19,7 +19,7 @@ export interface Player {
   gamemode: string;
   tier: string;
   points: number;
-  weapon: string;
+  region: string;
   rank: number;
   skinUrl?: string | null;
   customSkinUrl?: string | null;
@@ -32,7 +32,7 @@ export interface CreatePlayerInput {
   gamemode: string;
   tier: string;
   points: number;
-  weapon: string;
+  region: string;
   customSkinUrl?: string | null;
 }
 
@@ -41,7 +41,7 @@ export interface UpdatePlayerInput {
   gamemode?: string;
   tier?: string;
   points?: number;
-  weapon?: string;
+  region?: string;
   customSkinUrl?: string | null;
 }
 

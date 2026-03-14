@@ -67,8 +67,8 @@ router.get("/players", async (req, res) => {
 router.post("/players", async (req, res) => {
   if (!isAdmin(req)) return res.status(401).json({ message: "Unauthorized" });
   try {
-    const { username, gamemode, tier, points, weapon, customSkinUrl } = req.body;
-    if (!username || !gamemode || !tier || points === undefined || !weapon) {
+    const { username, gamemode, tier, points, region, customSkinUrl } = req.body;
+    if (!username || !gamemode || !tier || points === undefined) {
       return res.status(400).json({ message: "Missing required fields" });
     }
 
@@ -81,7 +81,7 @@ router.post("/players", async (req, res) => {
       gamemode,
       tier,
       points: parseInt(points, 10),
-      weapon,
+      region: region || "NA",
       rank: 0,
       skinUrl,
       customSkinUrl: customSkinUrl || null,
@@ -127,7 +127,7 @@ router.put("/players/:id", async (req, res) => {
   if (!isAdmin(req)) return res.status(401).json({ message: "Unauthorized" });
   try {
     const id = parseInt(req.params.id, 10);
-    const { username, gamemode, tier, points, weapon, customSkinUrl } = req.body;
+    const { username, gamemode, tier, points, region, customSkinUrl } = req.body;
 
     const table = getTable(gamemode || "");
     if (!table) return res.status(400).json({ message: "Valid gamemode required in body" });
@@ -139,7 +139,7 @@ router.put("/players/:id", async (req, res) => {
     }
     if (tier !== undefined) updateData.tier = tier;
     if (points !== undefined) updateData.points = parseInt(points, 10);
-    if (weapon !== undefined) updateData.weapon = weapon;
+    if (region !== undefined) updateData.region = region;
     if (customSkinUrl !== undefined) updateData.customSkinUrl = customSkinUrl || null;
 
     const [updated] = await db.update(table).set(updateData).where(eq(table.id, id)).returning();

@@ -9,7 +9,7 @@ function makeGamemodeTable(tableName: string) {
     gamemode: text("gamemode").notNull(),
     tier: text("tier").notNull().default("LT5"),
     points: integer("points").notNull().default(0),
-    weapon: text("weapon").notNull().default("Sword"),
+    region: text("region").notNull().default("NA"),
     rank: integer("rank").notNull().default(0),
     skinUrl: text("skin_url"),
     customSkinUrl: text("custom_skin_url"),

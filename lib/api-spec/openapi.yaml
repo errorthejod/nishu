@@ -320,7 +320,7 @@ components:
           type: string
         points:
           type: number
-        weapon:
+        region:
           type: string
         rank:
           type: number
@@ -340,7 +340,7 @@ components:
         - gamemode
         - tier
         - points
-        - weapon
+        - region
         - rank
         - createdAt
         - updatedAt
@@ -356,7 +356,7 @@ components:
           type: string
         points:
           type: number
-        weapon:
+        region:
           type: string
         customSkinUrl:
           type: string
@@ -366,7 +366,7 @@ components:
         - gamemode
         - tier
         - points
-        - weapon
+        - region
 
     UpdatePlayerInput:
       type: object
@@ -379,7 +379,7 @@ components:
           type: string
         points:
           type: number
-        weapon:
+        region:
           type: string
         customSkinUrl:
           type: string

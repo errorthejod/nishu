@@ -44,14 +44,15 @@ function OverallLeaderboard() {
   });
 
   const merged = useMemo(() => {
-    const map = new Map<string, { username: string; tiers: Record<string, string>; points: Record<string, number> }>();
+    const map = new Map<string, { username: string; tiers: Record<string, string>; points: Record<string, number>; region: string }>();
     RANKED_GAMEMODES.forEach((gm, i) => {
       const players: any[] = results[i]?.data ?? [];
       players.forEach((p) => {
-        if (!map.has(p.username)) map.set(p.username, { username: p.username, tiers: {}, points: {} });
+        if (!map.has(p.username)) map.set(p.username, { username: p.username, tiers: {}, points: {}, region: p.region || "NA" });
         const entry = map.get(p.username)!;
         entry.tiers[gm] = p.tier;
         entry.points[gm] = p.points;
+        if (p.region && !entry.region) entry.region = p.region;
       });
     });
     return Array.from(map.values())
@@ -139,6 +140,7 @@ function OverallLeaderboard() {
                 <th className="px-3 text-left w-10">#</th>
                 <th className="px-2 w-12" />
                 <th className="px-3 text-left min-w-[140px]">Player</th>
+                <th className="px-2 text-center w-16">Region</th>
                 {RANKED_GAMEMODES.map((gm) => (
                   <th key={gm} className="px-2 text-center w-20">
                     <span className="flex flex-col items-center gap-0.5">
@@ -187,6 +189,11 @@ function OverallLeaderboard() {
                     <td className="px-3 py-2">
                       <p className="font-semibold text-white">{player.username}</p>
                       <p className="text-[10px] font-medium" style={{ color: titleColor }}>{title}</p>
+                    </td>
+                    <td className="px-2 py-2 text-center">
+                      <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-[#1e2130] border border-[#2a2f42] text-white">
+                        {player.region || "NA"}
+                      </span>
                     </td>
                     {RANKED_GAMEMODES.map((gm) => (
                       <td key={gm} className="px-2 py-2 text-center">
