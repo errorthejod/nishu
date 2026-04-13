@@ -9,6 +9,15 @@ import { Link } from "wouter";
 
 type SortKey = "rank" | "username" | "tier" | "points";
 
+function getSkinUrl(player: { username: string; customSkinUrl?: string | null }, size: number): string {
+  const custom = player.customSkinUrl;
+  if (custom) {
+    if (custom.startsWith("http")) return custom;
+    return `https://visage.surgeplay.com/bust/${size}/${custom}`;
+  }
+  return `https://visage.surgeplay.com/bust/${size}/${player.username}`;
+}
+
 export const GAMEMODE_META: Record<string, { label: string; color: string }> = {
   overall:   { label: "Overall",    color: "#FFD700" },
   uhc:       { label: "UHC",        color: "#f59e0b" },
@@ -107,7 +116,7 @@ function OverallLeaderboard() {
                 <Link key={player.username} href={`/player/${player.username}`} className="flex-1 max-w-[200px]">
                   <div className={`flex flex-col items-center bg-[#0d0f14] border rounded-lg ${isFirst ? "border-yellow-500/50 shadow-[0_0_20px_rgba(255,215,0,0.15)]" : "border-[#1e2130]"} p-3 cursor-pointer hover:bg-[#1a1d27] transition-all`}>
                     <img
-                      src={`https://visage.surgeplay.com/bust/200/${player.username}`}
+                      src={getSkinUrl(player, 200)}
                       alt={player.username}
                       className={`${isFirst ? "w-28 h-28" : "w-20 h-20"} object-contain drop-shadow-xl`}
                       style={{ imageRendering: "pixelated" }}
@@ -189,7 +198,7 @@ function OverallLeaderboard() {
                     </td>
                     <td className="px-2 py-1">
                       <img
-                        src={`https://visage.surgeplay.com/bust/${player.rank <= 3 ? 128 : 112}/${player.username}`}
+                        src={getSkinUrl(player, player.rank <= 3 ? 128 : 112)}
                         alt={player.username}
                         className={`${player.rank <= 3 ? "w-24 h-24" : "w-20 h-20"} object-contain`}
                         style={{ imageRendering: "pixelated" }}
@@ -332,7 +341,7 @@ export default function Leaderboard({ gamemode = "overall" }: LeaderboardProps) 
                 <Link key={player.id} href={`/player/${player.username}`} className="flex-1 max-w-[160px]">
                   <div className={`flex flex-col items-center bg-[#0d0f14] border rounded-lg ${isFirst ? "border-yellow-500/50 shadow-[0_0_20px_rgba(255,215,0,0.15)]" : "border-[#1e2130]"} p-3 cursor-pointer hover:bg-[#1a1d27] transition-all`}>
                     <img
-                      src={`https://visage.surgeplay.com/bust/160/${player.username}`}
+                      src={getSkinUrl(player, 160)}
                       alt={player.username}
                       className={`${isFirst ? "w-24 h-24" : "w-16 h-16"} object-contain drop-shadow-xl`}
                       style={{ imageRendering: "pixelated" }}

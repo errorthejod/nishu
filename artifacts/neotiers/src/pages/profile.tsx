@@ -120,7 +120,11 @@ export default function Profile() {
               style={{ background: "linear-gradient(to bottom, #1a1d27, #0d0f14)" }}>
               <div className="absolute inset-0 pointer-events-none" style={{ background: "radial-gradient(ellipse at 50% 60%, rgba(99,102,241,0.18) 0%, rgba(139,92,246,0.06) 40%, transparent 70%)", filter: "blur(24px)" }} />
               <img
-                src={`https://visage.surgeplay.com/bust/400/${player.username}`}
+                src={(() => {
+                  const custom = (player as any).customSkinUrl as string | null | undefined;
+                  if (custom) return custom.startsWith("http") ? custom : `https://visage.surgeplay.com/bust/400/${custom}`;
+                  return `https://visage.surgeplay.com/bust/400/${player.username}`;
+                })()}
                 alt={player.username}
                 className="relative z-10 h-72 object-contain drop-shadow-2xl"
                 style={{ imageRendering: "pixelated" }}

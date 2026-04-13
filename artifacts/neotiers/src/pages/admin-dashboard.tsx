@@ -182,9 +182,14 @@ function PlayersTab() {
                   <td className="p-3 text-muted-foreground text-sm">#{p.id}</td>
                   <td className="p-3">
                     <img
-                      src={`https://visage.surgeplay.com/face/32/${p.username}`}
+                      src={(() => {
+                        const custom = (p as any).customSkinUrl as string | null | undefined;
+                        if (custom) return custom.startsWith("http") ? custom : `https://visage.surgeplay.com/bust/64/${custom}`;
+                        return `https://visage.surgeplay.com/face/32/${p.username}`;
+                      })()}
                       alt={p.username}
-                      className="w-8 h-8 rounded"
+                      className="w-8 h-8 rounded object-contain"
+                      style={{ imageRendering: "pixelated" }}
                       onError={(e) => { e.currentTarget.src = `https://mc-heads.net/avatar/${p.username}/32`; }}
                     />
                   </td>
@@ -414,6 +419,48 @@ function PlayerFormDialog({ isOpen, onClose, initialData, defaultGamemode, onSuc
                   <option key={r} value={r}>{REGION_LABELS[r]}</option>
                 ))}
               </select>
+            </div>
+          </div>
+
+          <label className={labelClass}>Custom Skin <span className="text-[#6b7280] normal-case font-sans tracking-normal">(username or image URL — leave blank for auto)</span></label>
+          <div className="flex gap-3 items-start">
+            <div className="flex-1">
+              <input
+                name="customSkinUrl"
+                value={formData.customSkinUrl}
+                onChange={handleChange}
+                className={inputClass}
+                placeholder="e.g. Dream  or  https://visage.surgeplay.com/bust/200/Dream"
+              />
+              <p className="text-[10px] text-[#6b7280] mt-1">
+                Enter a Minecraft username to use their skin, or paste a full image URL
+              </p>
+            </div>
+            <div className="flex-shrink-0 flex flex-col items-center gap-1">
+              <div className="w-16 h-16 bg-[#0d0f14] border border-[#2a2f42] rounded overflow-hidden flex items-center justify-center">
+                {skinPreviewError ? (
+                  <span className="text-[#6b7280] text-xs text-center px-1">No preview</span>
+                ) : (
+                  <img
+                    key={formData.customSkinUrl || formData.username}
+                    src={getCustomSkinPreviewUrl(formData.customSkinUrl, formData.username)}
+                    alt="Skin preview"
+                    className="w-full h-full object-contain"
+                    style={{ imageRendering: "pixelated" }}
+                    onError={() => setSkinPreviewError(true)}
+                  />
+                )}
+              </div>
+              <span className="text-[9px] text-[#6b7280] uppercase tracking-wide">Preview</span>
+              {formData.customSkinUrl && (
+                <button
+                  type="button"
+                  onClick={() => { setFormData(p => ({ ...p, customSkinUrl: "" })); setSkinPreviewError(false); }}
+                  className="text-[9px] text-red-400 hover:text-red-300 uppercase tracking-wide"
+                >
+                  Clear
+                </button>
+              )}
             </div>
           </div>
 

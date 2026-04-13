@@ -3,6 +3,15 @@ import { TierBadge, getRankTitle, getRankTitleColor, getRankTitleStyle, handleSk
 import { Link } from "wouter";
 import { COL_WIDTHS } from "@/pages/leaderboard";
 
+function getSkinUrl(player: Player, size: number): string {
+  const custom = (player as any).customSkinUrl as string | null | undefined;
+  if (custom) {
+    if (custom.startsWith("http")) return custom;
+    return `https://visage.surgeplay.com/bust/${size}/${custom}`;
+  }
+  return `https://visage.surgeplay.com/bust/${size}/${player.username}`;
+}
+
 interface PlayerRowProps {
   player: Player;
   position: number;
@@ -66,7 +75,7 @@ export function PlayerRow({ player, position, gamemode }: PlayerRowProps) {
 
         <div className="flex items-center justify-center py-1">
           <img
-            src={`https://visage.surgeplay.com/bust/${isTop3 ? 128 : 112}/${player.username}`}
+            src={getSkinUrl(player, isTop3 ? 128 : 112)}
             alt={player.username}
             className={`${isTop3 ? "w-24 h-24" : "w-20 h-20"} object-contain`}
             style={{ imageRendering: "pixelated" }}
