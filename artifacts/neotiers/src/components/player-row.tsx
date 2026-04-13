@@ -1,5 +1,5 @@
 import { Player } from "@workspace/api-client-react";
-import { TierBadge, getRankTitle, getRankTitleColor, getRankTitleStyle } from "./ui-elements";
+import { TierBadge, getRankTitle, getRankTitleColor, getRankTitleStyle, handleSkinError } from "./ui-elements";
 import { Link } from "wouter";
 import { COL_WIDTHS } from "@/pages/leaderboard";
 
@@ -70,12 +70,7 @@ export function PlayerRow({ player, position, gamemode }: PlayerRowProps) {
             alt={player.username}
             className={`${isTop3 ? "w-24 h-24" : "w-20 h-20"} object-contain`}
             style={{ imageRendering: "pixelated" }}
-            onError={(e) => {
-              const t = e.currentTarget;
-              if (!t.src.includes("mc-heads")) {
-                t.src = `https://mc-heads.net/avatar/${player.username}/40`;
-              }
-            }}
+            onError={(e) => handleSkinError(e, player.username, isTop3 ? 128 : 112)}
           />
         </div>
 

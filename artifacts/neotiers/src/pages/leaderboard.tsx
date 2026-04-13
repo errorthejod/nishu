@@ -1,7 +1,7 @@
 import { useState, useMemo } from "react";
 import { Layout } from "@/components/layout";
 import { PlayerRow } from "@/components/player-row";
-import { TierBadge, GamemodeTierBadge, GamemodeIcon, getRankTitle, getRankTitleColor, getRankTitleFromPoints, getRankTitleColorFromPoints, getRankTitleStyle, TIERS, TIER_ORDER } from "@/components/ui-elements";
+import { TierBadge, GamemodeTierBadge, GamemodeIcon, getRankTitle, getRankTitleColor, getRankTitleFromPoints, getRankTitleColorFromPoints, getRankTitleStyle, handleSkinError, TIERS, TIER_ORDER } from "@/components/ui-elements";
 import { useListPlayers } from "@workspace/api-client-react";
 import { useQueries } from "@tanstack/react-query";
 import { Search, ChevronUp, ChevronDown, Minus } from "lucide-react";
@@ -111,9 +111,7 @@ function OverallLeaderboard() {
                       alt={player.username}
                       className={`${isFirst ? "w-28 h-28" : "w-20 h-20"} object-contain drop-shadow-xl`}
                       style={{ imageRendering: "pixelated" }}
-                      onError={(e) => {
-                        (e.target as HTMLImageElement).src = `https://mc-heads.net/avatar/${player.username}/64`;
-                      }}
+                      onError={(e) => handleSkinError(e, player.username, 200)}
                     />
                     <span className={`text-lg mt-1 font-black ${isFirst ? "text-yellow-400" : player.rank === 2 ? "text-slate-300" : "text-amber-600"}`}>
                       #{player.rank}
@@ -195,9 +193,7 @@ function OverallLeaderboard() {
                         alt={player.username}
                         className={`${player.rank <= 3 ? "w-24 h-24" : "w-20 h-20"} object-contain`}
                         style={{ imageRendering: "pixelated" }}
-                        onError={(e) => {
-                          (e.target as HTMLImageElement).src = `https://mc-heads.net/avatar/${player.username}/32`;
-                        }}
+                        onError={(e) => handleSkinError(e, player.username, player.rank <= 3 ? 128 : 112)}
                       />
                     </td>
                     <td className="px-3 py-2">
@@ -340,9 +336,7 @@ export default function Leaderboard({ gamemode = "overall" }: LeaderboardProps) 
                       alt={player.username}
                       className={`${isFirst ? "w-24 h-24" : "w-16 h-16"} object-contain drop-shadow-xl`}
                       style={{ imageRendering: "pixelated" }}
-                      onError={(e) => {
-                        (e.target as HTMLImageElement).src = `https://mc-heads.net/avatar/${player.username}/64`;
-                      }}
+                      onError={(e) => handleSkinError(e, player.username, 160)}
                     />
                     <span className={`text-base mt-1 font-black ${isFirst ? "text-yellow-400" : player.rank === 2 ? "text-slate-300" : "text-amber-600"}`}>
                       #{player.rank}

@@ -201,12 +201,12 @@ export function WeaponIcon({ weapon }: { weapon: string }) {
 }
 
 export function getRankTitle(rank: number): string {
-  if (rank === 1)  return "Combat Grandmaster";
-  if (rank === 2)  return "Combat Master";
-  if (rank === 3)  return "Master";
-  if (rank <= 10)  return "Combat Ace";
-  if (rank <= 20)  return "Combat Intermediate";
-  if (rank <= 35)  return "Combat Initiate";
+  if (rank === 1)   return "Combat Grandmaster";
+  if (rank === 2)   return "Combat Master";
+  if (rank === 3)   return "Master";
+  if (rank <= 10)   return "Combat Ace";
+  if (rank <= 50)   return "Combat Specialist";
+  if (rank <= 100)  return "Combat Initiate";
   return "Rookie";
 }
 
@@ -215,19 +215,19 @@ export function getRankTitleFromPoints(points: number): string {
   if (points >= 300) return "Combat Master";
   if (points >= 200) return "Master";
   if (points >= 120) return "Combat Ace";
-  if (points >= 60)  return "Combat Intermediate";
-  if (points >= 20)  return "Combat Initiate";
+  if (points >= 50)  return "Combat Specialist";
+  if (points >= 15)  return "Combat Initiate";
   if (points > 0)    return "Rookie";
   return "Unranked";
 }
 
 export function getRankTitleColor(rank: number): string {
-  if (rank === 1)  return "#FFD700";
-  if (rank === 2)  return "#C0C0C0";
-  if (rank === 3)  return "#CD7F32";
-  if (rank <= 10)  return "#ef4444";
-  if (rank <= 20)  return "#a855f7";
-  if (rank <= 35)  return "#3b82f6";
+  if (rank === 1)   return "#FFD700";
+  if (rank === 2)   return "#C0C0C0";
+  if (rank === 3)   return "#CD7F32";
+  if (rank <= 10)   return "#ef4444";
+  if (rank <= 50)   return "#a855f7";
+  if (rank <= 100)  return "#3b82f6";
   return "#6b7280";
 }
 
@@ -236,9 +236,48 @@ export function getRankTitleColorFromPoints(points: number): string {
   if (points >= 300) return "#C0C0C0";
   if (points >= 200) return "#CD7F32";
   if (points >= 120) return "#ef4444";
-  if (points >= 60)  return "#a855f7";
-  if (points >= 20)  return "#3b82f6";
+  if (points >= 50)  return "#a855f7";
+  if (points >= 15)  return "#3b82f6";
   return "#6b7280";
+}
+
+// ── Seeded random skin fallback for cracked players ───────────────────────────
+const POPULAR_SKINS = [
+  "Technoblade","Dream","GeorgeNotFound","Sapnap","BadBoyHalo",
+  "TommyInnit","Wilbur","Skeppy","xNestorio","Fruitberries",
+  "Purpled","Punz","Antfrost","Ranboo","Tubbo",
+  "Quackity","HBomb94","Fundy","Nihachu","Philza",
+  "Mumbo","Grian","Scar","ImpulseSV","Etho",
+  "BdoubleO100","xisumavoid","VintageBeef","JoeHills","Docm77",
+];
+
+function seededHash(str: string): number {
+  let h = 5381;
+  for (let i = 0; i < str.length; i++) h = (h * 33 ^ str.charCodeAt(i)) >>> 0;
+  return h;
+}
+
+export function getFallbackSkinUsername(username: string): string {
+  return POPULAR_SKINS[seededHash(username) % POPULAR_SKINS.length];
+}
+
+export function getBustUrl(username: string, size: number): string {
+  return `https://visage.surgeplay.com/bust/${size}/${username}`;
+}
+
+export function handleSkinError(
+  e: React.SyntheticEvent<HTMLImageElement>,
+  username: string,
+  size: number,
+) {
+  const img = e.currentTarget;
+  if (!img.dataset.fallback) {
+    img.dataset.fallback = "1";
+    img.src = `https://visage.surgeplay.com/bust/${size}/${getFallbackSkinUsername(username)}`;
+  } else if (img.dataset.fallback === "1") {
+    img.dataset.fallback = "2";
+    img.src = `https://mc-heads.net/avatar/${getFallbackSkinUsername(username)}/128`;
+  }
 }
 
 export function getRankTitleStyle(title: string): React.CSSProperties {

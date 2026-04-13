@@ -1,5 +1,5 @@
 import { Layout } from "@/components/layout";
-import { TierBadge, GamemodeIcon, getRankTitleFromPoints, getRankTitleColorFromPoints, getRankTitleStyle, LoadingSpinner } from "@/components/ui-elements";
+import { TierBadge, GamemodeIcon, getRankTitleFromPoints, getRankTitleColorFromPoints, getRankTitleStyle, handleSkinError, LoadingSpinner } from "@/components/ui-elements";
 import { useParams, Link } from "wouter";
 import { useQuery } from "@tanstack/react-query";
 import { motion } from "framer-motion";
@@ -124,14 +124,7 @@ export default function Profile() {
                 alt={player.username}
                 className="relative z-10 h-72 object-contain drop-shadow-2xl"
                 style={{ imageRendering: "pixelated" }}
-                onError={(e) => {
-                  const img = e.target as HTMLImageElement;
-                  if (!img.src.includes("full")) {
-                    img.src = `https://visage.surgeplay.com/full/256/${player.username}`;
-                  } else {
-                    img.src = `https://mc-heads.net/body/${player.username}/200`;
-                  }
-                }}
+                onError={(e) => handleSkinError(e, player.username, 400)}
               />
             </div>
 
