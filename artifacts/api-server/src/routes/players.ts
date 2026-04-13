@@ -2,6 +2,23 @@ import { Router, type IRouter } from "express";
 import { db, GAMEMODE_TABLES, VALID_GAMEMODES, type GamemodeSlug } from "@workspace/db";
 import { eq, ilike, and } from "drizzle-orm";
 
+async function syncCustomSkinUrlByUsername(username: string, customSkinUrl: string | null) {
+  for (const table of Object.values(GAMEMODE_TABLES)) {
+    const rows = await db.select({ id: table.id }).from(table).where(eq(table.username, username));
+    for (const row of rows) {
+      await db.update(table).set({ customSkinUrl }).where(eq(table.id, row.id));
+    }
+  }
+}
+
+async function getExistingCustomSkin(username: string): Promise<string | null> {
+  for (const table of Object.values(GAMEMODE_TABLES)) {
+    const [row] = await db.select({ customSkinUrl: table.customSkinUrl }).from(table).where(eq(table.username, username));
+    if (row?.customSkinUrl) return row.customSkinUrl;
+  }
+  return null;
+}
+
 const router: IRouter = Router();
 
 function isAdmin(req: any): boolean {
@@ -76,6 +93,7 @@ router.post("/players", async (req, res) => {
     if (!table) return res.status(400).json({ message: "Invalid gamemode: " + gamemode });
 
     const skinUrl = `https://mc-heads.net/avatar/${username}/64`;
+    const resolvedCustomSkin = customSkinUrl || await getExistingCustomSkin(username);
     const [created] = await db.insert(table).values({
       username,
       gamemode,
@@ -84,7 +102,7 @@ router.post("/players", async (req, res) => {
       region: region || "NA",
       rank: 0,
       skinUrl,
-      customSkinUrl: customSkinUrl || null,
+      customSkinUrl: resolvedCustomSkin,
     }).returning();
 
     await recalcRanks(gamemode);
@@ -144,6 +162,10 @@ router.put("/players/:id", async (req, res) => {
 
     const [updated] = await db.update(table).set(updateData).where(eq(table.id, id)).returning();
     if (!updated) return res.status(404).json({ message: "Player not found" });
+
+    if (customSkinUrl !== undefined) {
+      await syncCustomSkinUrlByUsername(updated.username, customSkinUrl || null);
+    }
 
     await recalcRanks(gamemode);
     res.json(formatPlayer(updated, gamemode));

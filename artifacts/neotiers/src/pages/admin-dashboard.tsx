@@ -120,7 +120,7 @@ function PlayersTab() {
   const deleteMutation = useDeletePlayer({
     mutation: {
       onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: ["players", selectedGamemode] });
+        queryClient.invalidateQueries({ queryKey: ["players"] });
         toast({ title: "Player deleted" });
       },
     },
@@ -230,7 +230,7 @@ function PlayersTab() {
         initialData={editingPlayer}
         defaultGamemode={selectedGamemode}
         onSuccess={() => {
-          queryClient.invalidateQueries({ queryKey: ["players", selectedGamemode] });
+          queryClient.invalidateQueries({ queryKey: ["players"] });
           setIsFormOpen(false);
         }}
       />
