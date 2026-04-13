@@ -242,13 +242,40 @@ export function getRankTitleColorFromPoints(points: number): string {
 }
 
 // ── Seeded random skin fallback for cracked players ───────────────────────────
-const POPULAR_SKINS = [
+const BOY_SKINS = [
   "Technoblade","Dream","GeorgeNotFound","Sapnap","BadBoyHalo",
   "TommyInnit","Wilbur","Skeppy","xNestorio","Fruitberries",
   "Purpled","Punz","Antfrost","Ranboo","Tubbo",
-  "Quackity","HBomb94","Fundy","Nihachu","Philza",
-  "Mumbo","Grian","Scar","ImpulseSV","Etho",
-  "BdoubleO100","xisumavoid","VintageBeef","JoeHills","Docm77",
+  "Quackity","HBomb94","Fundy","Philza","Mumbo",
+  "Grian","Scar","ImpulseSV","Etho","BdoubleO100",
+  "xisumavoid","VintageBeef","JoeHills","Docm77","Keralis",
+];
+
+const GIRL_SKINS = [
+  "Nihachu","CaptainPuffy","Shubble","ZombieCleo","PearlRP",
+  "Stressmonster101","GardenMia","LDShadowlady","SolidarityGaming",
+  "fWhip","Hazel","MythicalSausage","SmallishBeans","Paimon",
+  "Moonkitti","PetiteHxney","KatieRose","RentheWitch","Velvet",
+  "Aery","Crystalst","PrincessPiggy","AquaFPS","Valkyrae",
+];
+
+const FEMALE_KEYWORDS = [
+  "girl","gal","queen","princess","lady","cute","kawaii","chan",
+  "rosa","rose","lily","luna","star","angel","heart","pretty","sweet",
+  "cherry","bunny","kitty","moon","fairy","goddess","witch","babe",
+  "flower","butterfly","pink","violet","pearl","sugar","honey",
+  "daisy","ivy","petal","glitter","sparkle","belle","ella","elsa",
+];
+
+const FEMALE_NAMES = [
+  "emma","emily","ava","mia","olivia","sophia","grace","anna",
+  "ella","eva","zoe","kate","alice","bella","lucy","ruby","amy",
+  "sarah","maya","aria","jade","nina","stella","julia","diana",
+  "aurora","jasmine","cleo","priya","nisha","tara","lisa",
+  "natasha","natalie","victoria","isabella","charlotte","amelia",
+  "isha","ishika","ananya","shreya","pooja","divya","kavya",
+  "riya","neha","sneha","swati","siya","aisha","layla","leila",
+  "sara","jessica","hannah","ashley","rachel","michelle","brittany",
 ];
 
 function seededHash(str: string): number {
@@ -257,8 +284,17 @@ function seededHash(str: string): number {
   return h;
 }
 
+function isLikelyFemale(username: string): boolean {
+  const lower = username.toLowerCase();
+  return (
+    FEMALE_KEYWORDS.some((k) => lower.includes(k)) ||
+    FEMALE_NAMES.some((n) => lower.includes(n))
+  );
+}
+
 export function getFallbackSkinUsername(username: string): string {
-  return POPULAR_SKINS[seededHash(username) % POPULAR_SKINS.length];
+  const pool = isLikelyFemale(username) ? GIRL_SKINS : BOY_SKINS;
+  return pool[seededHash(username) % pool.length];
 }
 
 export function getBustUrl(username: string, size: number): string {
