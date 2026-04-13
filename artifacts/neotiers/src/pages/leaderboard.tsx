@@ -53,15 +53,16 @@ function OverallLeaderboard() {
   });
 
   const merged = useMemo(() => {
-    const map = new Map<string, { username: string; tiers: Record<string, string>; points: Record<string, number>; region: string }>();
+    const map = new Map<string, { username: string; tiers: Record<string, string>; points: Record<string, number>; region: string; customSkinUrl?: string | null }>();
     RANKED_GAMEMODES.forEach((gm, i) => {
       const players: any[] = results[i]?.data ?? [];
       players.forEach((p) => {
-        if (!map.has(p.username)) map.set(p.username, { username: p.username, tiers: {}, points: {}, region: p.region || "NA" });
+        if (!map.has(p.username)) map.set(p.username, { username: p.username, tiers: {}, points: {}, region: p.region || "NA", customSkinUrl: p.customSkinUrl ?? null });
         const entry = map.get(p.username)!;
         entry.tiers[gm] = p.tier;
         entry.points[gm] = p.points;
         if (p.region && !entry.region) entry.region = p.region;
+        if (p.customSkinUrl && !entry.customSkinUrl) entry.customSkinUrl = p.customSkinUrl;
       });
     });
     return Array.from(map.values())
