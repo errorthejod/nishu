@@ -20,6 +20,7 @@ interface PlayerData {
   overallRank: number;
   totalPoints: number;
   firstSeen: string | null;
+  customSkinUrl: string | null;
 }
 
 async function fetchPlayerProfile(username: string): Promise<PlayerData> {
@@ -35,6 +36,7 @@ async function fetchPlayerProfile(username: string): Promise<PlayerData> {
   const points: Record<string, number> = {};
   const regions: Record<string, string> = {};
   let firstSeen: string | null = null;
+  let customSkinUrl: string | null = null;
 
   for (const result of results) {
     if (result.status !== "fulfilled") continue;
@@ -46,6 +48,9 @@ async function fetchPlayerProfile(username: string): Promise<PlayerData> {
       regions[gm] = exact.region ?? exact.weapon ?? "";
       if (!firstSeen || new Date(exact.createdAt) < new Date(firstSeen)) {
         firstSeen = exact.createdAt;
+      }
+      if (!customSkinUrl && exact.customSkinUrl) {
+        customSkinUrl = exact.customSkinUrl;
       }
     }
   }
@@ -59,7 +64,7 @@ async function fetchPlayerProfile(username: string): Promise<PlayerData> {
     if (entry) overallRank = entry.rank;
   } catch {}
 
-  return { username, tiers, points, regions, overallRank, totalPoints, firstSeen };
+  return { username, tiers, points, regions, overallRank, totalPoints, firstSeen, customSkinUrl };
 }
 
 export default function Profile() {
@@ -120,11 +125,13 @@ export default function Profile() {
               style={{ background: "linear-gradient(to bottom, #1a1d27, #0d0f14)" }}>
               <div className="absolute inset-0 pointer-events-none" style={{ background: "radial-gradient(ellipse at 50% 60%, rgba(99,102,241,0.18) 0%, rgba(139,92,246,0.06) 40%, transparent 70%)", filter: "blur(24px)" }} />
               <img
-                src={(() => {
-                  const custom = (player as any).customSkinUrl as string | null | undefined;
-                  if (custom) return custom.startsWith("http") ? custom : `https://visage.surgeplay.com/bust/400/${custom}`;
-                  return `https://visage.surgeplay.com/bust/400/${player.username}`;
-                })()}
+                src={
+                  player.customSkinUrl
+                    ? player.customSkinUrl.startsWith("http")
+                      ? player.customSkinUrl
+                      : `https://visage.surgeplay.com/bust/400/${player.customSkinUrl}`
+                    : `https://visage.surgeplay.com/bust/400/${player.username}`
+                }
                 alt={player.username}
                 className="relative z-10 h-72 object-contain drop-shadow-2xl"
                 style={{ imageRendering: "pixelated" }}

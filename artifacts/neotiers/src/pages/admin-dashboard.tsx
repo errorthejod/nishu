@@ -121,6 +121,7 @@ function PlayersTab() {
     mutation: {
       onSuccess: () => {
         queryClient.invalidateQueries({ queryKey: ["players"] });
+        queryClient.invalidateQueries({ queryKey: ["profile"] });
         toast({ title: "Player deleted" });
       },
     },
@@ -231,6 +232,7 @@ function PlayersTab() {
         defaultGamemode={selectedGamemode}
         onSuccess={() => {
           queryClient.invalidateQueries({ queryKey: ["players"] });
+          queryClient.invalidateQueries({ queryKey: ["profile"] });
           setIsFormOpen(false);
         }}
       />
