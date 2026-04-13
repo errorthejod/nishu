@@ -301,8 +301,15 @@ function GamemodesTab() {
 
 const TIERS = ["HT1", "HT2", "HT3", "HT4", "HT5", "LT1", "LT2", "LT3", "LT4", "LT5"];
 
+function getCustomSkinPreviewUrl(customSkinUrl: string, username: string): string {
+  if (!customSkinUrl) return `https://visage.surgeplay.com/bust/128/${username || "Steve"}`;
+  if (customSkinUrl.startsWith("http")) return customSkinUrl;
+  return `https://visage.surgeplay.com/bust/128/${customSkinUrl}`;
+}
+
 function PlayerFormDialog({ isOpen, onClose, initialData, defaultGamemode, onSuccess }: any) {
   const { toast } = useToast();
+  const [skinPreviewError, setSkinPreviewError] = useState(false);
 
   const [formData, setFormData] = useState({
     username: "",
@@ -310,9 +317,11 @@ function PlayerFormDialog({ isOpen, onClose, initialData, defaultGamemode, onSuc
     tier: "LT5",
     points: 0,
     region: "NA",
+    customSkinUrl: "",
   });
 
   useEffect(() => {
+    setSkinPreviewError(false);
     if (initialData) {
       setFormData({
         username: initialData.username,
@@ -320,9 +329,10 @@ function PlayerFormDialog({ isOpen, onClose, initialData, defaultGamemode, onSuc
         tier: initialData.tier,
         points: initialData.points,
         region: initialData.region || "NA",
+        customSkinUrl: initialData.customSkinUrl || "",
       });
     } else {
-      setFormData({ username: "", gamemode: defaultGamemode || "uhc", tier: "LT5", points: 0, region: "NA" });
+      setFormData({ username: "", gamemode: defaultGamemode || "uhc", tier: "LT5", points: 0, region: "NA", customSkinUrl: "" });
     }
   }, [initialData, isOpen, defaultGamemode]);
 
@@ -341,7 +351,11 @@ function PlayerFormDialog({ isOpen, onClose, initialData, defaultGamemode, onSuc
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const payload = { ...formData, points: Number(formData.points) };
+    const payload = {
+      ...formData,
+      points: Number(formData.points),
+      customSkinUrl: formData.customSkinUrl || null,
+    };
     if (initialData) {
       updateMutation.mutate({ id: initialData.id, data: payload });
     } else {
@@ -349,7 +363,10 @@ function PlayerFormDialog({ isOpen, onClose, initialData, defaultGamemode, onSuc
     }
   };
 
-  const handleChange = (e: any) => setFormData(p => ({ ...p, [e.target.name]: e.target.value }));
+  const handleChange = (e: any) => {
+    setSkinPreviewError(false);
+    setFormData(p => ({ ...p, [e.target.name]: e.target.value }));
+  };
 
   const inputClass = "w-full bg-background border border-border px-3 py-2 text-foreground focus:border-primary focus:ring-1 focus:ring-primary outline-none esports-clip-sm";
   const labelClass = "block text-xs font-display uppercase tracking-widest text-muted-foreground mb-1 mt-4";
