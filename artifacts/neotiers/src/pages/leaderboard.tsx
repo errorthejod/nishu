@@ -69,7 +69,7 @@ function OverallLeaderboard() {
       .map((p) => ({ ...p, totalPoints: Object.values(p.points).reduce((a: number, b: number) => a + b, 0) }))
       .sort((a, b) => b.totalPoints - a.totalPoints)
       .map((p, i) => ({ ...p, rank: i + 1 }))
-      .slice(0, 25);
+      .slice(0, 100);
   }, [results]);
 
   const isLoading = results.some((r) => r.isLoading);
@@ -90,7 +90,7 @@ function OverallLeaderboard() {
                 Overall Rankings
                 <span className="text-xs font-normal text-[#6b7280] bg-[#1e2130] px-2 py-0.5 rounded">Season 1</span>
               </h1>
-              <p className="text-xs text-[#6b7280]">Global rankings across all gamemodes · Top 25</p>
+              <p className="text-xs text-[#6b7280]">Global rankings across all gamemodes · Top 100</p>
             </div>
           </div>
           <div className="sm:ml-auto relative">
@@ -248,7 +248,7 @@ export default function Leaderboard({ gamemode = "overall" }: LeaderboardProps) 
   const [sortDir, setSortDir] = useState<"asc" | "desc">("asc");
 
   const { data: players = [], isLoading, error } = useListPlayers(
-    { gamemode, limit: "50" },
+    { gamemode, limit: "100" },
     { query: { queryKey: ["players", gamemode], refetchOnWindowFocus: false } }
   );
 
