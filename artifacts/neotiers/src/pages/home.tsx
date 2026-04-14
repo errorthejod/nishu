@@ -111,7 +111,7 @@ export default function Home() {
         <div className="max-w-4xl mx-auto px-4 text-center relative z-10">
           <h2 className="text-5xl md:text-7xl font-display text-foreground mb-6">Join The <span className="text-[#5865F2]">Discord</span></h2>
           <p className="text-xl text-muted-foreground mb-10">Get instantly notified of tier updates, participate in community events, and appeal ranking decisions.</p>
-          <a href="https://discord.gg/7UxNZS3tph" target="_blank" rel="noreferrer">
+          <a href="https://discord.gg/rCbVkcrb39" target="_blank" rel="noreferrer">
             <button className="esports-clip bg-[#5865F2] hover:bg-[#4752C4] text-white px-10 py-4 font-display text-2xl tracking-widest uppercase transition-all shadow-[0_0_20px_rgba(88,101,242,0.4)] hover:shadow-[0_0_30px_rgba(88,101,242,0.6)]">
               Connect Now
             </button>

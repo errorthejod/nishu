@@ -479,6 +479,21 @@ function PlayerFormDialog({ isOpen, onClose, initialData, defaultGamemode, onSuc
 function SettingsTab() {
   const { toast } = useToast();
   const [downloading, setDownloading] = useState<string | null>(null);
+  const [updatingSeed, setUpdatingSeed] = useState(false);
+
+  async function handleUpdateSeed() {
+    setUpdatingSeed(true);
+    try {
+      const res = await fetch("/api/admin/backup/update-seed", { method: "POST", credentials: "include" });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message);
+      toast({ title: "Recovery data updated!", description: `${data.players} player entries saved. Future deploys will auto-restore this data.` });
+    } catch {
+      toast({ title: "Update failed", variant: "destructive" });
+    } finally {
+      setUpdatingSeed(false);
+    }
+  }
 
   async function handleDownload(endpoint: string, filename: string, label: string) {
     setDownloading(label);
@@ -610,13 +625,38 @@ function SettingsTab() {
         </ol>
       </div>
 
+      {/* Auto-Recovery Seed Update */}
+      <div className="bg-[#0d0f14] border border-[#7c3aed]/40 rounded-lg p-5">
+        <div className="flex items-center justify-between flex-wrap gap-3">
+          <div className="flex items-center gap-3">
+            <ShieldCheck className="w-6 h-6 text-[#7c3aed] flex-shrink-0" />
+            <div>
+              <p className="font-display uppercase tracking-wider text-sm text-white">Auto-Recovery Data</p>
+              <p className="text-xs text-muted-foreground mt-0.5">
+                Click this <span className="text-white">after adding or editing any players</span>. This saves the current player list so it auto-restores if the database is ever wiped on redeploy.
+              </p>
+            </div>
+          </div>
+          <button
+            onClick={handleUpdateSeed}
+            disabled={updatingSeed}
+            className="flex items-center gap-2 bg-[#7c3aed] hover:bg-[#6d28d9] disabled:opacity-50 text-white font-display uppercase tracking-wider text-xs py-2 px-5 rounded transition-colors whitespace-nowrap"
+          >
+            <ShieldCheck className="w-4 h-4" />
+            {updatingSeed ? "Saving…" : "Update Recovery Data"}
+          </button>
+        </div>
+      </div>
+
       {/* Safety Tip */}
       <div className="border border-yellow-500/30 bg-yellow-500/5 rounded-lg p-4 flex gap-3">
         <ShieldCheck className="w-5 h-5 text-yellow-400 flex-shrink-0 mt-0.5" />
         <div>
-          <p className="text-yellow-300 font-display uppercase tracking-wider text-xs mb-1">Best Practice</p>
+          <p className="text-yellow-300 font-display uppercase tracking-wider text-xs mb-1">Best Practice — 2 Steps After Every Edit</p>
           <p className="text-xs text-muted-foreground">
-            Download a fresh SQL backup <span className="text-white">before every republish</span>. This way you always have the latest data saved locally, and you can restore in minutes if anything is lost.
+            1. Click <span className="text-white">Update Recovery Data</span> above (protects against DB wipe on redeploy).
+            <br />
+            2. <span className="text-white">Download SQL</span> to your computer (your personal offline backup).
           </p>
         </div>
       </div>

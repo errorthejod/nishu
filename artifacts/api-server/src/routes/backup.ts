@@ -1,5 +1,10 @@
 import { Router, type IRouter } from "express";
 import { db, GAMEMODE_TABLES } from "@workspace/db";
+import { writeFileSync } from "fs";
+import path from "path";
+import { fileURLToPath } from "url";
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const router: IRouter = Router();
 
@@ -96,6 +101,50 @@ PORT=3001
   res.setHeader("Content-Type", "text/plain");
   res.setHeader("Content-Disposition", 'attachment; filename=".env.example"');
   res.send(envExample);
+});
+
+router.post("/admin/backup/update-seed", async (req, res) => {
+  if (!isAdmin(req)) return res.status(403).json({ message: "Forbidden" });
+
+  try {
+    const data: Record<string, any[]> = {};
+
+    for (const [slug, table] of Object.entries(GAMEMODE_TABLES)) {
+      if (slug === "overall") continue;
+      const rows = await db.select().from(table);
+      data[slug] = rows.map((r) => ({
+        username: r.username,
+        gamemode: r.gamemode,
+        tier: r.tier,
+        points: r.points,
+        region: r.region,
+        rank: r.rank,
+        skinUrl: r.skinUrl ?? null,
+        customSkinUrl: r.customSkinUrl ?? null,
+      }));
+    }
+
+    let ts = `// Auto-generated seed data — updated via Admin > Site Config\n// DO NOT EDIT MANUALLY\n\nexport const SEED_DATA: Record<string, Array<{username:string;gamemode:string;tier:string;points:number;region:string;rank:number;skinUrl:string|null;customSkinUrl:string|null;}>> = {\n`;
+    for (const [slug, rows] of Object.entries(data)) {
+      ts += `  ${slug}: [\n`;
+      for (const row of rows as any[]) {
+        ts += `    { username: ${JSON.stringify(row.username)}, gamemode: ${JSON.stringify(row.gamemode)}, tier: ${JSON.stringify(row.tier)}, points: ${row.points}, region: ${JSON.stringify(row.region)}, rank: ${row.rank}, skinUrl: ${JSON.stringify(row.skinUrl)}, customSkinUrl: ${JSON.stringify(row.customSkinUrl)} },\n`;
+      }
+      ts += `  ],\n`;
+    }
+    ts += `};\n`;
+
+    const seedPath = path.join(__dirname, "..", "seed-data.ts");
+    writeFileSync(seedPath, ts, "utf-8");
+
+    const totalPlayers = Object.values(data).reduce((a, b) => a + b.length, 0);
+    console.log(`[seed] Seed data updated: ${totalPlayers} entries across ${Object.keys(data).length} gamemodes`);
+
+    res.json({ message: "Recovery data updated successfully", players: totalPlayers });
+  } catch (err) {
+    console.error("[seed] Failed to update seed:", err);
+    res.status(500).json({ message: "Failed to update recovery data" });
+  }
 });
 
 export default router;

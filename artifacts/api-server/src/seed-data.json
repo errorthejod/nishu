@@ -1,0 +1,600 @@
+{
+  "uhc": [
+    {
+      "username": "ItsNishu",
+      "gamemode": "uhc",
+      "tier": "LT3",
+      "points": 50,
+      "region": "IN",
+      "rank": 1,
+      "skinUrl": "https://mc-heads.net/avatar/ItsNishu/64",
+      "customSkinUrl": null
+    },
+    {
+      "username": "yashbrooo",
+      "gamemode": "uhc",
+      "tier": "LT3",
+      "points": 45,
+      "region": "AS",
+      "rank": 2,
+      "skinUrl": "https://mc-heads.net/avatar/yashbrooo/64",
+      "customSkinUrl": null
+    },
+    {
+      "username": "Peaceplsyz",
+      "gamemode": "uhc",
+      "tier": "LT3",
+      "points": 35,
+      "region": "IN",
+      "rank": 3,
+      "skinUrl": "https://mc-heads.net/avatar/Peaceplsyz/64",
+      "customSkinUrl": null
+    },
+    {
+      "username": "ERRORzGAMING",
+      "gamemode": "uhc",
+      "tier": "HT4",
+      "points": 30,
+      "region": "NA",
+      "rank": 4,
+      "skinUrl": "https://mc-heads.net/avatar/ERRORzGAMING/64",
+      "customSkinUrl": null
+    },
+    {
+      "username": "vdotgaming07",
+      "gamemode": "uhc",
+      "tier": "HT5",
+      "points": 24,
+      "region": "IN",
+      "rank": 5,
+      "skinUrl": "https://mc-heads.net/avatar/vdotgaming07/64",
+      "customSkinUrl": null
+    },
+    {
+      "username": "Pramveer",
+      "gamemode": "uhc",
+      "tier": "LT5",
+      "points": 10,
+      "region": "IN",
+      "rank": 6,
+      "skinUrl": "https://mc-heads.net/avatar/Pramveer/64",
+      "customSkinUrl": null
+    }
+  ],
+  "nethpot": [
+    {
+      "username": "aniketyt996",
+      "gamemode": "nethpot",
+      "tier": "LT1",
+      "points": 50,
+      "region": "IN",
+      "rank": 1,
+      "skinUrl": "https://mc-heads.net/avatar/aniketyt996/64",
+      "customSkinUrl": null
+    },
+    {
+      "username": "SpiderXAnshu",
+      "gamemode": "nethpot",
+      "tier": "LT3",
+      "points": 50,
+      "region": "IN",
+      "rank": 2,
+      "skinUrl": "https://mc-heads.net/avatar/SpiderXAnshu/64",
+      "customSkinUrl": null
+    },
+    {
+      "username": "yashbrooo",
+      "gamemode": "nethpot",
+      "tier": "LT3",
+      "points": 45,
+      "region": "AS",
+      "rank": 3,
+      "skinUrl": "https://mc-heads.net/avatar/yashbrooo/64",
+      "customSkinUrl": null
+    },
+    {
+      "username": "Peaceplsyz",
+      "gamemode": "nethpot",
+      "tier": "HT5",
+      "points": 40,
+      "region": "IN",
+      "rank": 4,
+      "skinUrl": "https://mc-heads.net/avatar/Peaceplsyz/64",
+      "customSkinUrl": null
+    },
+    {
+      "username": "ItsNishu",
+      "gamemode": "nethpot",
+      "tier": "HT4",
+      "points": 40,
+      "region": "IN",
+      "rank": 5,
+      "skinUrl": "https://mc-heads.net/avatar/ItsNishu/64",
+      "customSkinUrl": null
+    },
+    {
+      "username": "DeathhBringerX",
+      "gamemode": "nethpot",
+      "tier": "LT4",
+      "points": 25,
+      "region": "NA",
+      "rank": 6,
+      "skinUrl": "https://mc-heads.net/avatar/DeathhBringerX/64",
+      "customSkinUrl": null
+    },
+    {
+      "username": "ERRORzGAMING",
+      "gamemode": "nethpot",
+      "tier": "LT4",
+      "points": 25,
+      "region": "NA",
+      "rank": 7,
+      "skinUrl": "https://mc-heads.net/avatar/ERRORzGAMING/64",
+      "customSkinUrl": null
+    },
+    {
+      "username": "leathebostha",
+      "gamemode": "nethpot",
+      "tier": "LT5",
+      "points": 10,
+      "region": "NA",
+      "rank": 8,
+      "skinUrl": "https://mc-heads.net/avatar/leathebostha/64",
+      "customSkinUrl": null
+    }
+  ],
+  "smp": [
+    {
+      "username": "ItsNishu",
+      "gamemode": "smp",
+      "tier": "LT3",
+      "points": 50,
+      "region": "IN",
+      "rank": 1,
+      "skinUrl": "https://mc-heads.net/avatar/ItsNishu/64",
+      "customSkinUrl": null
+    },
+    {
+      "username": "yashbrooo",
+      "gamemode": "smp",
+      "tier": "HT3",
+      "points": 45,
+      "region": "AS",
+      "rank": 2,
+      "skinUrl": "https://mc-heads.net/avatar/yashbrooo/64",
+      "customSkinUrl": null
+    },
+    {
+      "username": "Ultima_Ninja",
+      "gamemode": "smp",
+      "tier": "LT4",
+      "points": 35,
+      "region": "IN",
+      "rank": 3,
+      "skinUrl": "https://mc-heads.net/avatar/Ultima_Ninja/64",
+      "customSkinUrl": null
+    },
+    {
+      "username": "DECOMPLY",
+      "gamemode": "smp",
+      "tier": "LT5",
+      "points": 30,
+      "region": "NA",
+      "rank": 4,
+      "skinUrl": "https://mc-heads.net/avatar/DECOMPLY/64",
+      "customSkinUrl": null
+    },
+    {
+      "username": "Awalnoor",
+      "gamemode": "smp",
+      "tier": "HT5",
+      "points": 25,
+      "region": "NA",
+      "rank": 5,
+      "skinUrl": "https://mc-heads.net/avatar/Awalnoor/64",
+      "customSkinUrl": null
+    },
+    {
+      "username": "_Shadowz",
+      "gamemode": "smp",
+      "tier": "HT5",
+      "points": 23,
+      "region": "NA",
+      "rank": 6,
+      "skinUrl": "https://mc-heads.net/avatar/_Shadowz/64",
+      "customSkinUrl": null
+    },
+    {
+      "username": "VectorYogid_YT",
+      "gamemode": "smp",
+      "tier": "HT5",
+      "points": 20,
+      "region": "NA",
+      "rank": 7,
+      "skinUrl": "https://mc-heads.net/avatar/VectorYogid_YT/64",
+      "customSkinUrl": null
+    },
+    {
+      "username": "Pircamolecule4",
+      "gamemode": "smp",
+      "tier": "HT5",
+      "points": 20,
+      "region": "IN",
+      "rank": 8,
+      "skinUrl": "https://mc-heads.net/avatar/Pircamolecule4/64",
+      "customSkinUrl": null
+    },
+    {
+      "username": "cute_babby",
+      "gamemode": "smp",
+      "tier": "LT5",
+      "points": 15,
+      "region": "IN",
+      "rank": 9,
+      "skinUrl": "https://mc-heads.net/avatar/cute_babby/64",
+      "customSkinUrl": null
+    },
+    {
+      "username": "rishu1285",
+      "gamemode": "smp",
+      "tier": "LT5",
+      "points": 10,
+      "region": "IN",
+      "rank": 10,
+      "skinUrl": "https://mc-heads.net/avatar/rishu1285/64",
+      "customSkinUrl": null
+    }
+  ],
+  "axe": [
+    {
+      "username": "ItsNishu",
+      "gamemode": "axe",
+      "tier": "HT1",
+      "points": 80,
+      "region": "IN",
+      "rank": 1,
+      "skinUrl": "https://mc-heads.net/avatar/ItsNishu/64",
+      "customSkinUrl": null
+    },
+    {
+      "username": "yashbrooo",
+      "gamemode": "axe",
+      "tier": "LT4",
+      "points": 40,
+      "region": "AS",
+      "rank": 2,
+      "skinUrl": "https://mc-heads.net/avatar/yashbrooo/64",
+      "customSkinUrl": null
+    },
+    {
+      "username": "Ultima_Ninja",
+      "gamemode": "axe",
+      "tier": "LT3",
+      "points": 40,
+      "region": "IN",
+      "rank": 3,
+      "skinUrl": "https://mc-heads.net/avatar/Ultima_Ninja/64",
+      "customSkinUrl": null
+    },
+    {
+      "username": "SpiderXAnshu",
+      "gamemode": "axe",
+      "tier": "LT4",
+      "points": 25,
+      "region": "IN",
+      "rank": 4,
+      "skinUrl": "https://mc-heads.net/avatar/SpiderXAnshu/64",
+      "customSkinUrl": null
+    },
+    {
+      "username": "Awalnoor",
+      "gamemode": "axe",
+      "tier": "HT5",
+      "points": 20,
+      "region": "NA",
+      "rank": 5,
+      "skinUrl": "https://mc-heads.net/avatar/Awalnoor/64",
+      "customSkinUrl": null
+    }
+  ],
+  "mace": [
+    {
+      "username": "ItsNishu",
+      "gamemode": "mace",
+      "tier": "HT4",
+      "points": 40,
+      "region": "IN",
+      "rank": 1,
+      "skinUrl": "https://mc-heads.net/avatar/ItsNishu/64",
+      "customSkinUrl": null
+    },
+    {
+      "username": "yashbrooo",
+      "gamemode": "mace",
+      "tier": "LT3",
+      "points": 40,
+      "region": "AS",
+      "rank": 2,
+      "skinUrl": "https://mc-heads.net/avatar/yashbrooo/64",
+      "customSkinUrl": null
+    },
+    {
+      "username": "ERRORzGAMING",
+      "gamemode": "mace",
+      "tier": "HT5",
+      "points": 25,
+      "region": "NA",
+      "rank": 3,
+      "skinUrl": "https://mc-heads.net/avatar/ERRORzGAMING/64",
+      "customSkinUrl": null
+    }
+  ],
+  "spear": [
+    {
+      "username": "ItsNishu",
+      "gamemode": "spear",
+      "tier": "LT3",
+      "points": 50,
+      "region": "IN",
+      "rank": 1,
+      "skinUrl": "https://mc-heads.net/avatar/ItsNishu/64",
+      "customSkinUrl": null
+    },
+    {
+      "username": "yashbrooo",
+      "gamemode": "spear",
+      "tier": "LT3",
+      "points": 45,
+      "region": "AS",
+      "rank": 2,
+      "skinUrl": "https://mc-heads.net/avatar/yashbrooo/64",
+      "customSkinUrl": null
+    },
+    {
+      "username": "DeathhBringerX",
+      "gamemode": "spear",
+      "tier": "LT3",
+      "points": 45,
+      "region": "NA",
+      "rank": 3,
+      "skinUrl": "https://mc-heads.net/avatar/DeathhBringerX/64",
+      "customSkinUrl": null
+    },
+    {
+      "username": "Abhi_Saint_012",
+      "gamemode": "spear",
+      "tier": "HT5",
+      "points": 24,
+      "region": "IN",
+      "rank": 4,
+      "skinUrl": "https://mc-heads.net/avatar/Abhi_Saint_012/64",
+      "customSkinUrl": null
+    }
+  ],
+  "lifesteal": [
+    {
+      "username": "ItsNishu",
+      "gamemode": "lifesteal",
+      "tier": "HT4",
+      "points": 40,
+      "region": "IN",
+      "rank": 1,
+      "skinUrl": "https://mc-heads.net/avatar/ItsNishu/64",
+      "customSkinUrl": null
+    },
+    {
+      "username": "Ultima_Ninja",
+      "gamemode": "lifesteal",
+      "tier": "HT5",
+      "points": 30,
+      "region": "IN",
+      "rank": 2,
+      "skinUrl": "https://mc-heads.net/avatar/Ultima_Ninja/64",
+      "customSkinUrl": null
+    },
+    {
+      "username": "DeathhBringerX",
+      "gamemode": "lifesteal",
+      "tier": "LT4",
+      "points": 25,
+      "region": "NA",
+      "rank": 3,
+      "skinUrl": "https://mc-heads.net/avatar/DeathhBringerX/64",
+      "customSkinUrl": null
+    },
+    {
+      "username": "AkxlGamingYT",
+      "gamemode": "lifesteal",
+      "tier": "HT5",
+      "points": 25,
+      "region": "NA",
+      "rank": 4,
+      "skinUrl": "https://mc-heads.net/avatar/AkxlGamingYT/64",
+      "customSkinUrl": null
+    },
+    {
+      "username": "i7Nixco",
+      "gamemode": "lifesteal",
+      "tier": "HT5",
+      "points": 20,
+      "region": "NA",
+      "rank": 5,
+      "skinUrl": "https://mc-heads.net/avatar/i7Nixco/64",
+      "customSkinUrl": null
+    },
+    {
+      "username": "nastygaming13",
+      "gamemode": "lifesteal",
+      "tier": "HT5",
+      "points": 20,
+      "region": "NA",
+      "rank": 6,
+      "skinUrl": "https://mc-heads.net/avatar/nastygaming13/64",
+      "customSkinUrl": null
+    },
+    {
+      "username": "VectorYogid_YT",
+      "gamemode": "lifesteal",
+      "tier": "LT5",
+      "points": 10,
+      "region": "NA",
+      "rank": 7,
+      "skinUrl": "https://mc-heads.net/avatar/VectorYogid_YT/64",
+      "customSkinUrl": null
+    }
+  ],
+  "crystal": [
+    {
+      "username": "yashbrooo",
+      "gamemode": "crystal",
+      "tier": "HT4",
+      "points": 40,
+      "region": "AS",
+      "rank": 1,
+      "skinUrl": "https://mc-heads.net/avatar/yashbrooo/64",
+      "customSkinUrl": null
+    },
+    {
+      "username": "SpiderXAnshu",
+      "gamemode": "crystal",
+      "tier": "HT4",
+      "points": 40,
+      "region": "IN",
+      "rank": 2,
+      "skinUrl": "https://mc-heads.net/avatar/SpiderXAnshu/64",
+      "customSkinUrl": null
+    },
+    {
+      "username": "Ultima_Ninja",
+      "gamemode": "crystal",
+      "tier": "HT4",
+      "points": 35,
+      "region": "IN",
+      "rank": 3,
+      "skinUrl": "https://mc-heads.net/avatar/Ultima_Ninja/64",
+      "customSkinUrl": null
+    },
+    {
+      "username": "ERRORzGAMING",
+      "gamemode": "crystal",
+      "tier": "HT4",
+      "points": 30,
+      "region": "NA",
+      "rank": 4,
+      "skinUrl": "https://mc-heads.net/avatar/ERRORzGAMING/64",
+      "customSkinUrl": null
+    },
+    {
+      "username": "ItsNishu",
+      "gamemode": "crystal",
+      "tier": "LT4",
+      "points": 30,
+      "region": "IN",
+      "rank": 5,
+      "skinUrl": "https://mc-heads.net/avatar/ItsNishu/64",
+      "customSkinUrl": null
+    },
+    {
+      "username": "DeathhBringerX",
+      "gamemode": "crystal",
+      "tier": "LT4",
+      "points": 20,
+      "region": "NA",
+      "rank": 6,
+      "skinUrl": "https://mc-heads.net/avatar/DeathhBringerX/64",
+      "customSkinUrl": null
+    },
+    {
+      "username": "aniketyt996",
+      "gamemode": "crystal",
+      "tier": "HT5",
+      "points": 20,
+      "region": "IN",
+      "rank": 7,
+      "skinUrl": "https://mc-heads.net/avatar/aniketyt996/64",
+      "customSkinUrl": null
+    }
+  ],
+  "sword": [
+    {
+      "username": "ItsNishu",
+      "gamemode": "sword",
+      "tier": "HT4",
+      "points": 40,
+      "region": "IN",
+      "rank": 1,
+      "skinUrl": "https://mc-heads.net/avatar/ItsNishu/64",
+      "customSkinUrl": null
+    },
+    {
+      "username": "yashbrooo",
+      "gamemode": "sword",
+      "tier": "HT3",
+      "points": 40,
+      "region": "AS",
+      "rank": 2,
+      "skinUrl": "https://mc-heads.net/avatar/yashbrooo/64",
+      "customSkinUrl": null
+    },
+    {
+      "username": "Ultima_Ninja",
+      "gamemode": "sword",
+      "tier": "HT4",
+      "points": 35,
+      "region": "IN",
+      "rank": 3,
+      "skinUrl": "https://mc-heads.net/avatar/Ultima_Ninja/64",
+      "customSkinUrl": null
+    },
+    {
+      "username": "ERRORzGAMING",
+      "gamemode": "sword",
+      "tier": "LT3",
+      "points": 30,
+      "region": "NA",
+      "rank": 4,
+      "skinUrl": "https://mc-heads.net/avatar/ERRORzGAMING/64",
+      "customSkinUrl": null
+    },
+    {
+      "username": "Nishant310",
+      "gamemode": "sword",
+      "tier": "HT5",
+      "points": 20,
+      "region": "IN",
+      "rank": 5,
+      "skinUrl": "https://mc-heads.net/avatar/Nishant310/64",
+      "customSkinUrl": null
+    },
+    {
+      "username": "Aisha_Killer",
+      "gamemode": "sword",
+      "tier": "HT5",
+      "points": 16,
+      "region": "IN",
+      "rank": 6,
+      "skinUrl": "https://mc-heads.net/avatar/Aisha_Killer/64",
+      "customSkinUrl": null
+    },
+    {
+      "username": "goatmadu",
+      "gamemode": "sword",
+      "tier": "HT5",
+      "points": 15,
+      "region": "IN",
+      "rank": 7,
+      "skinUrl": "https://mc-heads.net/avatar/goatmadu/64",
+      "customSkinUrl": null
+    },
+    {
+      "username": "_Shadowz7",
+      "gamemode": "sword",
+      "tier": "LT5",
+      "points": 10,
+      "region": "NA",
+      "rank": 8,
+      "skinUrl": "https://mc-heads.net/avatar/_Shadowz7/64",
+      "customSkinUrl": null
+    }
+  ]
+}
