@@ -14,7 +14,7 @@ import {
 } from "@workspace/api-client-react";
 import { useLocation } from "wouter";
 import { useQueryClient } from "@tanstack/react-query";
-import { LogOut, Plus, Edit, Trash2, Settings, Users, Gamepad2 } from "lucide-react";
+import { LogOut, Plus, Edit, Trash2, Settings, Users, Gamepad2, Download, Database, FileCode, ShieldCheck, Terminal, ExternalLink } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 
@@ -94,11 +94,7 @@ export default function AdminDashboard() {
         <div className="bg-card border border-border p-6 esports-clip-sm min-h-[500px]">
           {activeTab === "players" && <PlayersTab />}
           {activeTab === "gamemodes" && <GamemodesTab />}
-          {activeTab === "settings" && (
-            <div className="text-center py-20 text-muted-foreground font-display text-2xl uppercase">
-              Settings Module — Coming Soon
-            </div>
-          )}
+          {activeTab === "settings" && <SettingsTab />}
         </div>
       </div>
     </Layout>
@@ -477,5 +473,153 @@ function PlayerFormDialog({ isOpen, onClose, initialData, defaultGamemode, onSuc
         </form>
       </DialogContent>
     </Dialog>
+  );
+}
+
+function SettingsTab() {
+  const { toast } = useToast();
+  const [downloading, setDownloading] = useState<string | null>(null);
+
+  async function handleDownload(endpoint: string, filename: string, label: string) {
+    setDownloading(label);
+    try {
+      const res = await fetch(endpoint, { credentials: "include" });
+      if (!res.ok) throw new Error("Download failed");
+      const blob = await res.blob();
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      toast({ title: `${label} downloaded!` });
+    } catch {
+      toast({ title: "Download failed", description: "Make sure you are logged in as admin.", variant: "destructive" });
+    } finally {
+      setDownloading(null);
+    }
+  }
+
+  const ts = () => new Date().toISOString().slice(0, 10);
+
+  return (
+    <div className="space-y-8">
+      {/* Header */}
+      <div>
+        <h2 className="font-display text-2xl uppercase tracking-wider text-foreground flex items-center gap-2">
+          <ShieldCheck className="w-6 h-6 text-[#7c3aed]" />
+          Backup & Recovery
+        </h2>
+        <p className="text-muted-foreground text-sm mt-1">
+          Download your data so you never lose it again after a redeploy.
+        </p>
+      </div>
+
+      {/* Download Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        {/* DB JSON */}
+        <div className="bg-[#0d0f14] border border-[#2a2f42] rounded-lg p-5 flex flex-col gap-3">
+          <div className="flex items-center gap-2">
+            <Database className="w-5 h-5 text-emerald-400" />
+            <span className="font-display uppercase tracking-wider text-sm">Database (JSON)</span>
+          </div>
+          <p className="text-xs text-muted-foreground">
+            Full export of all player data across every gamemode — JSON format, easy to re-import.
+          </p>
+          <button
+            onClick={() => handleDownload("/api/admin/backup/db", `neotiers-db-${ts()}.json`, "DB JSON")}
+            disabled={downloading === "DB JSON"}
+            className="mt-auto flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-500 disabled:opacity-50 text-white font-display uppercase tracking-wider text-xs py-2 px-4 rounded transition-colors"
+          >
+            <Download className="w-4 h-4" />
+            {downloading === "DB JSON" ? "Downloading…" : "Download JSON"}
+          </button>
+        </div>
+
+        {/* DB SQL */}
+        <div className="bg-[#0d0f14] border border-[#2a2f42] rounded-lg p-5 flex flex-col gap-3">
+          <div className="flex items-center gap-2">
+            <Database className="w-5 h-5 text-blue-400" />
+            <span className="font-display uppercase tracking-wider text-sm">Database (SQL)</span>
+          </div>
+          <p className="text-xs text-muted-foreground">
+            All player data as SQL INSERT statements — paste directly into any PostgreSQL database.
+          </p>
+          <button
+            onClick={() => handleDownload("/api/admin/backup/sql", `neotiers-db-${ts()}.sql`, "DB SQL")}
+            disabled={downloading === "DB SQL"}
+            className="mt-auto flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-500 disabled:opacity-50 text-white font-display uppercase tracking-wider text-xs py-2 px-4 rounded transition-colors"
+          >
+            <Download className="w-4 h-4" />
+            {downloading === "DB SQL" ? "Downloading…" : "Download SQL"}
+          </button>
+        </div>
+
+        {/* .env.example */}
+        <div className="bg-[#0d0f14] border border-[#2a2f42] rounded-lg p-5 flex flex-col gap-3">
+          <div className="flex items-center gap-2">
+            <FileCode className="w-5 h-5 text-yellow-400" />
+            <span className="font-display uppercase tracking-wider text-sm">Env Variables</span>
+          </div>
+          <p className="text-xs text-muted-foreground">
+            Template of all required environment variables. Fill in your values when redeploying.
+          </p>
+          <button
+            onClick={() => handleDownload("/api/admin/backup/env", ".env.example", "Env File")}
+            disabled={downloading === "Env File"}
+            className="mt-auto flex items-center justify-center gap-2 bg-yellow-600 hover:bg-yellow-500 disabled:opacity-50 text-white font-display uppercase tracking-wider text-xs py-2 px-4 rounded transition-colors"
+          >
+            <Download className="w-4 h-4" />
+            {downloading === "Env File" ? "Downloading…" : "Download .env.example"}
+          </button>
+        </div>
+      </div>
+
+      {/* Shell Script */}
+      <div className="bg-[#0d0f14] border border-[#2a2f42] rounded-lg p-5">
+        <div className="flex items-center gap-2 mb-3">
+          <Terminal className="w-5 h-5 text-[#7c3aed]" />
+          <span className="font-display uppercase tracking-wider text-sm">Full Project Backup (Shell)</span>
+        </div>
+        <p className="text-xs text-muted-foreground mb-3">
+          Run this command in your Replit shell to zip the entire project including all source code:
+        </p>
+        <pre className="bg-[#050709] border border-[#1a1f2e] rounded p-3 text-xs text-emerald-400 overflow-x-auto select-all">
+          bash scripts/backup.sh
+        </pre>
+        <p className="text-xs text-muted-foreground mt-2">
+          This creates <span className="text-white font-mono">neotiers-backup-[date].zip</span> in the project root containing all source code, assets, and a database dump.
+        </p>
+      </div>
+
+      {/* Deploy Guide */}
+      <div className="bg-[#0d0f14] border border-[#2a2f42] rounded-lg p-5">
+        <div className="flex items-center gap-2 mb-4">
+          <ExternalLink className="w-5 h-5 text-[#7c3aed]" />
+          <span className="font-display uppercase tracking-wider text-sm">Restore on a New Host</span>
+        </div>
+        <ol className="space-y-3 text-xs text-muted-foreground list-decimal list-inside">
+          <li><span className="text-white">Download the SQL backup</span> using the button above.</li>
+          <li><span className="text-white">Create a PostgreSQL database</span> on Render, Railway, Neon, or Supabase (all free tiers available).</li>
+          <li><span className="text-white">Run the SQL file</span> against your new database: <code className="text-emerald-400 bg-[#050709] px-1 rounded">psql $DATABASE_URL &lt; neotiers-db.sql</code></li>
+          <li><span className="text-white">Fork or clone this Replit project</span>, then set the environment variables from your <code className="text-yellow-400">.env.example</code> file.</li>
+          <li><span className="text-white">For Render:</span> Deploy as a Web Service. Set build command: <code className="text-emerald-400 bg-[#050709] px-1 rounded">pnpm install && pnpm run build</code> and start command: <code className="text-emerald-400 bg-[#050709] px-1 rounded">pnpm run start</code>.</li>
+          <li><span className="text-white">For Vercel / Netlify:</span> These are best for the frontend only. Deploy the <code className="text-emerald-400 bg-[#050709] px-1 rounded">artifacts/neotiers</code> folder as a static site and host the API server separately on Render.</li>
+        </ol>
+      </div>
+
+      {/* Safety Tip */}
+      <div className="border border-yellow-500/30 bg-yellow-500/5 rounded-lg p-4 flex gap-3">
+        <ShieldCheck className="w-5 h-5 text-yellow-400 flex-shrink-0 mt-0.5" />
+        <div>
+          <p className="text-yellow-300 font-display uppercase tracking-wider text-xs mb-1">Best Practice</p>
+          <p className="text-xs text-muted-foreground">
+            Download a fresh SQL backup <span className="text-white">before every republish</span>. This way you always have the latest data saved locally, and you can restore in minutes if anything is lost.
+          </p>
+        </div>
+      </div>
+    </div>
   );
 }
