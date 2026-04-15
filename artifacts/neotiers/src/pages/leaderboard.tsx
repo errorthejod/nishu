@@ -167,13 +167,13 @@ function OverallLeaderboard() {
                     {/* Rank */}
                     <td style={{ padding: "8px 12px" }}>
                       {player.rank === 1 ? (
-                        <span style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", width: 26, height: 26, borderRadius: 6, fontWeight: 900, fontSize: 13, color: "#000", background: "linear-gradient(135deg,#FFD700,#FFA500)" }}>1</span>
+                        <span style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", width: 38, height: 30, borderRadius: 6, fontWeight: 900, fontStyle: "italic", fontSize: 14, letterSpacing: "-0.02em", color: "#000", background: "linear-gradient(135deg,#FFD700,#FFA500)" }}>1.</span>
                       ) : player.rank === 2 ? (
-                        <span style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", width: 26, height: 26, borderRadius: 6, fontWeight: 900, fontSize: 13, color: "#000", background: "linear-gradient(135deg,#E8E8E8,#A0A0A0)" }}>2</span>
+                        <span style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", width: 38, height: 30, borderRadius: 6, fontWeight: 900, fontStyle: "italic", fontSize: 14, letterSpacing: "-0.02em", color: "#111", background: "linear-gradient(135deg,#c8d6e0,#8ea8b8)" }}>2.</span>
                       ) : player.rank === 3 ? (
-                        <span style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", width: 26, height: 26, borderRadius: 6, fontWeight: 900, fontSize: 13, color: "#fff", background: "linear-gradient(135deg,#CD7F32,#7a4010)" }}>3</span>
+                        <span style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", width: 38, height: 30, borderRadius: 6, fontWeight: 900, fontStyle: "italic", fontSize: 14, letterSpacing: "-0.02em", color: "#fff", background: "linear-gradient(135deg,#CD7F32,#7a4010)" }}>3.</span>
                       ) : (
-                        <span style={{ color: "#6b7280", fontSize: 12, fontFamily: "monospace" }}>#{player.rank}</span>
+                        <span style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", width: 38, height: 30, borderRadius: 6, fontWeight: 900, fontStyle: "italic", fontSize: 14, letterSpacing: "-0.02em", color: "#9ca3af", background: "#1a1d2e", border: "1px solid #2a2f48" }}>{player.rank}.</span>
                       )}
                     </td>
                     {/* Skin */}
@@ -315,7 +315,7 @@ export default function Leaderboard({ gamemode = "overall" }: LeaderboardProps) 
             <span style={{ fontSize: 10, fontWeight: 600, color: "#6b7280", letterSpacing: "0.08em", textTransform: "uppercase", textAlign: "center", display: "block" }}>Region</span>
             <span style={{ fontSize: 10, fontWeight: 600, color: "#6b7280", letterSpacing: "0.08em", textTransform: "uppercase", textAlign: "center", display: "block" }}>Mode</span>
             <button onClick={() => handleSort("tier")} style={{ background: "none", border: "none", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 10, fontWeight: 600, color: "#6b7280", letterSpacing: "0.08em", textTransform: "uppercase" }}>Tier<SortIcon col="tier" /></button>
-            <button onClick={() => handleSort("points")} style={{ background: "none", border: "none", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "flex-end", fontSize: 10, fontWeight: 600, color: "#6b7280", letterSpacing: "0.08em", textTransform: "uppercase" }}>Pts<SortIcon col="points" /></button>
+            <button onClick={() => handleSort("points")} style={{ background: "none", border: "none", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "flex-end", width: "100%", fontSize: 10, fontWeight: 600, color: "#6b7280", letterSpacing: "0.08em", textTransform: "uppercase" }}>Pts<SortIcon col="points" /></button>
           </div>
 
           {isLoading && <div style={{ textAlign: "center", padding: "48px 0", color: "#6b7280", fontSize: 13 }}>Loading players…</div>}

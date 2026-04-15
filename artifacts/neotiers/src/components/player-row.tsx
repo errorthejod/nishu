@@ -50,13 +50,37 @@ const RANK_BG = (rank: number): string | undefined => {
 };
 
 function RankBadge({ position }: { position: number }) {
+  const labelStyle: React.CSSProperties = {
+    fontWeight: 900,
+    fontStyle: "italic",
+    fontSize: 14,
+    letterSpacing: "-0.02em",
+    lineHeight: 1,
+  };
+
   if (position === 1)
-    return <span style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", width: 26, height: 26, borderRadius: 6, fontWeight: 900, fontSize: 13, color: "#000", background: "linear-gradient(135deg,#FFD700,#FFA500)" }}>1</span>;
+    return (
+      <span style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", width: 38, height: 30, borderRadius: 6, background: "linear-gradient(135deg,#FFD700,#FFA500)", ...labelStyle, color: "#000" }}>
+        1.
+      </span>
+    );
   if (position === 2)
-    return <span style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", width: 26, height: 26, borderRadius: 6, fontWeight: 900, fontSize: 13, color: "#000", background: "linear-gradient(135deg,#E8E8E8,#A0A0A0)" }}>2</span>;
+    return (
+      <span style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", width: 38, height: 30, borderRadius: 6, background: "linear-gradient(135deg,#c8d6e0,#8ea8b8)", ...labelStyle, color: "#111" }}>
+        2.
+      </span>
+    );
   if (position === 3)
-    return <span style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", width: 26, height: 26, borderRadius: 6, fontWeight: 900, fontSize: 13, color: "#fff", background: "linear-gradient(135deg,#CD7F32,#7a4010)" }}>3</span>;
-  return <span style={{ color: "#6b7280", fontSize: 12, fontFamily: "monospace" }}>#{position}</span>;
+    return (
+      <span style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", width: 38, height: 30, borderRadius: 6, background: "linear-gradient(135deg,#CD7F32,#7a4010)", ...labelStyle, color: "#fff" }}>
+        3.
+      </span>
+    );
+  return (
+    <span style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", width: 38, height: 30, borderRadius: 6, background: "#1a1d2e", border: "1px solid #2a2f48", ...labelStyle, color: "#9ca3af" }}>
+      {position}.
+    </span>
+  );
 }
 
 export function PlayerRow({ player, position, gamemode }: PlayerRowProps) {
