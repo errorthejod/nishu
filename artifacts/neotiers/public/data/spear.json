@@ -1,0 +1,54 @@
+[
+  {
+    "id": 1,
+    "username": "ItsNishu",
+    "gamemode": "spear",
+    "tier": "LT3",
+    "points": 50,
+    "region": "IN",
+    "rank": 1,
+    "skinUrl": "https://mc-heads.net/avatar/ItsNishu/64",
+    "customSkinUrl": null,
+    "createdAt": "2026-04-15T03:43:03.900Z",
+    "updatedAt": "2026-04-15T03:43:03.900Z"
+  },
+  {
+    "id": 2,
+    "username": "yashbrooo",
+    "gamemode": "spear",
+    "tier": "LT3",
+    "points": 45,
+    "region": "AS",
+    "rank": 2,
+    "skinUrl": "https://mc-heads.net/avatar/yashbrooo/64",
+    "customSkinUrl": null,
+    "createdAt": "2026-04-15T03:43:03.905Z",
+    "updatedAt": "2026-04-15T03:43:03.905Z"
+  },
+  {
+    "id": 3,
+    "username": "DeathhBringerX",
+    "gamemode": "spear",
+    "tier": "LT3",
+    "points": 45,
+    "region": "NA",
+    "rank": 3,
+    "skinUrl": "https://mc-heads.net/avatar/DeathhBringerX/64",
+    "customSkinUrl": null,
+    "createdAt": "2026-04-15T03:43:03.911Z",
+    "updatedAt": "2026-04-15T03:43:03.911Z"
+  },
+  {
+    "id": 4,
+    "username": "Abhi_Saint_012",
+    "gamemode": "spear",
+    "tier": "HT5",
+    "points": 24,
+    "region": "IN",
+    "rank": 4,
+    "skinUrl": "https://mc-heads.net/avatar/Abhi_Saint_012/64",
+    "customSkinUrl": null,
+    "createdAt": "2026-04-15T03:43:03.916Z",
+    "updatedAt": "2026-04-15T03:43:03.916Z"
+  }
+]

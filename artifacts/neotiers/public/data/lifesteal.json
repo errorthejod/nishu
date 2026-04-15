@@ -1,0 +1,93 @@
+[
+  {
+    "id": 1,
+    "username": "ItsNishu",
+    "gamemode": "lifesteal",
+    "tier": "HT4",
+    "points": 40,
+    "region": "IN",
+    "rank": 1,
+    "skinUrl": "https://mc-heads.net/avatar/ItsNishu/64",
+    "customSkinUrl": null,
+    "createdAt": "2026-04-15T03:43:03.921Z",
+    "updatedAt": "2026-04-15T03:43:03.921Z"
+  },
+  {
+    "id": 2,
+    "username": "Ultima_Ninja",
+    "gamemode": "lifesteal",
+    "tier": "HT5",
+    "points": 30,
+    "region": "IN",
+    "rank": 2,
+    "skinUrl": "https://mc-heads.net/avatar/Ultima_Ninja/64",
+    "customSkinUrl": null,
+    "createdAt": "2026-04-15T03:43:03.926Z",
+    "updatedAt": "2026-04-15T03:43:03.926Z"
+  },
+  {
+    "id": 3,
+    "username": "DeathhBringerX",
+    "gamemode": "lifesteal",
+    "tier": "LT4",
+    "points": 25,
+    "region": "NA",
+    "rank": 3,
+    "skinUrl": "https://mc-heads.net/avatar/DeathhBringerX/64",
+    "customSkinUrl": null,
+    "createdAt": "2026-04-15T03:43:03.931Z",
+    "updatedAt": "2026-04-15T03:43:03.931Z"
+  },
+  {
+    "id": 4,
+    "username": "AkxlGamingYT",
+    "gamemode": "lifesteal",
+    "tier": "HT5",
+    "points": 25,
+    "region": "NA",
+    "rank": 4,
+    "skinUrl": "https://mc-heads.net/avatar/AkxlGamingYT/64",
+    "customSkinUrl": null,
+    "createdAt": "2026-04-15T03:43:03.936Z",
+    "updatedAt": "2026-04-15T03:43:03.936Z"
+  },
+  {
+    "id": 5,
+    "username": "i7Nixco",
+    "gamemode": "lifesteal",
+    "tier": "HT5",
+    "points": 20,
+    "region": "NA",
+    "rank": 5,
+    "skinUrl": "https://mc-heads.net/avatar/i7Nixco/64",
+    "customSkinUrl": null,
+    "createdAt": "2026-04-15T03:43:03.940Z",
+    "updatedAt": "2026-04-15T03:43:03.940Z"
+  },
+  {
+    "id": 6,
+    "username": "nastygaming13",
+    "gamemode": "lifesteal",
+    "tier": "HT5",
+    "points": 20,
+    "region": "NA",
+    "rank": 6,
+    "skinUrl": "https://mc-heads.net/avatar/nastygaming13/64",
+    "customSkinUrl": null,
+    "createdAt": "2026-04-15T03:43:03.946Z",
+    "updatedAt": "2026-04-15T03:43:03.946Z"
+  },
+  {
+    "id": 7,
+    "username": "VectorYogid_YT",
+    "gamemode": "lifesteal",
+    "tier": "LT5",
+    "points": 10,
+    "region": "NA",
+    "rank": 7,
+    "skinUrl": "https://mc-heads.net/avatar/VectorYogid_YT/64",
+    "customSkinUrl": null,
+    "createdAt": "2026-04-15T03:43:03.950Z",
+    "updatedAt": "2026-04-15T03:43:03.950Z"
+  }
+]

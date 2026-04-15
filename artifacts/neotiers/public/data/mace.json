@@ -1,0 +1,41 @@
+[
+  {
+    "id": 1,
+    "username": "ItsNishu",
+    "gamemode": "mace",
+    "tier": "HT4",
+    "points": 40,
+    "region": "IN",
+    "rank": 1,
+    "skinUrl": "https://mc-heads.net/avatar/ItsNishu/64",
+    "customSkinUrl": null,
+    "createdAt": "2026-04-15T03:43:03.885Z",
+    "updatedAt": "2026-04-15T03:43:03.885Z"
+  },
+  {
+    "id": 2,
+    "username": "yashbrooo",
+    "gamemode": "mace",
+    "tier": "LT3",
+    "points": 40,
+    "region": "AS",
+    "rank": 2,
+    "skinUrl": "https://mc-heads.net/avatar/yashbrooo/64",
+    "customSkinUrl": null,
+    "createdAt": "2026-04-15T03:43:03.890Z",
+    "updatedAt": "2026-04-15T03:43:03.890Z"
+  },
+  {
+    "id": 3,
+    "username": "ERRORzGAMING",
+    "gamemode": "mace",
+    "tier": "HT5",
+    "points": 25,
+    "region": "NA",
+    "rank": 3,
+    "skinUrl": "https://mc-heads.net/avatar/ERRORzGAMING/64",
+    "customSkinUrl": null,
+    "createdAt": "2026-04-15T03:43:03.896Z",
+    "updatedAt": "2026-04-15T03:43:03.896Z"
+  }
+]

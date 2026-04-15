@@ -1,0 +1,93 @@
+[
+  {
+    "id": 1,
+    "username": "yashbrooo",
+    "gamemode": "crystal",
+    "tier": "HT4",
+    "points": 40,
+    "region": "AS",
+    "rank": 1,
+    "skinUrl": "https://mc-heads.net/avatar/yashbrooo/64",
+    "customSkinUrl": null,
+    "createdAt": "2026-04-15T03:43:03.955Z",
+    "updatedAt": "2026-04-15T03:43:03.955Z"
+  },
+  {
+    "id": 2,
+    "username": "SpiderXAnshu",
+    "gamemode": "crystal",
+    "tier": "HT4",
+    "points": 40,
+    "region": "IN",
+    "rank": 2,
+    "skinUrl": "https://mc-heads.net/avatar/SpiderXAnshu/64",
+    "customSkinUrl": null,
+    "createdAt": "2026-04-15T03:43:03.960Z",
+    "updatedAt": "2026-04-15T03:43:03.960Z"
+  },
+  {
+    "id": 3,
+    "username": "Ultima_Ninja",
+    "gamemode": "crystal",
+    "tier": "HT4",
+    "points": 35,
+    "region": "IN",
+    "rank": 3,
+    "skinUrl": "https://mc-heads.net/avatar/Ultima_Ninja/64",
+    "customSkinUrl": null,
+    "createdAt": "2026-04-15T03:43:03.965Z",
+    "updatedAt": "2026-04-15T03:43:03.965Z"
+  },
+  {
+    "id": 4,
+    "username": "ERRORzGAMING",
+    "gamemode": "crystal",
+    "tier": "HT4",
+    "points": 30,
+    "region": "NA",
+    "rank": 4,
+    "skinUrl": "https://mc-heads.net/avatar/ERRORzGAMING/64",
+    "customSkinUrl": null,
+    "createdAt": "2026-04-15T03:43:03.970Z",
+    "updatedAt": "2026-04-15T03:43:03.970Z"
+  },
+  {
+    "id": 5,
+    "username": "ItsNishu",
+    "gamemode": "crystal",
+    "tier": "LT4",
+    "points": 30,
+    "region": "IN",
+    "rank": 5,
+    "skinUrl": "https://mc-heads.net/avatar/ItsNishu/64",
+    "customSkinUrl": null,
+    "createdAt": "2026-04-15T03:43:03.975Z",
+    "updatedAt": "2026-04-15T03:43:03.975Z"
+  },
+  {
+    "id": 6,
+    "username": "DeathhBringerX",
+    "gamemode": "crystal",
+    "tier": "LT4",
+    "points": 20,
+    "region": "NA",
+    "rank": 6,
+    "skinUrl": "https://mc-heads.net/avatar/DeathhBringerX/64",
+    "customSkinUrl": null,
+    "createdAt": "2026-04-15T03:43:03.979Z",
+    "updatedAt": "2026-04-15T03:43:03.979Z"
+  },
+  {
+    "id": 7,
+    "username": "aniketyt996",
+    "gamemode": "crystal",
+    "tier": "HT5",
+    "points": 20,
+    "region": "IN",
+    "rank": 7,
+    "skinUrl": "https://mc-heads.net/avatar/aniketyt996/64",
+    "customSkinUrl": null,
+    "createdAt": "2026-04-15T03:43:03.985Z",
+    "updatedAt": "2026-04-15T03:43:03.985Z"
+  }
+]

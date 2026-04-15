@@ -1,0 +1,67 @@
+[
+  {
+    "id": 1,
+    "username": "ItsNishu",
+    "gamemode": "axe",
+    "tier": "HT1",
+    "points": 80,
+    "region": "IN",
+    "rank": 1,
+    "skinUrl": "https://mc-heads.net/avatar/ItsNishu/64",
+    "customSkinUrl": null,
+    "createdAt": "2026-04-15T03:43:03.858Z",
+    "updatedAt": "2026-04-15T03:43:03.858Z"
+  },
+  {
+    "id": 2,
+    "username": "yashbrooo",
+    "gamemode": "axe",
+    "tier": "LT4",
+    "points": 40,
+    "region": "AS",
+    "rank": 2,
+    "skinUrl": "https://mc-heads.net/avatar/yashbrooo/64",
+    "customSkinUrl": null,
+    "createdAt": "2026-04-15T03:43:03.864Z",
+    "updatedAt": "2026-04-15T03:43:03.864Z"
+  },
+  {
+    "id": 3,
+    "username": "Ultima_Ninja",
+    "gamemode": "axe",
+    "tier": "LT3",
+    "points": 40,
+    "region": "IN",
+    "rank": 3,
+    "skinUrl": "https://mc-heads.net/avatar/Ultima_Ninja/64",
+    "customSkinUrl": null,
+    "createdAt": "2026-04-15T03:43:03.869Z",
+    "updatedAt": "2026-04-15T03:43:03.869Z"
+  },
+  {
+    "id": 4,
+    "username": "SpiderXAnshu",
+    "gamemode": "axe",
+    "tier": "LT4",
+    "points": 25,
+    "region": "IN",
+    "rank": 4,
+    "skinUrl": "https://mc-heads.net/avatar/SpiderXAnshu/64",
+    "customSkinUrl": null,
+    "createdAt": "2026-04-15T03:43:03.874Z",
+    "updatedAt": "2026-04-15T03:43:03.874Z"
+  },
+  {
+    "id": 5,
+    "username": "Awalnoor",
+    "gamemode": "axe",
+    "tier": "HT5",
+    "points": 20,
+    "region": "NA",
+    "rank": 5,
+    "skinUrl": "https://mc-heads.net/avatar/Awalnoor/64",
+    "customSkinUrl": null,
+    "createdAt": "2026-04-15T03:43:03.879Z",
+    "updatedAt": "2026-04-15T03:43:03.879Z"
+  }
+]

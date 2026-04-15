@@ -1,0 +1,80 @@
+[
+  {
+    "id": 1,
+    "username": "ItsNishu",
+    "gamemode": "uhc",
+    "tier": "LT3",
+    "points": 50,
+    "region": "IN",
+    "rank": 1,
+    "skinUrl": "https://mc-heads.net/avatar/ItsNishu/64",
+    "customSkinUrl": null,
+    "createdAt": "2026-04-15T03:43:03.735Z",
+    "updatedAt": "2026-04-15T03:43:03.735Z"
+  },
+  {
+    "id": 2,
+    "username": "yashbrooo",
+    "gamemode": "uhc",
+    "tier": "LT3",
+    "points": 45,
+    "region": "AS",
+    "rank": 2,
+    "skinUrl": "https://mc-heads.net/avatar/yashbrooo/64",
+    "customSkinUrl": null,
+    "createdAt": "2026-04-15T03:43:03.740Z",
+    "updatedAt": "2026-04-15T03:43:03.740Z"
+  },
+  {
+    "id": 3,
+    "username": "Peaceplsyz",
+    "gamemode": "uhc",
+    "tier": "LT3",
+    "points": 35,
+    "region": "IN",
+    "rank": 3,
+    "skinUrl": "https://mc-heads.net/avatar/Peaceplsyz/64",
+    "customSkinUrl": "_ObvCr4xion",
+    "createdAt": "2026-04-15T03:43:03.745Z",
+    "updatedAt": "2026-04-15T04:45:45.036Z"
+  },
+  {
+    "id": 4,
+    "username": "ERRORzGAMING",
+    "gamemode": "uhc",
+    "tier": "HT4",
+    "points": 30,
+    "region": "NA",
+    "rank": 4,
+    "skinUrl": "https://mc-heads.net/avatar/ERRORzGAMING/64",
+    "customSkinUrl": null,
+    "createdAt": "2026-04-15T03:43:03.752Z",
+    "updatedAt": "2026-04-15T03:43:03.752Z"
+  },
+  {
+    "id": 5,
+    "username": "vdotgaming07",
+    "gamemode": "uhc",
+    "tier": "HT5",
+    "points": 24,
+    "region": "IN",
+    "rank": 5,
+    "skinUrl": "https://mc-heads.net/avatar/vdotgaming07/64",
+    "customSkinUrl": null,
+    "createdAt": "2026-04-15T03:43:03.757Z",
+    "updatedAt": "2026-04-15T03:43:03.757Z"
+  },
+  {
+    "id": 6,
+    "username": "Pramveer",
+    "gamemode": "uhc",
+    "tier": "LT5",
+    "points": 10,
+    "region": "IN",
+    "rank": 6,
+    "skinUrl": "https://mc-heads.net/avatar/Pramveer/64",
+    "customSkinUrl": null,
+    "createdAt": "2026-04-15T03:43:03.762Z",
+    "updatedAt": "2026-04-15T03:43:03.762Z"
+  }
+]

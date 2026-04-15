@@ -2,10 +2,19 @@ import { useState, useMemo } from "react";
 import { Layout } from "@/components/layout";
 import { PlayerRow } from "@/components/player-row";
 import { GamemodeTierBadge, GamemodeIcon, getRankTitleFromPoints, getRankTitleColorFromPoints, getRankTitleStyle, handleSkinError, TIERS, TIER_ORDER, TierBadge } from "@/components/ui-elements";
-import { useListPlayers } from "@workspace/api-client-react";
-import { useQueries } from "@tanstack/react-query";
+import { useQueries, useQuery } from "@tanstack/react-query";
 import { Search, ChevronUp, ChevronDown, Minus } from "lucide-react";
 import { Link } from "wouter";
+
+async function fetchGamemodePlayers(gm: string): Promise<any[]> {
+  try {
+    const res = await fetch(`${import.meta.env.BASE_URL}data/${gm}.json`);
+    if (res.ok) return res.json();
+  } catch {}
+  const res = await fetch(`/api/players?gamemode=${gm}&limit=200`);
+  if (!res.ok) throw new Error("Failed");
+  return res.json();
+}
 
 type SortKey = "rank" | "username" | "tier" | "points";
 
@@ -62,11 +71,7 @@ function OverallLeaderboard() {
   const results = useQueries({
     queries: RANKED_GAMEMODES.map((gm) => ({
       queryKey: ["players", gm],
-      queryFn: async () => {
-        const res = await fetch(`/api/players?gamemode=${gm}&limit=200`);
-        if (!res.ok) throw new Error("Failed");
-        return res.json() as Promise<any[]>;
-      },
+      queryFn: () => fetchGamemodePlayers(gm),
       staleTime: 30_000,
     })),
   });
@@ -228,10 +233,12 @@ export default function Leaderboard({ gamemode = "overall" }: LeaderboardProps) 
   const [sortKey, setSortKey] = useState<SortKey>("rank");
   const [sortDir, setSortDir] = useState<"asc" | "desc">("asc");
 
-  const { data: players = [], isLoading, error } = useListPlayers(
-    { gamemode, limit: "100" },
-    { query: { queryKey: ["players", gamemode], refetchOnWindowFocus: false } }
-  );
+  const { data: players = [], isLoading, error } = useQuery({
+    queryKey: ["players", gamemode],
+    queryFn: () => fetchGamemodePlayers(gamemode),
+    refetchOnWindowFocus: false,
+    staleTime: 30_000,
+  });
 
   const meta = GAMEMODE_META[gamemode] ?? { label: gamemode, color: "#6b7280" };
 
