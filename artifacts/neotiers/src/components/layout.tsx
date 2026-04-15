@@ -6,16 +6,16 @@ import { motion, AnimatePresence } from "framer-motion";
 import { GAMEMODE_ICONS } from "./ui-elements";
 
 const GAMEMODE_NAV = [
-  { href: "/leaderboard", label: "Overall",   gm: "overall",  tabImg: "/icon-tab-overall.png" },
-  { href: "/uhc",         label: "UHC",       gm: "uhc",      tabImg: "/icon-tab-uhc.png" },
-  { href: "/nethpot",     label: "NethPot",   gm: "nethpot",  tabImg: "/icon-tab-nethpot.png" },
-  { href: "/smp",         label: "SMP",       gm: "smp",      tabImg: "/icon-tab-smp.png" },
-  { href: "/axe",         label: "Axe",       gm: "axe",      tabImg: "/icon-tab-axe.png" },
-  { href: "/mace",        label: "Mace",      gm: "mace",     tabImg: "/icon-tab-mace.png" },
+  { href: "/leaderboard", label: "Overall",   gm: "overall",  tabImg: null },
+  { href: "/uhc",         label: "UHC",       gm: "uhc",      tabImg: null },
+  { href: "/nethpot",     label: "NethPot",   gm: "nethpot",  tabImg: null },
+  { href: "/smp",         label: "SMP",       gm: "smp",      tabImg: null },
+  { href: "/axe",         label: "Axe",       gm: "axe",      tabImg: null },
+  { href: "/mace",        label: "Mace",      gm: "mace",     tabImg: null },
   { href: "/spear",       label: "Spear",     gm: "spear",    tabImg: null },
   { href: "/lifesteal",   label: "Lifesteal", gm: "lifesteal",tabImg: null },
   { href: "/crystal",     label: "Crystal",   gm: "crystal",  tabImg: null },
-  { href: "/sword",       label: "Sword",     gm: "sword",    tabImg: "/icon-tab-sword.png" },
+  { href: "/sword",       label: "Sword",     gm: "sword",    tabImg: null },
 ];
 
 function TabIcon({ tabImg, gm, active }: { tabImg: string | null; gm: string; active: boolean }) {

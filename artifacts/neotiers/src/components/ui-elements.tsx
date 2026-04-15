@@ -30,12 +30,12 @@ export const TIER_COLORS: Record<string, string> = {
 
 export const GAMEMODE_ICONS: Record<string, { src: string; color: string }> = {
   overall:   { src: "/icon-trophy.png",                                                               color: "#FFD700" },
-  uhc:       { src: "https://minecraft.wiki/w/Special:FilePath/Invicon_Heart_of_the_Sea.png",        color: "#f43f5e" },
+  uhc:       { src: "https://minecraft.wiki/w/Special:FilePath/Invicon_Enchanted_Golden_Apple.png",   color: "#f59e0b" },
   nethpot:   { src: "https://minecraft.wiki/w/Special:FilePath/Invicon_Splash_Potion.png",            color: "#a855f7" },
-  smp:       { src: "https://minecraft.wiki/w/Special:FilePath/Invicon_Eye_of_Ender.png",             color: "#14b8a6" },
+  smp:       { src: "https://minecraft.wiki/w/Special:FilePath/Invicon_Shield.png",                   color: "#3b82f6" },
   axe:       { src: "https://minecraft.wiki/w/Special:FilePath/Invicon_Diamond_Axe.png",              color: "#f97316" },
   mace:      { src: "https://minecraft.wiki/w/Special:FilePath/Invicon_Mace.png",                     color: "#eab308" },
-  spear:     { src: "https://minecraft.wiki/w/Special:FilePath/Invicon_Trident.png",                  color: "#22c55e" },
+  spear:     { src: "/icon-spear.png",                                                                color: "#22c55e" },
   lifesteal: { src: "/icon-heart.png",                                                                color: "#ec4899" },
   crystal:   { src: "https://minecraft.wiki/w/Special:FilePath/Invicon_End_Crystal.png",              color: "#06b6d4" },
   sword:     { src: "https://minecraft.wiki/w/Special:FilePath/Invicon_Diamond_Sword.png",            color: "#ef4444" },
