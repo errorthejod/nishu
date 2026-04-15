@@ -1,7 +1,7 @@
 import { useState, useMemo } from "react";
 import { Layout } from "@/components/layout";
 import { PlayerRow } from "@/components/player-row";
-import { TierBadge, GamemodeTierBadge, GamemodeIcon, getRankTitle, getRankTitleColor, getRankTitleFromPoints, getRankTitleColorFromPoints, getRankTitleStyle, handleSkinError, TIERS, TIER_ORDER } from "@/components/ui-elements";
+import { GamemodeTierBadge, GamemodeIcon, getRankTitleFromPoints, getRankTitleColorFromPoints, getRankTitleStyle, handleSkinError, TIERS, TIER_ORDER, TierBadge } from "@/components/ui-elements";
 import { useListPlayers } from "@workspace/api-client-react";
 import { useQueries } from "@tanstack/react-query";
 import { Search, ChevronUp, ChevronDown, Minus } from "lucide-react";
@@ -19,24 +19,43 @@ function getSkinUrl(player: { username: string; customSkinUrl?: string | null },
 }
 
 export const GAMEMODE_META: Record<string, { label: string; color: string }> = {
-  overall:   { label: "Overall",    color: "#FFD700" },
-  uhc:       { label: "UHC",        color: "#f59e0b" },
-  nethpot:   { label: "NethPot",    color: "#a855f7" },
-  smp:       { label: "SMP",        color: "#3b82f6" },
-  axe:       { label: "Axe",        color: "#f97316" },
-  mace:      { label: "Mace",       color: "#eab308" },
-  spear:     { label: "Spear",      color: "#22c55e" },
-  lifesteal: { label: "Lifesteal",  color: "#ec4899" },
-  crystal:   { label: "Crystal",    color: "#06b6d4" },
-  sword:     { label: "Sword",      color: "#ef4444" },
+  overall:   { label: "Overall",   color: "#FFD700" },
+  uhc:       { label: "UHC",       color: "#f43f5e" },
+  nethpot:   { label: "NethPot",   color: "#a855f7" },
+  smp:       { label: "SMP",       color: "#14b8a6" },
+  axe:       { label: "Axe",       color: "#f97316" },
+  mace:      { label: "Mace",      color: "#eab308" },
+  spear:     { label: "Spear",     color: "#22c55e" },
+  lifesteal: { label: "Lifesteal", color: "#ec4899" },
+  crystal:   { label: "Crystal",   color: "#06b6d4" },
+  sword:     { label: "Sword",     color: "#ef4444" },
 };
 
-export const COL_WIDTHS = "52px 100px 1fr 90px 110px 72px 80px";
+export const COL_WIDTHS = "48px 80px 1fr 72px 96px 56px 72px";
 const RANKED_GAMEMODES = ["uhc", "nethpot", "smp", "axe", "mace", "spear", "lifesteal", "crystal", "sword"] as const;
 
 interface LeaderboardProps { gamemode?: string; }
 
-// ─── Overall (MCTiers-style) ────────────────────────────────────────────────
+function RegionBadge({ region }: { region: string }) {
+  const upper = (region || "NA").toUpperCase();
+  const colors: Record<string, { bg: string; text: string }> = {
+    NA: { bg: "#1e40af", text: "#93c5fd" },
+    EU: { bg: "#14532d", text: "#86efac" },
+    AS: { bg: "#7c3aed", text: "#c4b5fd" },
+    OC: { bg: "#0e4f7c", text: "#7dd3fc" },
+    IN: { bg: "#7c2d12", text: "#fdba74" },
+    SA: { bg: "#065f46", text: "#6ee7b7" },
+  };
+  const c = colors[upper] ?? { bg: "#1e2235", text: "#9ca3af" };
+  return (
+    <span style={{
+      fontSize: 10, fontWeight: 700, padding: "2px 6px", borderRadius: 4,
+      background: c.bg, color: c.text, display: "inline-block", letterSpacing: "0.05em",
+    }}>{upper}</span>
+  );
+}
+
+// ─── Overall (MCTiers-style) ─────────────────────────────────────────────────
 function OverallLeaderboard() {
   const [search, setSearch] = useState("");
 
@@ -75,156 +94,118 @@ function OverallLeaderboard() {
   const isLoading = results.some((r) => r.isLoading);
   const filtered = merged.filter((p) => p.username.toLowerCase().includes(search.toLowerCase()));
 
-  const top3 = merged.slice(0, 3);
-  const podiumOrder = top3.length >= 3 ? [top3[1], top3[0], top3[2]] : top3;
+  const rankBg = (rank: number) => {
+    if (rank === 1) return "linear-gradient(to right, rgba(255,215,0,0.10) 0%, transparent 70%)";
+    if (rank === 2) return "linear-gradient(to right, rgba(192,192,192,0.08) 0%, transparent 70%)";
+    if (rank === 3) return "linear-gradient(to right, rgba(205,127,50,0.10) 0%, transparent 70%)";
+    return undefined;
+  };
 
   return (
     <Layout>
-      <div className="max-w-7xl mx-auto px-3 py-6">
-        {/* Header */}
-        <div className="flex flex-col sm:flex-row sm:items-center gap-3 mb-5">
-          <div className="flex items-center gap-3">
-            <GamemodeIcon gamemode="overall" size="lg" active />
+      <div style={{ maxWidth: 1280, margin: "0 auto", padding: "20px 16px" }}>
+        {/* Header bar */}
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 16, flexWrap: "wrap", gap: 10 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+            <GamemodeIcon gamemode="overall" size="md" active />
             <div>
-              <h1 className="text-xl font-bold text-white flex items-center gap-2">
+              <h1 style={{ fontSize: 16, fontWeight: 700, color: "#fff", margin: 0 }}>
                 Overall Rankings
-                <span className="text-xs font-normal text-[#6b7280] bg-[#1e2130] px-2 py-0.5 rounded">Season 1</span>
+                <span style={{ fontSize: 11, fontWeight: 400, color: "#6b7280", background: "#1a1d2e", border: "1px solid #2a2f48", borderRadius: 4, padding: "1px 6px", marginLeft: 8 }}>Season 1</span>
               </h1>
-              <p className="text-xs text-[#6b7280]">Global rankings across all gamemodes · Top 100</p>
+              <p style={{ fontSize: 11, color: "#6b7280", margin: 0 }}>Global rankings across all gamemodes · Top 100</p>
             </div>
           </div>
-          <div className="sm:ml-auto relative">
-            <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-[#6b7280]" />
+          <div style={{ position: "relative" }}>
+            <Search style={{ position: "absolute", left: 9, top: "50%", transform: "translateY(-50%)", width: 13, height: 13, color: "#6b7280" }} />
             <input
               type="text"
               placeholder="Search player..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="pl-8 pr-3 py-1.5 text-sm bg-[#1e2130] border border-[#2a2f42] rounded text-white placeholder-[#6b7280] focus:outline-none focus:border-primary w-52"
+              style={{ paddingLeft: 28, paddingRight: 10, paddingTop: 6, paddingBottom: 6, fontSize: 12, background: "#1a1d2e", border: "1px solid #2a2f48", borderRadius: 6, color: "#fff", outline: "none", width: 200 }}
             />
           </div>
         </div>
 
-        {/* Podium Top 3 */}
-        {!isLoading && top3.length === 3 && (
-          <div className="flex items-end justify-center gap-3 mb-8">
-            {podiumOrder.map((player) => {
-              const isFirst = player.rank === 1;
-              const podiumHeight = player.rank === 1 ? "h-36" : player.rank === 2 ? "h-28" : "h-24";
-              const title = getRankTitleFromPoints(player.totalPoints);
-              const titleColor = getRankTitleColorFromPoints(player.totalPoints);
-              return (
-                <Link key={player.username} href={`/player/${player.username}`} className="flex-1 max-w-[200px]">
-                  <div className={`flex flex-col items-center bg-[#0d0f14] border rounded-lg ${isFirst ? "border-yellow-500/50 shadow-[0_0_20px_rgba(255,215,0,0.15)]" : "border-[#1e2130]"} p-3 cursor-pointer hover:bg-[#1a1d27] transition-all`}>
-                    <img
-                      src={getSkinUrl(player, 200)}
-                      alt={player.username}
-                      className={`${isFirst ? "w-28 h-28" : "w-20 h-20"} object-contain drop-shadow-xl`}
-                      style={{ imageRendering: "pixelated" }}
-                      onError={(e) => handleSkinError(e, player.username, 200)}
-                    />
-                    <span className={`text-lg mt-1 font-black ${isFirst ? "text-yellow-400" : player.rank === 2 ? "text-slate-300" : "text-amber-600"}`}>
-                      #{player.rank}
-                    </span>
-                    <p className="font-bold text-sm text-white mt-0.5 truncate max-w-full">{player.username}</p>
-                    <p className="text-[10px] mt-0.5" style={{ color: titleColor, ...getRankTitleStyle(title) }}>{title}</p>
-                    <div className={`${podiumHeight} w-full rounded-b-md mt-2 flex flex-col items-center justify-end pb-2 gap-1`}
-                      style={{ background: isFirst ? "linear-gradient(to top, rgba(255,215,0,0.15), transparent)" : "linear-gradient(to top, rgba(255,255,255,0.04), transparent)" }}>
-                      <p className="text-white font-bold text-sm">{player.totalPoints.toLocaleString()}</p>
-                      <p className="text-[#6b7280] text-[10px]">points</p>
-                    </div>
-                  </div>
-                </Link>
-              );
-            })}
-          </div>
-        )}
-
-        {/* MCTiers Wide Table */}
-        <div className="rounded-lg border border-[#1e2130] overflow-hidden bg-[#0d0f14] overflow-x-auto">
-          <table className="w-full min-w-[960px] text-sm border-collapse">
+        {/* Table */}
+        <div style={{ borderRadius: 8, border: "1px solid #1e2235", overflow: "hidden", background: "#131520", overflowX: "auto" }}>
+          <table style={{ width: "100%", minWidth: 900, borderCollapse: "collapse", fontSize: 13 }}>
             <thead>
-              <tr className="border-b border-[#1e2130] text-[11px] font-semibold uppercase tracking-wider text-[#6b7280] h-10">
-                <th className="px-3 text-left w-10">#</th>
-                <th className="px-2 w-24" />
-                <th className="px-3 text-left min-w-[140px]">Player</th>
-                <th className="px-2 text-center w-16">Region</th>
+              <tr style={{ borderBottom: "1px solid #1e2235" }}>
+                <th style={{ width: 44, padding: "10px 12px", textAlign: "left", fontSize: 10, fontWeight: 600, color: "#6b7280", letterSpacing: "0.08em", textTransform: "uppercase" }}>#</th>
+                <th style={{ width: 52 }} />
+                <th style={{ padding: "10px 12px", textAlign: "left", fontSize: 10, fontWeight: 600, color: "#6b7280", letterSpacing: "0.08em", textTransform: "uppercase" }}>Player</th>
+                <th style={{ width: 64, padding: "10px 8px", textAlign: "center", fontSize: 10, fontWeight: 600, color: "#6b7280", letterSpacing: "0.08em", textTransform: "uppercase" }}>Region</th>
                 {RANKED_GAMEMODES.map((gm) => (
-                  <th key={gm} className="px-2 text-center w-20">
-                    <span className="flex flex-col items-center gap-0.5">
+                  <th key={gm} style={{ width: 56, padding: "8px 4px", textAlign: "center" }}>
+                    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 2 }}>
                       <GamemodeIcon gamemode={gm} size="sm" />
-                      <span className="text-[9px] uppercase tracking-wide">{GAMEMODE_META[gm]?.label}</span>
-                    </span>
+                      <span style={{ fontSize: 9, color: "#6b7280", textTransform: "uppercase", letterSpacing: "0.05em" }}>{GAMEMODE_META[gm]?.label.slice(0, 4)}</span>
+                    </div>
                   </th>
                 ))}
-                <th className="px-3 text-right w-24">Points</th>
+                <th style={{ width: 72, padding: "10px 12px", textAlign: "right", fontSize: 10, fontWeight: 600, color: "#6b7280", letterSpacing: "0.08em", textTransform: "uppercase" }}>Pts</th>
               </tr>
             </thead>
             <tbody>
               {isLoading ? (
-                <tr><td colSpan={13} className="text-center py-12 text-[#6b7280]">Loading rankings...</td></tr>
+                <tr><td colSpan={13} style={{ textAlign: "center", padding: "40px 0", color: "#6b7280", fontSize: 13 }}>Loading rankings…</td></tr>
               ) : filtered.length === 0 ? (
-                <tr><td colSpan={13} className="text-center py-12 text-[#6b7280]">No players found</td></tr>
+                <tr><td colSpan={13} style={{ textAlign: "center", padding: "40px 0", color: "#6b7280", fontSize: 13 }}>No players found</td></tr>
               ) : filtered.map((player) => {
                 const title = getRankTitleFromPoints(player.totalPoints);
                 const titleColor = getRankTitleColorFromPoints(player.totalPoints);
-                const rowBg = player.rank === 1
-                  ? "linear-gradient(to right, rgba(255,215,0,0.13) 0%, rgba(255,215,0,0.04) 50%, transparent 100%)"
-                  : player.rank === 2
-                  ? "linear-gradient(to right, rgba(192,192,192,0.10) 0%, rgba(192,192,192,0.03) 50%, transparent 100%)"
-                  : player.rank === 3
-                  ? "linear-gradient(to right, rgba(205,127,50,0.13) 0%, rgba(205,127,50,0.04) 50%, transparent 100%)"
-                  : undefined;
-                const leftBorder = player.rank === 1 ? "3px solid rgba(255,215,0,0.5)"
-                  : player.rank === 2 ? "3px solid rgba(192,192,192,0.35)"
-                  : player.rank === 3 ? "3px solid rgba(205,127,50,0.45)"
-                  : undefined;
                 return (
                   <tr
                     key={player.username}
-                    className="border-b border-[#1e2130] cursor-pointer transition-colors hover:brightness-110"
-                    style={{ background: rowBg, borderLeft: leftBorder }}
+                    style={{ background: rankBg(player.rank), borderBottom: "1px solid #1a1d2e", cursor: "pointer" }}
                     onClick={() => window.location.href = `/player/${player.username}`}
+                    onMouseEnter={(e) => (e.currentTarget.style.background = "rgba(255,255,255,0.03)")}
+                    onMouseLeave={(e) => (e.currentTarget.style.background = rankBg(player.rank) ?? "")}
                   >
-                    <td className="px-3 py-2">
+                    {/* Rank */}
+                    <td style={{ padding: "8px 12px" }}>
                       {player.rank === 1 ? (
-                        <span className="inline-flex items-center justify-center w-7 h-7 rounded-md font-black text-sm text-black" style={{ background: "linear-gradient(135deg,#FFD700,#FFA500)" }}>1</span>
+                        <span style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", width: 26, height: 26, borderRadius: 6, fontWeight: 900, fontSize: 13, color: "#000", background: "linear-gradient(135deg,#FFD700,#FFA500)" }}>1</span>
                       ) : player.rank === 2 ? (
-                        <span className="inline-flex items-center justify-center w-7 h-7 rounded-md font-black text-sm text-black" style={{ background: "linear-gradient(135deg,#E8E8E8,#A0A0A0)" }}>2</span>
+                        <span style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", width: 26, height: 26, borderRadius: 6, fontWeight: 900, fontSize: 13, color: "#000", background: "linear-gradient(135deg,#E8E8E8,#A0A0A0)" }}>2</span>
                       ) : player.rank === 3 ? (
-                        <span className="inline-flex items-center justify-center w-7 h-7 rounded-md font-black text-sm text-black" style={{ background: "linear-gradient(135deg,#CD7F32,#8B4513)" }}>3</span>
+                        <span style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", width: 26, height: 26, borderRadius: 6, fontWeight: 900, fontSize: 13, color: "#fff", background: "linear-gradient(135deg,#CD7F32,#7a4010)" }}>3</span>
                       ) : (
-                        <span className="text-[#6b7280] font-mono text-xs">#{player.rank}</span>
+                        <span style={{ color: "#6b7280", fontSize: 12, fontFamily: "monospace" }}>#{player.rank}</span>
                       )}
                     </td>
-                    <td className="px-2 py-1">
+                    {/* Skin */}
+                    <td style={{ padding: "4px 6px" }}>
                       <img
-                        src={getSkinUrl(player, player.rank <= 3 ? 128 : 112)}
+                        src={getSkinUrl(player, 64)}
                         alt={player.username}
-                        className={`${player.rank <= 3 ? "w-24 h-24" : "w-20 h-20"} object-contain`}
-                        style={{ imageRendering: "pixelated" }}
-                        onError={(e) => handleSkinError(e, player.username, player.rank <= 3 ? 128 : 112)}
+                        style={{ width: 40, height: 40, objectFit: "contain", imageRendering: "pixelated", display: "block" }}
+                        onError={(e) => handleSkinError(e, player.username, 64)}
                       />
                     </td>
-                    <td className="px-3 py-2">
-                      <p className="font-semibold text-white">{player.username}</p>
-                      <p className="text-[10px]" style={{ color: titleColor, ...getRankTitleStyle(title) }}>{title}</p>
+                    {/* Name */}
+                    <td style={{ padding: "8px 12px" }}>
+                      <p style={{ fontWeight: 600, color: "#fff", margin: 0, fontSize: 13 }}>{player.username}</p>
+                      <p style={{ fontSize: 10, margin: 0, ...getRankTitleStyle(title), color: titleColor }}>{title}</p>
                     </td>
-                    <td className="px-2 py-2 text-center">
-                      <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-[#1e2130] border border-[#2a2f42] text-white">
-                        {player.region || "NA"}
-                      </span>
+                    {/* Region */}
+                    <td style={{ padding: "8px", textAlign: "center" }}>
+                      <RegionBadge region={player.region} />
                     </td>
+                    {/* Per-gamemode tiers */}
                     {RANKED_GAMEMODES.map((gm) => (
-                      <td key={gm} className="px-2 py-2 text-center">
+                      <td key={gm} style={{ padding: "8px 4px", textAlign: "center" }}>
                         {player.tiers[gm] ? (
                           <GamemodeTierBadge gamemode={gm} tier={player.tiers[gm]} />
                         ) : (
-                          <span className="text-[#374151] text-xs">—</span>
+                          <span style={{ color: "#374151", fontSize: 11 }}>—</span>
                         )}
                       </td>
                     ))}
-                    <td className="px-3 py-2 text-right font-bold text-white tabular-nums">
+                    {/* Points */}
+                    <td style={{ padding: "8px 12px", textAlign: "right", fontWeight: 700, color: "#fff", fontVariantNumeric: "tabular-nums", fontSize: 13 }}>
                       {player.totalPoints.toLocaleString()}
                     </td>
                   </tr>
@@ -238,7 +219,7 @@ function OverallLeaderboard() {
   );
 }
 
-// ─── Regular Gamemode Leaderboard ───────────────────────────────────────────
+// ─── Regular Gamemode Leaderboard ────────────────────────────────────────────
 export default function Leaderboard({ gamemode = "overall" }: LeaderboardProps) {
   if (gamemode === "overall") return <OverallLeaderboard />;
 
@@ -257,8 +238,7 @@ export default function Leaderboard({ gamemode = "overall" }: LeaderboardProps) 
   const filtered = players.filter((p) => {
     const matchesSearch =
       p.username.toLowerCase().includes(search.toLowerCase()) ||
-      p.tier.toLowerCase().includes(search.toLowerCase()) ||
-      (p.gamemode ?? "").toLowerCase().includes(search.toLowerCase());
+      p.tier.toLowerCase().includes(search.toLowerCase());
     const matchesTier = tierFilter === "all" || p.tier.toUpperCase() === tierFilter;
     return matchesSearch && matchesTier;
   });
@@ -278,111 +258,70 @@ export default function Leaderboard({ gamemode = "overall" }: LeaderboardProps) 
   });
 
   function SortIcon({ col }: { col: SortKey }) {
-    if (sortKey !== col) return <Minus className="w-3 h-3 opacity-30 ml-0.5" />;
+    if (sortKey !== col) return <Minus style={{ width: 12, height: 12, opacity: 0.3, marginLeft: 3 }} />;
     return sortDir === "asc"
-      ? <ChevronUp className="w-3 h-3 ml-0.5" style={{ color: meta.color }} />
-      : <ChevronDown className="w-3 h-3 ml-0.5" style={{ color: meta.color }} />;
+      ? <ChevronUp style={{ width: 12, height: 12, marginLeft: 3, color: meta.color }} />
+      : <ChevronDown style={{ width: 12, height: 12, marginLeft: 3, color: meta.color }} />;
   }
-
-  const top3 = [...players].sort((a, b) => (a.rank ?? 99) - (b.rank ?? 99)).slice(0, 3);
-  const podiumOrder = top3.length === 3 ? [top3[1], top3[0], top3[2]] : top3;
 
   return (
     <Layout>
-      <div className="max-w-5xl mx-auto px-3 py-6">
+      <div style={{ maxWidth: 1100, margin: "0 auto", padding: "20px 16px" }}>
         {/* Header */}
-        <div className="flex flex-col sm:flex-row sm:items-center gap-3 mb-4">
-          <div className="flex items-center gap-3">
-            <GamemodeIcon gamemode={gamemode} size="lg" active />
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 14, flexWrap: "wrap", gap: 10 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+            <GamemodeIcon gamemode={gamemode} size="md" active />
             <div>
-              <h1 className="text-xl font-bold text-white flex items-center gap-2">
+              <h1 style={{ fontSize: 16, fontWeight: 700, color: "#fff", margin: 0 }}>
                 {meta.label}
-                <span className="text-xs font-normal text-[#6b7280] bg-[#1e2130] px-2 py-0.5 rounded">Season 1</span>
-                <span className="text-xs font-normal text-[#6b7280] bg-[#1e2130] px-2 py-0.5 rounded">Top {players.length}</span>
+                <span style={{ fontSize: 11, fontWeight: 400, color: "#6b7280", background: "#1a1d2e", border: "1px solid #2a2f48", borderRadius: 4, padding: "1px 6px", marginLeft: 8 }}>Season 1</span>
               </h1>
-              <p className="text-xs text-[#6b7280]">Ranked by points · Top 50 players</p>
+              <p style={{ fontSize: 11, color: "#6b7280", margin: 0 }}>Top {players.length} ranked players</p>
             </div>
           </div>
-          <div className="sm:ml-auto relative">
-            <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-[#6b7280]" />
+          <div style={{ position: "relative" }}>
+            <Search style={{ position: "absolute", left: 9, top: "50%", transform: "translateY(-50%)", width: 13, height: 13, color: "#6b7280" }} />
             <input
               type="text"
-              placeholder="Search username, tier, mode..."
+              placeholder="Search player…"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="pl-8 pr-3 py-1.5 text-sm bg-[#1e2130] border border-[#2a2f42] rounded text-white placeholder-[#6b7280] focus:outline-none focus:border-primary w-56"
+              style={{ paddingLeft: 28, paddingRight: 10, paddingTop: 6, paddingBottom: 6, fontSize: 12, background: "#1a1d2e", border: "1px solid #2a2f48", borderRadius: 6, color: "#fff", outline: "none", width: 200 }}
             />
           </div>
         </div>
 
-        {/* Tier Filter Buttons */}
-        <div className="flex flex-wrap gap-1.5 mb-4">
+        {/* Tier filter */}
+        <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginBottom: 14 }}>
           <button
             onClick={() => setTierFilter("all")}
-            className={`px-2.5 py-1 text-xs font-semibold rounded transition-colors ${tierFilter === "all" ? "bg-white text-black" : "bg-[#1e2130] text-[#9ca3af] border border-[#2a2f42] hover:text-white"}`}
+            style={{ padding: "3px 10px", fontSize: 11, fontWeight: 600, borderRadius: 4, border: "none", cursor: "pointer", background: tierFilter === "all" ? "#fff" : "#1a1d2e", color: tierFilter === "all" ? "#000" : "#9ca3af" }}
           >All</button>
           {TIERS.map((t) => (
-            <button
-              key={t}
-              onClick={() => setTierFilter(tierFilter === t ? "all" : t)}
-              className={`px-2.5 py-1 text-xs font-bold rounded transition-all ${tierFilter === t ? "ring-2 ring-white scale-105" : "hover:scale-105"}`}
-              style={{ background: tierFilter === t ? "white" : undefined }}
-            >
+            <button key={t} onClick={() => setTierFilter(tierFilter === t ? "all" : t)}
+              style={{ padding: "2px 2px", background: "none", border: "none", cursor: "pointer", transform: tierFilter === t ? "scale(1.1)" : "scale(1)", transition: "transform 0.1s" }}>
               <TierBadge tier={t} size="sm" />
             </button>
           ))}
         </div>
 
-        {/* Top 3 Podium */}
-        {!isLoading && top3.length === 3 && tierFilter === "all" && !search && (
-          <div className="flex items-end justify-center gap-3 mb-6">
-            {podiumOrder.map((player) => {
-              const isFirst = player.rank === 1;
-              return (
-                <Link key={player.id} href={`/player/${player.username}`} className="flex-1 max-w-[160px]">
-                  <div className={`flex flex-col items-center bg-[#0d0f14] border rounded-lg ${isFirst ? "border-yellow-500/50 shadow-[0_0_20px_rgba(255,215,0,0.15)]" : "border-[#1e2130]"} p-3 cursor-pointer hover:bg-[#1a1d27] transition-all`}>
-                    <img
-                      src={getSkinUrl(player, 160)}
-                      alt={player.username}
-                      className={`${isFirst ? "w-24 h-24" : "w-16 h-16"} object-contain drop-shadow-xl`}
-                      style={{ imageRendering: "pixelated" }}
-                      onError={(e) => handleSkinError(e, player.username, 160)}
-                    />
-                    <span className={`text-base mt-1 font-black ${isFirst ? "text-yellow-400" : player.rank === 2 ? "text-slate-300" : "text-amber-600"}`}>
-                      #{player.rank}
-                    </span>
-                    <p className="font-bold text-xs text-white mt-0.5 truncate max-w-full">{player.username}</p>
-                    <p className="text-[10px] mt-0.5" style={{ color: getRankTitleColor(player.rank ?? 0) }}>
-                      {getRankTitle(player.rank ?? 0)}
-                    </p>
-                    <div className="mt-1.5 text-center">
-                      <TierBadge tier={player.tier} size="sm" />
-                      <p className="text-white font-bold text-xs mt-1">{player.points.toLocaleString()}</p>
-                    </div>
-                  </div>
-                </Link>
-              );
-            })}
-          </div>
-        )}
-
-        {/* Leaderboard Table */}
-        <div className="rounded-lg border border-[#1e2130] overflow-hidden bg-[#0d0f14]">
-          <div className="grid text-[11px] font-semibold uppercase tracking-wider text-[#6b7280] border-b border-[#1e2130] px-3 h-9 items-center"
-            style={{ gridTemplateColumns: COL_WIDTHS }}>
-            <button onClick={() => handleSort("rank")} className="flex items-center hover:text-white">#<SortIcon col="rank" /></button>
+        {/* Table */}
+        <div style={{ borderRadius: 8, border: "1px solid #1e2235", overflow: "hidden", background: "#131520" }}>
+          {/* Header row */}
+          <div style={{ display: "grid", gridTemplateColumns: COL_WIDTHS, padding: "0 12px", height: 36, alignItems: "center", borderBottom: "1px solid #1e2235" }}>
+            <button onClick={() => handleSort("rank")} style={{ background: "none", border: "none", cursor: "pointer", display: "flex", alignItems: "center", fontSize: 10, fontWeight: 600, color: "#6b7280", letterSpacing: "0.08em", textTransform: "uppercase" }}>#<SortIcon col="rank" /></button>
             <span />
-            <button onClick={() => handleSort("username")} className="flex items-center hover:text-white">Player<SortIcon col="username" /></button>
-            <span className="hidden md:block">Mode</span>
-            <span className="hidden md:block">Weapon</span>
-            <button onClick={() => handleSort("tier")} className="flex items-center justify-center hover:text-white">Tier<SortIcon col="tier" /></button>
-            <button onClick={() => handleSort("points")} className="flex items-center justify-end hover:text-white">Pts<SortIcon col="points" /></button>
+            <button onClick={() => handleSort("username")} style={{ background: "none", border: "none", cursor: "pointer", display: "flex", alignItems: "center", fontSize: 10, fontWeight: 600, color: "#6b7280", letterSpacing: "0.08em", textTransform: "uppercase" }}>Player<SortIcon col="username" /></button>
+            <span style={{ fontSize: 10, fontWeight: 600, color: "#6b7280", letterSpacing: "0.08em", textTransform: "uppercase" }}>Region</span>
+            <span style={{ fontSize: 10, fontWeight: 600, color: "#6b7280", letterSpacing: "0.08em", textTransform: "uppercase" }}>Mode</span>
+            <button onClick={() => handleSort("tier")} style={{ background: "none", border: "none", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 10, fontWeight: 600, color: "#6b7280", letterSpacing: "0.08em", textTransform: "uppercase" }}>Tier<SortIcon col="tier" /></button>
+            <button onClick={() => handleSort("points")} style={{ background: "none", border: "none", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "flex-end", fontSize: 10, fontWeight: 600, color: "#6b7280", letterSpacing: "0.08em", textTransform: "uppercase" }}>Pts<SortIcon col="points" /></button>
           </div>
 
-          {isLoading && <div className="text-center py-16 text-[#6b7280] text-sm">Loading players...</div>}
-          {error && <div className="text-center py-16 text-red-500 text-sm">Failed to load leaderboard</div>}
+          {isLoading && <div style={{ textAlign: "center", padding: "48px 0", color: "#6b7280", fontSize: 13 }}>Loading players…</div>}
+          {error && <div style={{ textAlign: "center", padding: "48px 0", color: "#ef4444", fontSize: 13 }}>Failed to load leaderboard</div>}
           {!isLoading && !error && sorted.length === 0 && (
-            <div className="text-center py-16 text-[#6b7280] text-sm">
+            <div style={{ textAlign: "center", padding: "48px 0", color: "#6b7280", fontSize: 13 }}>
               {search || tierFilter !== "all" ? "No players match your filters" : "No players ranked yet"}
             </div>
           )}
