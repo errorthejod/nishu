@@ -312,8 +312,8 @@ export default function Leaderboard({ gamemode = "overall" }: LeaderboardProps) 
             <button onClick={() => handleSort("rank")} style={{ background: "none", border: "none", cursor: "pointer", display: "flex", alignItems: "center", fontSize: 10, fontWeight: 600, color: "#6b7280", letterSpacing: "0.08em", textTransform: "uppercase" }}>#<SortIcon col="rank" /></button>
             <span />
             <button onClick={() => handleSort("username")} style={{ background: "none", border: "none", cursor: "pointer", display: "flex", alignItems: "center", fontSize: 10, fontWeight: 600, color: "#6b7280", letterSpacing: "0.08em", textTransform: "uppercase" }}>Player<SortIcon col="username" /></button>
-            <span style={{ fontSize: 10, fontWeight: 600, color: "#6b7280", letterSpacing: "0.08em", textTransform: "uppercase" }}>Region</span>
-            <span style={{ fontSize: 10, fontWeight: 600, color: "#6b7280", letterSpacing: "0.08em", textTransform: "uppercase" }}>Mode</span>
+            <span style={{ fontSize: 10, fontWeight: 600, color: "#6b7280", letterSpacing: "0.08em", textTransform: "uppercase", textAlign: "center", display: "block" }}>Region</span>
+            <span style={{ fontSize: 10, fontWeight: 600, color: "#6b7280", letterSpacing: "0.08em", textTransform: "uppercase", textAlign: "center", display: "block" }}>Mode</span>
             <button onClick={() => handleSort("tier")} style={{ background: "none", border: "none", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 10, fontWeight: 600, color: "#6b7280", letterSpacing: "0.08em", textTransform: "uppercase" }}>Tier<SortIcon col="tier" /></button>
             <button onClick={() => handleSort("points")} style={{ background: "none", border: "none", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "flex-end", fontSize: 10, fontWeight: 600, color: "#6b7280", letterSpacing: "0.08em", textTransform: "uppercase" }}>Pts<SortIcon col="points" /></button>
           </div>

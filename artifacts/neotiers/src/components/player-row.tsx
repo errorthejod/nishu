@@ -1,5 +1,5 @@
 import { Player } from "@workspace/api-client-react";
-import { TierBadge, getRankTitle, getRankTitleColor, getRankTitleStyle, handleSkinError } from "./ui-elements";
+import { TierBadge, GamemodeIcon, getRankTitle, getRankTitleColor, getRankTitleStyle, handleSkinError } from "./ui-elements";
 import { Link } from "wouter";
 import { COL_WIDTHS } from "@/pages/leaderboard";
 
@@ -24,7 +24,10 @@ function RegionBadge({ region }: { region?: string }) {
   };
   const c = colors[upper] ?? { bg: "#1e2235", text: "#9ca3af" };
   return (
-    <span style={{ fontSize: 10, fontWeight: 700, padding: "2px 6px", borderRadius: 4, background: c.bg, color: c.text, display: "inline-block", letterSpacing: "0.05em" }}>{upper}</span>
+    <span style={{
+      fontSize: 10, fontWeight: 700, padding: "2px 7px", borderRadius: 4,
+      background: c.bg, color: c.text, display: "inline-block", letterSpacing: "0.05em",
+    }}>{upper}</span>
   );
 }
 
@@ -80,7 +83,9 @@ export function PlayerRow({ player, position, gamemode }: PlayerRowProps) {
         onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.filter = "")}
       >
         {/* Rank */}
-        <div><RankBadge position={position} /></div>
+        <div style={{ display: "flex", alignItems: "center" }}>
+          <RankBadge position={position} />
+        </div>
 
         {/* Skin */}
         <div style={{ display: "flex", alignItems: "center", justifyContent: "center", padding: "4px 0" }}>
@@ -104,23 +109,26 @@ export function PlayerRow({ player, position, gamemode }: PlayerRowProps) {
           )}
         </div>
 
-        {/* Region */}
-        <div><RegionBadge region={(player as any).region} /></div>
+        {/* Region — centered */}
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
+          <RegionBadge region={(player as any).region} />
+        </div>
 
-        {/* Gamemode */}
-        <div style={{ display: "none" }} className="md:block">
-          <span style={{ fontSize: 11, color: "#6b7280", background: "#1a1d2e", borderRadius: 4, padding: "2px 6px" }}>
+        {/* Mode — icon + label, centered */}
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 5 }}>
+          <GamemodeIcon gamemode={displayGamemode} size="sm" active />
+          <span style={{ fontSize: 11, fontWeight: 500, color: "#d1d5db", whiteSpace: "nowrap" }}>
             {GAMEMODE_LABELS[displayGamemode] ?? displayGamemode}
           </span>
         </div>
 
-        {/* Tier */}
-        <div style={{ display: "flex", justifyContent: "center" }}>
+        {/* Tier — centered */}
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
           <TierBadge tier={player.tier} size="sm" />
         </div>
 
-        {/* Points */}
-        <div style={{ textAlign: "right" }}>
+        {/* Points — right aligned */}
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "flex-end" }}>
           <span style={{ fontSize: 13, fontWeight: 700, color: position <= 3 ? "#fff" : "#9ca3af", fontVariantNumeric: "tabular-nums" }}>
             {player.points.toLocaleString()}
           </span>
