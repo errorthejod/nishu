@@ -1,0 +1,249 @@
+Skip to content
+
+AI
+
+Nishu Rank Site
+
+Upgrade
+
+
+Invite
+
+Republish
+
+
+
+
+
+
+Library
+
+File tree
+Search
+
+New
+Apps
+NEOTIERS - Minecraft PvP Rankings
+NEOTIERS - Minecraft PvP Rankings
+Website
+
+
+Agent
+4
+
+Overview
+
+Logs
+
+Analytics
+
+Resources
+
+Domains
+
+Manage
+Search
+
+
+Errors only
+
+Date
+Time
+Deployment
+Source
+Log
+2026-04-15 09:18:55.46
+4611b0c4
+System
+metasidecar: loaded enterprise status from environment is_enterprise=false
+2026-04-15 09:18:56.29
+4611b0c4
+User
+at fileURLToPath (node:internal/url:1611:11)
+2026-04-15 09:18:56.29
+4611b0c4
+User
+at Object..js (node:internal/modules/cjs/loader:1893:10)
+2026-04-15 09:18:56.29
+4611b0c4
+User
+node:internal/url:1611
+2026-04-15 09:18:56.29
+4611b0c4
+User
+at Module._compile (node:internal/modules/cjs/loader:1761:14)
+2026-04-15 09:18:56.29
+4611b0c4
+User
+TypeError [ERR_INVALID_ARG_TYPE]: The "path" argument must be of type string or an instance of URL. Received undefined
+2026-04-15 09:19:55.46
+4611b0c4
+System
+sending SIGTERM to artifact process artifact=artifacts/api-server
+2026-04-15 09:19:55.46
+4611b0c4
+System
+all artifact processes stopped
+2026-04-15 09:19:55.46
+4611b0c4
+System
+not all artifact ports opened within timeout expected=[8080] detected=0
+2026-04-15 09:19:55.46
+4611b0c4
+System
+a port configuration was specified but the required port was never opened
+2026-04-15 09:26:54.45
+c3dd1f2e
+System
+starting up user application
+2026-04-15 09:26:54.45
+c3dd1f2e
+System
+artifact mode enabled runnable=1 static=1
+2026-04-15 09:26:54.45
+c3dd1f2e
+System
+waiting for runnable artifact ports ports=[8080]
+2026-04-15 09:26:54.45
+c3dd1f2e
+System
+metasidecar: loaded enterprise status from environment is_enterprise=false
+2026-04-15 09:26:54.45
+c3dd1f2e
+System
+starting artifact processes for monorepo deployment
+2026-04-15 09:26:54.45
+c3dd1f2e
+System
+forwarding local port 0 to external port 80 (mapped as 1104)
+2026-04-15 09:26:54.45
+c3dd1f2e
+System
+registered static handler for artifact path=/ publicDir=artifacts/neotiers/dist/public
+2026-04-15 09:26:54.46
+c3dd1f2e
+System
+starting artifact processes count=1
+2026-04-15 09:26:54.46
+c3dd1f2e
+System
+starting artifact process port=8080 artifact=artifacts/api-server args=[node artifacts/api-server/dist/index.cjs]
+2026-04-15 09:26:54.48
+c3dd1f2e
+System
+artifact process started artifact=artifacts/api-server pid=19
+2026-04-15 09:26:55.23
+c3dd1f2e
+User
+node:internal/url:1611
+2026-04-15 09:26:55.23
+c3dd1f2e
+User
+^
+2026-04-15 09:26:55.23
+c3dd1f2e
+User
+at node:internal/main/run_main_module:33:47 {
+2026-04-15 09:26:55.23
+c3dd1f2e
+User
+}
+2026-04-15 09:26:55.23
+c3dd1f2e
+User
+TypeError [ERR_INVALID_ARG_TYPE]: The "path" argument must be of type string or an instance of URL. Received undefined
+2026-04-15 09:26:55.23
+c3dd1f2e
+User
+at Object..js (node:internal/modules/cjs/loader:1893:10)
+
+2026-04-15 09:26:55.23
+c3dd1f2e
+User
+code: 'ERR_INVALID_ARG_TYPE'
+2026-04-15 09:26:55.23
+c3dd1f2e
+User
+at Module.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:154:5)
+2026-04-15 09:26:55.23
+c3dd1f2e
+User
+throw new ERR_INVALID_ARG_TYPE('path', ['string', 'URL'], path);
+2026-04-15 09:27:54.45
+c3dd1f2e
+System
+a port configuration was specified but the required port was never opened
+2026-04-15 09:27:54.45
+c3dd1f2e
+System
+not all artifact ports opened within timeout expected=[8080] detected=0
+2026-04-15 09:27:54.45
+c3dd1f2e
+System
+sending SIGTERM to artifact process artifact=artifacts/api-server
+2026-04-15 09:27:54.45
+c3dd1f2e
+System
+all artifact processes stopped
+
+Collapse
+
+Wrap
+
+Colors
+
+Live
+Make build configuration more resilient to missing environment variables
+
+
+fix the site i cannot publish it error and logs
+
+11 minutes ago
+
+3 actions
+The dev servers are all running fine. The issue is likely a build error that only shows up when publishing. Let me check the build configuration.
+
+
+3 actions
+Found it. The vite.config.ts is throwing an error because it requires PORT to be set, but during a production build that variable isn't available. Let me fix it.
+
+
+2 actions
+The config throws an error if PORT or BASE_PATH aren't set, but during a production build those aren't available. I'll make them optional with safe defaults.
+
+
+2 actions
+Now let me verify the build succeeds:
+
+
+2 actions
+The build now completes successfully. The problem was that the config was throwing an error if PORT and BASE_PATH weren't set — which they aren't during a production build. I've updated it to use safe defaults (3000 and /) when those variables are absent, so the build phase works correctly.
+
+You should now be able to publish your site without that error.
+
+
+Planning deployment strategy
+The fix is in place and your site is ready to publish. Click the button above to deploy it!
+
+
+Checkpoint made
+10 minutes ago
+
+Worked for 1 minute
+Want users to get these changes? Republish this App.
+
+Failed
+
+Advanced configuration
+
+Scroll to latest
+
+Make, test, iterate…
+
+
+
+Plan
+
+Economy
+
+Loading... - Replit

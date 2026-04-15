@@ -2,9 +2,6 @@ import { Router, type IRouter } from "express";
 import { db, GAMEMODE_TABLES } from "@workspace/db";
 import { writeFileSync } from "fs";
 import path from "path";
-import { fileURLToPath } from "url";
-
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const router: IRouter = Router();
 
@@ -134,7 +131,7 @@ router.post("/admin/backup/update-seed", async (req, res) => {
     }
     ts += `};\n`;
 
-    const seedPath = path.join(__dirname, "..", "seed-data.ts");
+    const seedPath = path.join(process.cwd(), "artifacts/api-server/src/seed-data.ts");
     writeFileSync(seedPath, ts, "utf-8");
 
     const totalPlayers = Object.values(data).reduce((a, b) => a + b.length, 0);
