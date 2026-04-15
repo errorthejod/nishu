@@ -151,8 +151,8 @@ export function PlayerRow({ player, position, gamemode }: PlayerRowProps) {
           <TierBadge tier={player.tier} size="sm" />
         </div>
 
-        {/* Points — right aligned */}
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "flex-end" }}>
+        {/* Points — centered */}
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
           <span style={{ fontSize: 13, fontWeight: 700, color: position <= 3 ? "#fff" : "#9ca3af", fontVariantNumeric: "tabular-nums" }}>
             {player.points.toLocaleString()}
           </span>

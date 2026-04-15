@@ -205,7 +205,7 @@ function OverallLeaderboard() {
                       </td>
                     ))}
                     {/* Points */}
-                    <td style={{ padding: "8px 12px", textAlign: "right", fontWeight: 700, color: "#fff", fontVariantNumeric: "tabular-nums", fontSize: 13 }}>
+                    <td style={{ padding: "8px 12px", textAlign: "center", fontWeight: 700, color: "#fff", fontVariantNumeric: "tabular-nums", fontSize: 13 }}>
                       {player.totalPoints.toLocaleString()}
                     </td>
                   </tr>
@@ -315,7 +315,7 @@ export default function Leaderboard({ gamemode = "overall" }: LeaderboardProps) 
             <span style={{ fontSize: 10, fontWeight: 600, color: "#6b7280", letterSpacing: "0.08em", textTransform: "uppercase", textAlign: "center", display: "block" }}>Region</span>
             <span style={{ fontSize: 10, fontWeight: 600, color: "#6b7280", letterSpacing: "0.08em", textTransform: "uppercase", textAlign: "center", display: "block" }}>Mode</span>
             <button onClick={() => handleSort("tier")} style={{ background: "none", border: "none", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 10, fontWeight: 600, color: "#6b7280", letterSpacing: "0.08em", textTransform: "uppercase" }}>Tier<SortIcon col="tier" /></button>
-            <button onClick={() => handleSort("points")} style={{ background: "none", border: "none", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "flex-end", width: "100%", fontSize: 10, fontWeight: 600, color: "#6b7280", letterSpacing: "0.08em", textTransform: "uppercase" }}>Pts<SortIcon col="points" /></button>
+            <button onClick={() => handleSort("points")} style={{ background: "none", border: "none", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", width: "100%", fontSize: 10, fontWeight: 600, color: "#6b7280", letterSpacing: "0.08em", textTransform: "uppercase" }}>Pts<SortIcon col="points" /></button>
           </div>
 
           {isLoading && <div style={{ textAlign: "center", padding: "48px 0", color: "#6b7280", fontSize: 13 }}>Loading players…</div>}
