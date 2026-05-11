@@ -1,7 +1,7 @@
 import { useState, useMemo } from "react";
 import { Layout } from "@/components/layout";
 import { PlayerRow } from "@/components/player-row";
-import { GamemodeTierBadge, GamemodeIcon, getRankTitleFromPoints, getRankTitleColorFromPoints, getRankTitleStyle, handleSkinError, TIERS, TIER_ORDER, TierBadge } from "@/components/ui-elements";
+import { GamemodeTierBadge, GamemodeIcon, PlayerSkinViewer, getRankTitleFromPoints, getRankTitleColorFromPoints, getRankTitleStyle, handleSkinError, TIERS, TIER_ORDER, TierBadge } from "@/components/ui-elements";
 import { useQueries, useQuery } from "@tanstack/react-query";
 import { Search, ChevronUp, ChevronDown, Minus } from "lucide-react";
 import { Link } from "wouter";
@@ -17,15 +17,6 @@ async function fetchGamemodePlayers(gm: string): Promise<any[]> {
 }
 
 type SortKey = "rank" | "username" | "tier" | "points";
-
-function getSkinUrl(player: { username: string; customSkinUrl?: string | null }, size: number): string {
-  const custom = player.customSkinUrl;
-  if (custom) {
-    if (custom.startsWith("http")) return custom;
-    return `https://visage.surgeplay.com/bust/${size}/${custom}`;
-  }
-  return `https://visage.surgeplay.com/bust/${size}/${player.username}`;
-}
 
 export const GAMEMODE_META: Record<string, { label: string; color: string }> = {
   overall:   { label: "Overall",   color: "#FFD700" },
@@ -183,11 +174,11 @@ function OverallLeaderboard() {
                     </td>
                     {/* Skin */}
                     <td style={{ padding: "4px 6px" }}>
-                      <img
-                        src={getSkinUrl(player, 64)}
-                        alt={player.username}
-                        style={{ width: 40, height: 40, objectFit: "contain", imageRendering: "pixelated", display: "block" }}
-                        onError={(e) => handleSkinError(e, player.username, 64)}
+                      <PlayerSkinViewer
+                        username={player.username}
+                        customSkinUrl={player.customSkinUrl}
+                        size={40}
+                        cardData={{ points: player.totalPoints, region: player.region }}
                       />
                     </td>
                     {/* Name */}

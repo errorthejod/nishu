@@ -1,4 +1,4 @@
-import React, { ReactNode } from "react";
+import React, { ReactNode, useState, useEffect } from "react";
 
 export const TIERS = ["HT1","HT2","HT3","HT4","HT5","LT1","LT2","LT3","LT4","LT5"] as const;
 export type Tier = typeof TIERS[number];
@@ -339,6 +339,130 @@ export function getRankTitleStyle(title: string): React.CSSProperties {
     fontWeight: 700,
   };
   return {};
+}
+
+const SKIN_POSES = ["default", "walking", "running", "crouching", "ultimate"] as const;
+type SkinPose = typeof SKIN_POSES[number];
+
+export function PlayerSkinViewer({
+  username,
+  customSkinUrl,
+  size = 40,
+  cardData,
+}: {
+  username: string;
+  customSkinUrl?: string | null;
+  size?: number;
+  cardData?: { points?: number; tier?: string; region?: string };
+}) {
+  const [hovered, setHovered] = useState(false);
+  const [poseIdx, setPoseIdx] = useState(0);
+  const [opacity, setOpacity] = useState(1);
+  const [cardPos, setCardPos] = useState({ x: 0, y: 0 });
+
+  const skinIdentifier =
+    customSkinUrl && !customSkinUrl.startsWith("http") ? customSkinUrl : username;
+  const bustUrl =
+    customSkinUrl && customSkinUrl.startsWith("http")
+      ? customSkinUrl
+      : `https://visage.surgeplay.com/bust/128/${skinIdentifier}`;
+  const poseUrl = `https://starlightskins.lunareclipse.studio/render/${SKIN_POSES[poseIdx]}/${skinIdentifier}/full`;
+
+  useEffect(() => {
+    if (!hovered) return;
+    const tick = setInterval(() => {
+      setOpacity(0);
+      setTimeout(() => {
+        setPoseIdx((i) => (i + 1) % SKIN_POSES.length);
+        setOpacity(1);
+      }, 180);
+    }, 900);
+    return () => clearInterval(tick);
+  }, [hovered]);
+
+  const handleMouseEnter = (e: React.MouseEvent<HTMLDivElement>) => {
+    setHovered(true);
+    setPoseIdx(0);
+    setOpacity(1);
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x =
+      rect.right + 10 < window.innerWidth - 175
+        ? rect.right + 10
+        : rect.left - 175;
+    const y = Math.max(10, Math.min(rect.top - 60, window.innerHeight - 330));
+    setCardPos({ x, y });
+  };
+
+  return (
+    <>
+      <div
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={() => setHovered(false)}
+        style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}
+      >
+        <img
+          src={bustUrl}
+          alt={username}
+          style={{ width: size, height: size, objectFit: "contain", imageRendering: "pixelated" }}
+          onError={(e) => handleSkinError(e, username, 128)}
+        />
+      </div>
+
+      {hovered && (
+        <div
+          style={{
+            position: "fixed",
+            left: cardPos.x,
+            top: cardPos.y,
+            zIndex: 99999,
+            background: "linear-gradient(160deg, #0b0e1a 0%, #0f1424 100%)",
+            border: "1px solid #1e2848",
+            borderRadius: 14,
+            padding: "14px 16px 12px",
+            boxShadow: "0 32px 96px rgba(0,0,0,0.95), inset 0 1px 0 rgba(255,255,255,0.04)",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            gap: 7,
+            minWidth: 160,
+            pointerEvents: "none",
+          }}
+        >
+          <div style={{ fontSize: 9, color: "#3d5080", textTransform: "uppercase", letterSpacing: "0.12em", fontWeight: 700 }}>
+            {SKIN_POSES[poseIdx]}
+          </div>
+          <img
+            key={poseIdx}
+            src={poseUrl}
+            alt={`${username} ${SKIN_POSES[poseIdx]}`}
+            style={{
+              width: 120,
+              height: 168,
+              objectFit: "contain",
+              imageRendering: "pixelated",
+              opacity,
+              transition: "opacity 0.18s ease",
+            }}
+            onError={(e) => {
+              (e.currentTarget as HTMLImageElement).src = `https://visage.surgeplay.com/full/256/${skinIdentifier}`;
+            }}
+          />
+          <div style={{ fontWeight: 700, color: "#e5e7eb", fontSize: 13, marginTop: 2 }}>{username}</div>
+          {cardData?.tier && <TierBadge tier={cardData.tier} size="sm" />}
+          {cardData?.points !== undefined && (
+            <div style={{ fontSize: 11, color: "#6b7280", fontVariantNumeric: "tabular-nums" }}>
+              {cardData.points.toLocaleString()} <span style={{ color: "#4b5563" }}>pts</span>
+            </div>
+          )}
+          {cardData?.region && (
+            <div style={{ fontSize: 10, fontWeight: 700, color: "#6b7280", letterSpacing: "0.06em" }}>
+              {cardData.region}
+            </div>
+          )}
+        </div>
+      )}
+    </>
+  );
 }
 
 export function EsportsButton({

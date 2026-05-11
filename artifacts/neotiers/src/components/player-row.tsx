@@ -1,16 +1,7 @@
 import { Player } from "@workspace/api-client-react";
-import { TierBadge, GamemodeIcon, getRankTitle, getRankTitleColor, getRankTitleStyle, handleSkinError } from "./ui-elements";
+import { TierBadge, GamemodeIcon, PlayerSkinViewer, getRankTitle, getRankTitleColor, getRankTitleStyle } from "./ui-elements";
 import { Link } from "wouter";
 import { COL_WIDTHS } from "@/pages/leaderboard";
-
-function getSkinUrl(player: Player, size: number): string {
-  const custom = (player as any).customSkinUrl as string | null | undefined;
-  if (custom) {
-    if (custom.startsWith("http")) return custom;
-    return `https://visage.surgeplay.com/bust/${size}/${custom}`;
-  }
-  return `https://visage.surgeplay.com/bust/${size}/${player.username}`;
-}
 
 function RegionBadge({ region }: { region?: string }) {
   const upper = (region || "NA").toUpperCase();
@@ -113,11 +104,11 @@ export function PlayerRow({ player, position, gamemode }: PlayerRowProps) {
 
         {/* Skin */}
         <div style={{ display: "flex", alignItems: "center", justifyContent: "center", padding: "4px 0" }}>
-          <img
-            src={getSkinUrl(player, 64)}
-            alt={player.username}
-            style={{ width: 40, height: 40, objectFit: "contain", imageRendering: "pixelated" }}
-            onError={(e) => handleSkinError(e, player.username, 64)}
+          <PlayerSkinViewer
+            username={player.username}
+            customSkinUrl={(player as any).customSkinUrl}
+            size={40}
+            cardData={{ points: player.points, tier: player.tier, region: (player as any).region }}
           />
         </div>
 

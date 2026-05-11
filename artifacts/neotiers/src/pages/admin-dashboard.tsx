@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Layout } from "@/components/layout";
-import { EsportsButton, LoadingSpinner, TierBadge, GamemodeIcon } from "@/components/ui-elements";
+import { EsportsButton, LoadingSpinner, TierBadge, GamemodeIcon, PlayerSkinViewer } from "@/components/ui-elements";
 import { 
   useAdminMe, 
   useAdminLogout, 
@@ -178,16 +178,11 @@ function PlayersTab() {
                 <tr key={p.id} className="border-b border-border/50 hover:bg-secondary/30 transition-colors">
                   <td className="p-3 text-muted-foreground text-sm">#{p.id}</td>
                   <td className="p-3">
-                    <img
-                      src={(() => {
-                        const custom = (p as any).customSkinUrl as string | null | undefined;
-                        if (custom) return custom.startsWith("http") ? custom : `https://visage.surgeplay.com/bust/64/${custom}`;
-                        return `https://visage.surgeplay.com/face/32/${p.username}`;
-                      })()}
-                      alt={p.username}
-                      className="w-8 h-8 rounded object-contain"
-                      style={{ imageRendering: "pixelated" }}
-                      onError={(e) => { e.currentTarget.src = `https://mc-heads.net/avatar/${p.username}/32`; }}
+                    <PlayerSkinViewer
+                      username={p.username}
+                      customSkinUrl={(p as any).customSkinUrl}
+                      size={36}
+                      cardData={{ points: p.points, tier: p.tier, region: (p as any).region }}
                     />
                   </td>
                   <td className="p-3 font-bold">{p.username}</td>
