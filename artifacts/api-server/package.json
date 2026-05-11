@@ -3,6 +3,9 @@
   "version": "0.0.0",
   "private": true,
   "type": "module",
+  "engines": {
+    "node": "20.x"
+  },
   "scripts": {
     "dev": "NODE_ENV=development tsx ./src/index.ts",
     "build": "tsx ./build.ts",
@@ -10,23 +13,19 @@
   },
   "dependencies": {
     "@types/express-session": "^1.18.2",
-    "@workspace/api-zod": "workspace:*",
-    "@workspace/db": "workspace:*",
     "cookie-parser": "^1.4.7",
-    "cors": "^2",
-    "drizzle-orm": "catalog:",
-    "express": "^5",
+    "cors": "^2.8.5",
+    "drizzle-orm": "^0.44.2",
+    "express": "^5.1.0",
     "express-session": "^1.19.0"
   },
   "devDependencies": {
     "@types/cookie-parser": "^1.4.10",
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.6",
-    "@types/node": "catalog:",
+    "@types/node": "^22.13.10",
     "esbuild": "^0.27.3",
-    "tsx": "catalog:"
+    "tsx": "^4.20.5",
+    "typescript": "^5.7.3"
   }
-  "engines": {
-  "node": "20.x"
 }
-
