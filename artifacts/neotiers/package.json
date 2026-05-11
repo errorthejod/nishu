@@ -65,8 +65,8 @@
     "zod": "^3.24.2"
   },
   "devDependencies": {
-    "@replit/vite-plugin-cartographer": "^0.2.5",
-    "@replit/vite-plugin-dev-banner": "^0.1.7",
+    "@replit/vite-plugin-cartographer": "^0.2.1",
+    "@replit/vite-plugin-dev-banner": "^0.1.2",
     "@replit/vite-plugin-runtime-error-modal": "^0.0.3",
     "@tailwindcss/typography": "^0.5.15",
     "@tailwindcss/vite": "^4.1.11",
@@ -75,7 +75,7 @@
     "@types/react-dom": "^18.3.5",
     "@vitejs/plugin-react": "^4.4.1",
     "tailwindcss": "^4.1.11",
-    "vite": "^6.2.0",
-    "typescript": "^5.7.3"
+    "typescript": "^5.7.3",
+    "vite": "^6.2.0"
   }
 }
