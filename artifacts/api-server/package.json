@@ -26,4 +26,7 @@
     "esbuild": "^0.27.3",
     "tsx": "catalog:"
   }
+  "engines": {
+  "node": "20.x"
 }
+
